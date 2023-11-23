@@ -6,8 +6,14 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:08:58 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/11/23 11:09:48 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/11/23 13:13:38 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_irc.hpp"
+
+bool isArgValid(const char **argv)
+{
+    
+    return true;
+}

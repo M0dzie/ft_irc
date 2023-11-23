@@ -6,13 +6,14 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/11/23 11:10:46 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/11/23 13:13:20 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_IRC_HPP
 # define FT_IRC_HPP
 # include <iostream>
+# include <string>
 
 # define BLACK "\033[0;30m"
 # define RED "\033[0;31m"
@@ -25,6 +26,14 @@
 # define RESET "\033[0m" 
 # define BOLD "\033[1m"
 
+/* ---------- EXECUTING ---------- */
+/* ---------- main.cpp ---------- */
+
+/* ---------- PARSING ---------- */
+/* ---------- errors.cpp ---------- */
 void displayErrorMessage(std::string const &msg);
+
+/* ---------- parsing.cpp ---------- */
+bool isArgValid(const char **argv);
 
 #endif

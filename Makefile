@@ -6,7 +6,7 @@
 #    By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2023/11/23 10:57:30 by thmeyer          ###   ########.fr        #
+#    Updated: 2023/11/23 12:57:21 by thmeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ OBJS_DIRS	=	$(OBJ_PARSING_PATH) $(OBJ_EXECUTING_PATH)
 #                SOURCES                #
 # ##################################### #
 
-SRC_PARSING_FILES		=	parsing.cpp
+SRC_PARSING_FILES		=	parsing.cpp errors.cpp
 
 SRC_EXECUTING_FILES		=	main.cpp
 
