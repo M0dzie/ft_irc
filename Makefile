@@ -6,7 +6,7 @@
 #    By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2023/11/22 10:41:17 by thmeyer          ###   ########.fr        #
+#    Updated: 2023/11/23 10:20:06 by thmeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ UNAME		=	$(shell uname)
 NOCOLOR		=	\033[0m
 BGREEN		=	\033[1;32m
 
-HEADER		=	includes/
+HEADER		=	includes/ft_irc.hpp
 
 MAKEFILE	=	Makefile
 
