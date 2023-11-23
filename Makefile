@@ -6,7 +6,7 @@
 #    By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2023/11/23 10:20:06 by thmeyer          ###   ########.fr        #
+#    Updated: 2023/11/23 10:57:30 by thmeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,9 +50,9 @@ OBJS_DIRS	=	$(OBJ_PARSING_PATH) $(OBJ_EXECUTING_PATH)
 #                SOURCES                #
 # ##################################### #
 
-SRC_EXECUTING_FILES		=	main.cpp
+SRC_PARSING_FILES		=	parsing.cpp
 
-SRC_PARSING_FILES		=	
+SRC_EXECUTING_FILES		=	main.cpp
 
 SRCS_PARSING		=	$(addprefix $(SRC_PARSING_PATH), $(SRC_PARSING_FILES))
 SRCS_EXECUTING		=	$(addprefix $(SRC_EXECUTING_PATH), $(SRC_EXECUTING_FILES))
@@ -64,17 +64,15 @@ SRCS	=	$(SRCS_PARSING) $(SRCS_EXECUTING)
 #                OBJECTS                #
 # ##################################### #
 
-OBJS_PARSING		=	$(addprefix $(OBJ_PARSING_PATH),		\
-						$(SRC_PARSING_FILES:.c=.o))
-OBJS_EXECUTING		=	$(addprefix $(OBJ_EXECUTING_PATH),		\
-						$(SRC_EXECUTING_FILES:.c=.o))
+OBJS_PARSING		=	$(addprefix $(OBJ_PARSING_PATH), $(SRC_PARSING_FILES:.cpp=.o))
+OBJS_EXECUTING		=	$(addprefix $(OBJ_EXECUTING_PATH), $(SRC_EXECUTING_FILES:.cpp=.o))
 
 OBJS	=	$(OBJS_PARSING)	$(OBJS_EXECUTING)	
 
-$(OBJ_PARSING_PATH)%.o: $(SRC_PARSING_PATH)%.c $(MAKEFILE) $(HEADER)
+$(OBJ_PARSING_PATH)%.o: $(SRC_PARSING_PATH)%.cpp $(MAKEFILE) $(HEADER)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
-$(OBJ_EXECUTING_PATH)%.o: $(SRC_EXECUTING_PATH)%.c $(MAKEFILE) $(HEADER)
+$(OBJ_EXECUTING_PATH)%.o: $(SRC_EXECUTING_PATH)%.cpp $(MAKEFILE) $(HEADER)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
 
