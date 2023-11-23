@@ -6,11 +6,13 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/11/23 10:17:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/11/23 11:10:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main(void)
+#include "../../includes/ft_irc.hpp"
+
+int main(int argc, char **argv)
 {
     return 0;
-}
+}   
