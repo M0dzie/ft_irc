@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/11/23 13:13:20 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/11/23 13:42:18 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_IRC_HPP
 # include <iostream>
 # include <string>
+# include <sstream>
 
 # define BLACK "\033[0;30m"
 # define RED "\033[0;31m"
@@ -34,6 +35,6 @@
 void displayErrorMessage(std::string const &msg);
 
 /* ---------- parsing.cpp ---------- */
-bool isArgValid(const char **argv);
+bool isPortValid(char *argv);
 
 #endif
