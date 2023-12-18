@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/18 17:15:41 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/18 17:17:31 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ int main(int argc, char **argv)
     if ((clientSocket = accept(socketFd, (struct sockaddr *)&address, &addrLen)) < 0)
         return (displayErrorMessage("accept() failed."), -1);
 
-    std::string buffer;
-    if (recv(clientSocket, &buffer, buffer.size(), 0) < 0)
+    char buffer[1024];
+    if (recv(clientSocket, &buffer, 1024, 0) < 0)
         return (displayErrorMessage("recv() failed."), -1);
-    std::cout << buffer << std::endl;
+    std::cout << std::string(buffer) << std::endl;
 
     send(clientSocket, "Message received\n", 18, 0);
     /* Vous devrez également effectuer d'autres opérations telles que la liaison (bind()), l'écoute (listen(), 
