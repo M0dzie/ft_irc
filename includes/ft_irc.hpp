@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/11/28 10:36:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/18 13:35:28 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # include <iostream>
 # include <string>
 # include <sstream>
+# include <cstdlib>
 # include <sys/socket.h>
+# include <netinet/in.h>
 
 # define BLACK "\033[0;30m"
 # define RED "\033[0;31m"

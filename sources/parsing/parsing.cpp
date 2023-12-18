@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:08:58 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/11/28 09:39:40 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/18 13:33:28 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@ bool isPortValid(char *argv)
 {
     for (int i = 0; argv[i]; i++)
         if (!std::isdigit(argv[i]))
-            return (displayErrorMessage("Port must be a number"), false);
+            return (displayErrorMessage("Port must be a number."), false);
     return true;
 }
