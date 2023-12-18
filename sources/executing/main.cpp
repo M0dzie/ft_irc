@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/18 17:17:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/18 17:55:25 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,24 @@ int main(int argc, char **argv)
 
     if (bind(socketFd, (struct sockaddr *)&address, sizeof(address)) < 0)
         return (displayErrorMessage("bind() failed."), -1);
+        
     if (listen(socketFd, 1) < 0)
         return (displayErrorMessage("listen() failed."), -1);
 
     int clientSocket = 0;
     socklen_t addrLen = sizeof(address);
-    
+        
     // accept() block the program here
     if ((clientSocket = accept(socketFd, (struct sockaddr *)&address, &addrLen)) < 0)
         return (displayErrorMessage("accept() failed."), -1);
-
-    char buffer[1024];
-    if (recv(clientSocket, &buffer, 1024, 0) < 0)
-        return (displayErrorMessage("recv() failed."), -1);
-    std::cout << std::string(buffer) << std::endl;
-
-    send(clientSocket, "Message received\n", 18, 0);
+        
+    while (1) {
+        char buffer[1024];
+        if (recv(clientSocket, &buffer, 1024, 0) < 0)
+            return (displayErrorMessage("recv() failed."), -1);
+        std::cout << std::string(buffer);
+        send(clientSocket, "Message received\n", 18, 0);
+    }
     /* Vous devrez également effectuer d'autres opérations telles que la liaison (bind()), l'écoute (listen(), 
     pour un serveur), la connexion (connect(), pour un client), etc., en fonction de vos besoins.*/
     
