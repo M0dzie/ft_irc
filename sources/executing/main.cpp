@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/18 13:35:56 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/18 13:52:25 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,32 @@ int main(int argc, char **argv)
         return(displayErrorMessage("This program must run as follows : \n" BOLD "./ircserv <port> <password>" RESET), -1);
     if (!isPortValid(argv[1]))
         return -1;
+    if (!argv[2][0])
+        return (displayErrorMessage("Empty password are not authorized."), -1);
 
     int socketFd = 0;
     struct sockaddr_in address;
     int opt = 1;
 
     // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
+    // Create socket file descriptor
     if ((socketFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-        return(displayErrorMessage("creation of socket failed."), -1);
-    std::cout << socketFd << std::endl;
+        return(displayErrorMessage("Creation of socket failed."), -1);
     
+    // Forcefully attaching socket to the current port passing in paramater (argv[1])
     if (setsockopt(socketFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
         return(displayErrorMessage("Something went wrong."), -1);
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = std::atoi(argv[1]);
+    // htons function converts the unsigned short integer hostshort from host byte order to network byte order. 
+    address.sin_port = htons(std::atoi(argv[1]));
 
-    std::cout << address.sin_port << std::endl;
-
+    if (bind(socketFd, (struct sockaddr *)&address, sizeof(address)) < 0)
+        return (displayErrorMessage("Bind() failed."), -1);
+    if (listen(socketFd, 1) < 0)
+        return (displayErrorMessage("Listen() failed"), -1);
+    
     /* Vous devrez également effectuer d'autres opérations telles que la liaison (bind()), l'écoute (listen(), 
     pour un serveur), la connexion (connect(), pour un client), etc., en fonction de vos besoins.*/
     
