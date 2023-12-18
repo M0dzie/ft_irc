@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/18 17:55:25 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/18 19:41:16 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int main(int argc, char **argv)
             return (displayErrorMessage("recv() failed."), -1);
         std::cout << std::string(buffer);
         send(clientSocket, "Message received\n", 18, 0);
+        for (size_t i = 0; i < sizeof(buffer); i++)
+            buffer[i] = '\0';
     }
     /* Vous devrez également effectuer d'autres opérations telles que la liaison (bind()), l'écoute (listen(), 
     pour un serveur), la connexion (connect(), pour un client), etc., en fonction de vos besoins.*/
