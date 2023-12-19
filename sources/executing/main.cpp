@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 13:34:15 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/19 14:21:37 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int main(int argc, char **argv)
         char buffer[1024];
         if (recv(clientSocket, &buffer, 1024, 0) < 0)
             return (displayErrorMessage("recv() failed."), -1);
+            // boucle pour stocker l'entierete du buffer avant de print
         std::cout << std::string(buffer);
         send(clientSocket, "Message received\n", 18, 0);
         for (size_t i = 0; i < sizeof(buffer); i++)
