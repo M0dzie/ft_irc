@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 13:36:14 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/19 15:58:35 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 
 # include "ft_irc.hpp"
 
-class User
-{
+class User {
 private:
     User() {}
 

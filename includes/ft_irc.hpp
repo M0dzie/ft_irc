@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 13:36:37 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/19 16:25:59 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 
+# include "Server.hpp"
+# include "User.hpp"
+
 # define BLACK "\033[0;30m"
 # define RED "\033[0;31m"
 # define GREEN "\033[0;32m"
@@ -30,6 +33,7 @@
 # define GRAY "\033[0;37m"
 # define RESET "\033[0m" 
 # define BOLD "\033[1m"
+# define ERROR RED BOLD "Error: " RESET
 
 /* ---------- EXECUTING ---------- */
 /* ---------- main.cpp ---------- */
