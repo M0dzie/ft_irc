@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 13:10:04 by thmeyer          ###   ########.fr       */
+/*   Updated: 2023/12/19 13:26:35 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
         return(displayErrorMessage("This program must run as follows : \n" BOLD "./ircserv <port> <password>" RESET), -1);
-    if (!isPortValid(argv[1]) || !isPasswordValid(argv[2]))
+    if (!isPortValid(argv[1]))
         return -1;
 
     int socketFd = 0;
