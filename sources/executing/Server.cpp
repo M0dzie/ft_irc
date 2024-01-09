@@ -6,11 +6,14 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 16:26:09 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/09 12:56:33 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Server.hpp"
+
+/* Thus, if you try to read/recv or write/send in any file descriptor
+without using poll() (or equivalent), your grade will be 0. */
 
 Server::Server(int port) {
     int socketFd = 0;
