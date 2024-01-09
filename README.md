@@ -15,25 +15,25 @@
 ### Channel Operators
 - Channel operators (or “chanops”) on a given channel are considered to ‘run’ or ‘own’ that channel.
 - The commands which may only be used by channel moderators include:
-1. `KICK`: Eject a client from the channel
-2. `MODE`: Change the channel’s modes
-3. `INVITE`: Invite a client to an invite-only channel (mode +i)
-4. `TOPIC`: Change the channel topic in a mode +t channel
+	1. `KICK`: Eject a client from the channel
+	2. `MODE`: Change the channel’s modes
+	3. `INVITE`: Invite a client to an invite-only channel (mode +i)
+	4. `TOPIC`: Change the channel topic in a mode +t channel
 - Channel moderators are identified by the channel member prefix `@` for standard channel operators
 
 ### Message Format
 - An IRC message is a single line, delimited by a pair of `\r` and `\n` characters.
-1. When reading messages from a stream, read the incoming data into a buffer. Only parse and process a message once you encounter the `\r\n` at the end of it. If you encounter an empty message, silently ignore it.
-2. When sending messages, ensure that a pair of `\r\n` characters follows every single message your software sends out.
+	1. When reading messages from a stream, read the incoming data into a buffer. Only parse and process a message once you encounter the `\r\n` at the end of it. If you encounter an empty message, silently ignore it.
+	2. When sending messages, ensure that a pair of `\r\n` characters follows every single message your software sends out.
 
 ### Connection Registration 
 - The recommended order of commands during registration is as follows:
-1. `CAP LS 302`
-2. `PASS`
-3. `NICK and USER`
-4. `Capability Negotiation`
-5. `SASL (if negotiated)`
-6. `CAP END`
+	1. `CAP LS 302`
+	2. `PASS`
+	3. `NICK and USER`
+	4. `Capability Negotiation`
+	5. `SASL (if negotiated)`
+	6. `CAP END`
 
 
 ## Docs
