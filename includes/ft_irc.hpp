@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 16:25:59 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/09 17:42:38 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <string>
 # include <sstream>
 # include <cstdlib>
+# include <poll.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
 
