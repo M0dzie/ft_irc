@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 17:08:23 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 17:11:55 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ Server::Server(int port) {
                 this->_fds[nbClient].revents = 0;
             } else { // There is no places left
                 displayErrorMessage("The number of client available is full.");
-                interrupt = false;
+                interrupt = true;
             }
         }
         
