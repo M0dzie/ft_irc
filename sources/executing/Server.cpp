@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 16:39:11 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 16:55:43 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ Server::Server(int port) {
     // if ((clientSocket = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0)
     //     throw(Server::ServerError(ERROR "accept() failed."));
 
+    bool interrupt = false;
     socklen_t addrLen = sizeof(address);
     std::string tmpSentence;
     int nbClient = 0;
@@ -59,26 +60,32 @@ Server::Server(int port) {
     for (int i = 0; i < bufferSize; i++)
 		buffer[i] = '\0';
 
-    struct pollfd fds[MAXCLIENT + 1]; // + 1 for clientSocket : Server fd
-    fds[0].fd = serverFd;
-    fds[0].events = POLLIN;
+    this->_fds[0].fd = serverFd;
+    this->_fds[0].events = POLLIN;
 
-    while (1) {
-        poll(fds, nbClient + 1, -1);
+    while (interrupt == false) {
+        poll(this->_fds, nbClient + 1, -1);
         
-        if (fds[0].fd == serverFd) {
-            nbClient += 1;
-            if ((fds[nbClient].fd = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0 ) {
+        if (this->_fds[0].revents & POLLIN) {
+            if (nbClient < MAXCLIENT) {
+                nbClient += 1;
+            if ((this->_fds[nbClient].fd = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0 ) {
                 displayErrorMessage("accept() failed.");
-                break;
+                interrupt = true;
+            }
+            this->_fds[nbClient].events = POLLIN;
+            this->_fds[nbClient].revents = 0;
+            } else { // There is no places left
+                displayErrorMessage("The list of client is full.");
+                interrupt = false;
             }
         }
         
         for (int i = 0; i < nbClient + 1; i++) {
-            if (fds[i].revents & POLLIN) { // there is data ready to recv()
-                if (recv(fds[i].fd, &buffer, bufferSize, 0) < 0) {
+            if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
+                if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) < 0) {
                     displayErrorMessage("recv() failed.");
-                    break;
+                    interrupt = true;
                 }
                 tmpSentence.append(buffer);
                 std::size_t indexEnd = tmpSentence.find("\r\n");
@@ -89,8 +96,8 @@ Server::Server(int port) {
                     parseLine(command);
                     /* Send to everyone
                     for (int j = 0; j < nbClient + 1; j++) {
-                        int destFd = fds[j].fd;
-                        if (destFd != serverFd && destFd != fds[i].fd) {
+                        int destFd = this->_fds[j].fd;
+                        if (destFd != serverFd && destFd != this->_fds[i].fd) {
                             if (send(destFd, command, sizeof(command), 0) < 0) {
                                 displayErrorMessage("send() failed.");
                             }

@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 16:09:54 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 16:53:11 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 class Server {
 private:
     Server();
+
+    struct pollfd _fds[MAXCLIENT + 1]; // + 1 for serverFd
 
 public:
     Server(int port);
