@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 18:45:00 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 18:52:26 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,13 @@ void	parseLine(std::string line) {
 }
 
 Server::Server(int port) {
-    this->initData(port);
-    // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
-    // Create socket file descriptor
-    if ((this->_serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-        throw(Server::ServerError(ERROR "Creation of socket failed."));
-        // return(displayErrorMessage("Creation of socket failed."), -1);
-    
-    // Forcefully attaching socket to the current port passing in paramater (port)
-    if (setsockopt(this->_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
-        throw(Server::ServerError(ERROR "Something went wrong."));
-
-    if (bind(this->_serverFd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
-        throw(Server::ServerError(ERROR "bind() failed."));
-        
-    if (listen(this->_serverFd, 1) < 0)
-        throw(Server::ServerError(ERROR "listen() failed."));
-
     std::string tmpSentence;
 	int bufferSize = 1024;
 	char buffer[bufferSize];
     for (int i = 0; i < bufferSize; i++)
 		buffer[i] = '\0';
 
-    this->_fds[0].fd = this->_serverFd;
-    this->_fds[0].events = POLLIN;
+    this->initDataAndServer(port);
 
     while (this->_interrupt == false) {
         poll(this->_fds, this->_nbClient + 1, -1);
@@ -96,7 +78,7 @@ Server::Server(int port) {
 	}
 }
 
-void Server::initData(int port) {
+void Server::initDataAndServer(int port) {
     this->_opt = 1;
     this->_serverFd = 0;
     this->_nbClient = 0;
@@ -106,4 +88,23 @@ void Server::initData(int port) {
     this->_address.sin_addr.s_addr = INADDR_ANY;
     this->_address.sin_port = htons(port); // htons function converts the unsigned short integer hostshort from host byte order to network byte order.
     this->_addrLen = sizeof(this->_address);
+    
+    // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
+    // Create socket file descriptor
+    if ((this->_serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        throw(Server::ServerError(ERROR "Creation of socket failed."));
+        // return(displayErrorMessage("Creation of socket failed."), -1);
+    
+    // Forcefully attaching socket to the current port passing in paramater (port)
+    if (setsockopt(this->_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
+        throw(Server::ServerError(ERROR "Something went wrong."));
+
+    if (bind(this->_serverFd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
+        throw(Server::ServerError(ERROR "bind() failed."));
+        
+    if (listen(this->_serverFd, 1) < 0)
+        throw(Server::ServerError(ERROR "listen() failed."));
+
+    this->_fds[0].fd = this->_serverFd;
+    this->_fds[0].events = POLLIN;
 }

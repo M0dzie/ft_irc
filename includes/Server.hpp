@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 18:45:27 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 18:50:58 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ public:
     Server(int port);
     ~Server() {}
 
-    void initData(int port);
+    void initDataAndServer(int port);
 
     class ServerError: public std::exception {
     private:
