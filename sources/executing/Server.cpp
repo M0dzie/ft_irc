@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 16:23:10 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 16:39:11 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ Server::Server(int port) {
                 break;
             }
         }
-        std::cout << nbClient << std::endl;
+        
         for (int i = 0; i < nbClient + 1; i++) {
             if (fds[i].revents & POLLIN) { // there is data ready to recv()
                 if (recv(fds[i].fd, &buffer, bufferSize, 0) < 0) {
@@ -87,6 +87,16 @@ Server::Server(int port) {
                     std::string command = tmpSentence.substr(0, indexEnd);
                     tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
                     parseLine(command);
+                    /* Send to everyone
+                    for (int j = 0; j < nbClient + 1; j++) {
+                        int destFd = fds[j].fd;
+                        if (destFd != serverFd && destFd != fds[i].fd) {
+                            if (send(destFd, command, sizeof(command), 0) < 0) {
+                                displayErrorMessage("send() failed.");
+                            }
+                        }
+                    }
+                    */
                     indexEnd = tmpSentence.find("\r\n");
                 }
                 for (int i = 0; i <= bufferSize; i++)
