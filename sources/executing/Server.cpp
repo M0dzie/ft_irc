@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 12:31:33 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:28:05 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,30 +55,35 @@ Server::Server(int port) {
     std::string tmpSentence;
 	int bufferSize = 1024;
 	char buffer[bufferSize];
-
-	for (int i = 0; i < bufferSize; i++)
+    for (int i = 0; i < bufferSize; i++)
 		buffer[i] = '\0';
-	while (1) {
 
-		if (recv(clientSocket, &buffer, bufferSize, 0) < 0)
-			throw(Server::ServerError(ERROR "recv() failed."));
-			// boucle pour stocker l'entierete du buffer avant de print
-		else
-		{
-			tmpSentence.append(buffer);
-			std::size_t indexEnd = tmpSentence.find("\r\n");
+    struct pollfd fds[MAXCLIENT + 1]; // + 1 for clientSocket : Server fd
+    fds[0].fd = clientSocket;
+    fds[0].events = POLLIN;
 
-			while(indexEnd != std::string::npos)
-			{
-				std::string command = tmpSentence.substr(0, indexEnd);
-
-				tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
-				parseLine(command);
-				indexEnd = tmpSentence.find("\r\n");
-			}
-		}
-		for (int i = 0; i <= bufferSize; i++)
-			buffer[i] = '\0';
+    while (1) {
+        poll(fds, MAXCLIENT + 1, -1);
+        
+        for (int i = 0; i < MAXCLIENT + 1; i++) {
+            if (fds[i].revents & POLLIN) { // there is data ready to recv()
+                if (recv(fds[i].fd, &buffer, bufferSize, 0) < 0) {
+                    displayErrorMessage("recv() failed.");
+                    break;
+                }
+                tmpSentence.append(buffer);
+                std::size_t indexEnd = tmpSentence.find("\r\n");
+                while(indexEnd != std::string::npos)
+                {
+                    std::string command = tmpSentence.substr(0, indexEnd);
+                    tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
+                    parseLine(command);
+                    indexEnd = tmpSentence.find("\r\n");
+                }
+                for (int i = 0; i <= bufferSize; i++)
+                buffer[i] = '\0';
+            }
+        }
 	}
         
     // while (1) {
