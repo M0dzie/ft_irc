@@ -42,3 +42,6 @@ https://www.geeksforgeeks.org/socket-programming-cc/
 
 #### Command handling
 https://modern.ircdocs.horse/
+
+### Using Internet Sockets
+https://beej.us/guide/bgnet/pdf/bgnet_a4_c_1.pdf
