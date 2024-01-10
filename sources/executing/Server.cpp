@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 17:11:55 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 18:45:00 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,74 +20,56 @@ void	parseLine(std::string line) {
 }
 
 Server::Server(int port) {
-    int serverFd = 0;
-    struct sockaddr_in address;
-    int opt = 1;
-
+    this->initData(port);
     // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
     // Create socket file descriptor
-    if ((serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((this->_serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         throw(Server::ServerError(ERROR "Creation of socket failed."));
         // return(displayErrorMessage("Creation of socket failed."), -1);
     
     // Forcefully attaching socket to the current port passing in paramater (port)
-    if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+    if (setsockopt(this->_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
         throw(Server::ServerError(ERROR "Something went wrong."));
 
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    // htons function converts the unsigned short integer hostshort from host byte order to network byte order. 
-    address.sin_port = htons(port);
-
-    if (bind(serverFd, (struct sockaddr *)&address, sizeof(address)) < 0)
+    if (bind(this->_serverFd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
         throw(Server::ServerError(ERROR "bind() failed."));
         
-    if (listen(serverFd, 1) < 0)
+    if (listen(this->_serverFd, 1) < 0)
         throw(Server::ServerError(ERROR "listen() failed."));
 
-    // int clientSocket = 0;
-        
-    // accept() block the program here
-    // if ((clientSocket = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0)
-    //     throw(Server::ServerError(ERROR "accept() failed."));
-
-    bool interrupt = false;
-    socklen_t addrLen = sizeof(address);
     std::string tmpSentence;
-    int nbClient = 0;
 	int bufferSize = 1024;
 	char buffer[bufferSize];
     for (int i = 0; i < bufferSize; i++)
 		buffer[i] = '\0';
 
-    this->_fds[0].fd = serverFd;
+    this->_fds[0].fd = this->_serverFd;
     this->_fds[0].events = POLLIN;
 
-    while (interrupt == false) {
-        poll(this->_fds, nbClient + 1, -1);
+    while (this->_interrupt == false) {
+        poll(this->_fds, this->_nbClient + 1, -1);
         
         if (this->_fds[0].revents & POLLIN) {
-            if (nbClient + 1 < MAXCLIENT) {
-                nbClient += 1;
-                if ((this->_fds[nbClient].fd = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0 ) {
+            if (this->_nbClient + 1 < MAXCLIENT) {
+                this->_nbClient += 1;
+                if ((this->_fds[this->_nbClient].fd = accept(this->_serverFd, (struct sockaddr *)&this->_address, &this->_addrLen)) < 0 ) {
                     displayErrorMessage("accept() failed.");
-                    interrupt = true;
+                    this->_interrupt = true;
                 }
-                this->_fds[nbClient].events = POLLIN;
-                this->_fds[nbClient].revents = 0;
+                this->_fds[this->_nbClient].events = POLLIN;
+                this->_fds[this->_nbClient].revents = 0;
             } else { // There is no places left
                 displayErrorMessage("The number of client available is full.");
-                interrupt = true;
+                this->_interrupt = true;
             }
         }
         
-        for (int i = 0; i < nbClient + 1; i++) {
+        for (int i = 0; i < this->_nbClient + 1; i++) {
             if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
-                recv(this->_fds[i].fd, &buffer, bufferSize, 0);
-                // if (ret == -1) {
-                //     displayErrorMessage("recv() failed.");
-                //     interrupt = true;
-                // }
+                if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) == 0) {
+                    displayErrorMessage("recv() failed.");
+                    this->_interrupt = true;
+                }
                 tmpSentence.append(buffer);
                 std::size_t indexEnd = tmpSentence.find("\r\n");
                 while(indexEnd != std::string::npos)
@@ -96,9 +78,9 @@ Server::Server(int port) {
                     tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
                     parseLine(command);
                     /* Send to everyone
-                    for (int j = 0; j < nbClient + 1; j++) {
+                    for (int j = 0; j < this->_nbClient + 1; j++) {
                         int destFd = this->_fds[j].fd;
-                        if (destFd != serverFd && destFd != this->_fds[i].fd) {
+                        if (destFd != this->_serverFd && destFd != this->_fds[i].fd) {
                             if (send(destFd, command, sizeof(command), 0) < 0) {
                                 displayErrorMessage("send() failed.");
                             }
@@ -112,20 +94,16 @@ Server::Server(int port) {
             }
         }
 	}
-        
-    // while (1) {
-    //     char buffer[1024];
-    //     if (recv(clientSocket, &buffer, 1024, 0) < 0)
-    //     throw(Server::ServerError(ERROR "recv() failed."));
-    //         // boucle pour stocker l'entierete du buffer avant de print
-    //     std::cout << std::string(buffer);
-    //     send(clientSocket, "Message received\n", 18, 0);
-    //     for (size_t i = 0; i < sizeof(buffer); i++)
-    //         buffer[i] = '\0';
-    // }
-    /* Vous devrez également effectuer d'autres opérations telles que la liaison (bind()), l'écoute (listen(), 
-    pour un serveur), la connexion (connect(), pour un client), etc., en fonction de vos besoins.*/
-    
-    // close(clientSocket);
-    // close(serverFd);
+}
+
+void Server::initData(int port) {
+    this->_opt = 1;
+    this->_serverFd = 0;
+    this->_nbClient = 0;
+    this->_interrupt = false;
+    this->_addrLen = sizeof(this->_address);
+    this->_address.sin_family = AF_INET;
+    this->_address.sin_addr.s_addr = INADDR_ANY;
+    this->_address.sin_port = htons(port); // htons function converts the unsigned short integer hostshort from host byte order to network byte order.
+    this->_addrLen = sizeof(this->_address);
 }

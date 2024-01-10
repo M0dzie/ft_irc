@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 17:12:17 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 18:45:27 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,19 @@ class Server {
 private:
     Server();
 
+    int _opt;
+    int _serverFd;
+    int _nbClient;
+    bool _interrupt;
+    socklen_t _addrLen;
     struct pollfd _fds[MAXCLIENT + 1]; // + 1 for serverFd
+    struct sockaddr_in _address;
 
 public:
     Server(int port);
     ~Server() {}
+
+    void initData(int port);
 
     class ServerError: public std::exception {
     private:
