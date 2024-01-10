@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 16:55:43 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/10 17:08:23 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,27 @@ Server::Server(int port) {
         poll(this->_fds, nbClient + 1, -1);
         
         if (this->_fds[0].revents & POLLIN) {
-            if (nbClient < MAXCLIENT) {
+            if (nbClient + 1 < MAXCLIENT) {
                 nbClient += 1;
-            if ((this->_fds[nbClient].fd = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0 ) {
-                displayErrorMessage("accept() failed.");
-                interrupt = true;
-            }
-            this->_fds[nbClient].events = POLLIN;
-            this->_fds[nbClient].revents = 0;
+                if ((this->_fds[nbClient].fd = accept(serverFd, (struct sockaddr *)&address, &addrLen)) < 0 ) {
+                    displayErrorMessage("accept() failed.");
+                    interrupt = true;
+                }
+                this->_fds[nbClient].events = POLLIN;
+                this->_fds[nbClient].revents = 0;
             } else { // There is no places left
-                displayErrorMessage("The list of client is full.");
+                displayErrorMessage("The number of client available is full.");
                 interrupt = false;
             }
         }
         
         for (int i = 0; i < nbClient + 1; i++) {
             if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
-                if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) < 0) {
-                    displayErrorMessage("recv() failed.");
-                    interrupt = true;
-                }
+                recv(this->_fds[i].fd, &buffer, bufferSize, 0);
+                // if (ret == -1) {
+                //     displayErrorMessage("recv() failed.");
+                //     interrupt = true;
+                // }
                 tmpSentence.append(buffer);
                 std::size_t indexEnd = tmpSentence.find("\r\n");
                 while(indexEnd != std::string::npos)
