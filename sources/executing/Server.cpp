@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/09 12:56:33 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/09 18:08:38 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,37 @@ Server::Server(int port) {
     if (listen(socketFd, 1) < 0)
         throw(Server::ServerError(ERROR "listen() failed."));
 
+    struct pollfd fds[200];
+    int nfds = 1, currentSize = 0;
+    fds[0].fd = socketFd;
+    fds[0].events = POLLIN;
+
     int clientSocket = 0;
     socklen_t addrLen = sizeof(address);
+
+    while (clientSocket != -1) {
+        if (poll(fds, nfds, 0) < 0) {
+            throw(Server::ServerError(ERROR "poll() failed."));
+        }
+        currentSize = nfds;
+        for (int i = 0; i < currentSize; i++) {
+            if (fds[i].fd == socketFd) {
+                std::cout << "Found it" << std::endl;
+                if ((clientSocket = accept(socketFd, (struct sockaddr *)&address, &addrLen)) < 0)
+                    throw(Server::ServerError(ERROR "accept() failed."));
+            }
+            fds[nfds].fd = clientSocket;
+            fds[nfds].events = POLLIN;
+            nfds++;
+        }
+    }
+
+ 
+
         
     // accept() block the program here
-    if ((clientSocket = accept(socketFd, (struct sockaddr *)&address, &addrLen)) < 0)
-        throw(Server::ServerError(ERROR "accept() failed."));
+    // if ((clientSocket = accept(socketFd, (struct sockaddr *)&address, &addrLen)) < 0)
+    //     throw(Server::ServerError(ERROR "accept() failed."));
         
     while (1) {
         char buffer[1024];
