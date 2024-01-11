@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 18:50:58 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/11 12:30:58 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ private:
     Server();
 
     int _opt;
-    int _serverFd;
     int _nbClient;
     bool _interrupt;
     socklen_t _addrLen;
@@ -34,6 +33,7 @@ public:
     ~Server() {}
 
     void initDataAndServer(int port);
+    void sendMessage(int clientFd, std::string msg);
 
     class ServerError: public std::exception {
     private:
