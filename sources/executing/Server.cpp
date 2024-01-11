@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/10 18:52:26 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/11 11:17:37 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Server::Server(int port) {
         if (this->_fds[0].revents & POLLIN) {
             if (this->_nbClient + 1 < MAXCLIENT) {
                 this->_nbClient += 1;
-                if ((this->_fds[this->_nbClient].fd = accept(this->_serverFd, (struct sockaddr *)&this->_address, &this->_addrLen)) < 0 ) {
+                if ((this->_fds[this->_nbClient].fd = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen)) < 0 ) {
                     displayErrorMessage("accept() failed.");
                     this->_interrupt = true;
                 }
@@ -62,7 +62,7 @@ Server::Server(int port) {
                     /* Send to everyone
                     for (int j = 0; j < this->_nbClient + 1; j++) {
                         int destFd = this->_fds[j].fd;
-                        if (destFd != this->_serverFd && destFd != this->_fds[i].fd) {
+                        if (destFd != this->_fds[0].fd && destFd != this->_fds[i].fd) {
                             if (send(destFd, command, sizeof(command), 0) < 0) {
                                 displayErrorMessage("send() failed.");
                             }
@@ -80,7 +80,6 @@ Server::Server(int port) {
 
 void Server::initDataAndServer(int port) {
     this->_opt = 1;
-    this->_serverFd = 0;
     this->_nbClient = 0;
     this->_interrupt = false;
     this->_addrLen = sizeof(this->_address);
@@ -91,20 +90,19 @@ void Server::initDataAndServer(int port) {
     
     // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
     // Create socket file descriptor
-    if ((this->_serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((this->_fds[0].fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         throw(Server::ServerError(ERROR "Creation of socket failed."));
         // return(displayErrorMessage("Creation of socket failed."), -1);
     
     // Forcefully attaching socket to the current port passing in paramater (port)
-    if (setsockopt(this->_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
+    if (setsockopt(this->_fds[0].fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
         throw(Server::ServerError(ERROR "Something went wrong."));
 
-    if (bind(this->_serverFd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
+    if (bind(this->_fds[0].fd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
         throw(Server::ServerError(ERROR "bind() failed."));
         
-    if (listen(this->_serverFd, 1) < 0)
+    if (listen(this->_fds[0].fd, 1) < 0)
         throw(Server::ServerError(ERROR "listen() failed."));
 
-    this->_fds[0].fd = this->_serverFd;
     this->_fds[0].events = POLLIN;
 }
