@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/11 11:17:37 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/11 13:45:26 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 /* Thus, if you try to read/recv or write/send in any file descriptor
 without using poll() (or equivalent), your grade will be 0. */
+
+void Server::sendMessage(int clientFd, std::string msg) {
+    if (send(clientFd, msg.c_str(), msg.length(), 0) < 0)
+        displayErrorMessage("send() failed.");
+}
 
 void	parseLine(std::string line) {
 	std::cout << "LINE: " << line << std::endl;
@@ -46,7 +51,7 @@ Server::Server(int port) {
             }
         }
         
-        for (int i = 0; i < this->_nbClient + 1; i++) {
+        for (int i = 1; i <= this->_nbClient + 1; i++) {
             if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
                 if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) == 0) {
                     displayErrorMessage("recv() failed.");
@@ -69,6 +74,7 @@ Server::Server(int port) {
                         }
                     }
                     */
+                    this->sendMessage(this->_fds[i].fd, command + "\r\n");
                     indexEnd = tmpSentence.find("\r\n");
                 }
                 for (int i = 0; i <= bufferSize; i++)
@@ -87,6 +93,7 @@ void Server::initDataAndServer(int port) {
     this->_address.sin_addr.s_addr = INADDR_ANY;
     this->_address.sin_port = htons(port); // htons function converts the unsigned short integer hostshort from host byte order to network byte order.
     this->_addrLen = sizeof(this->_address);
+    this->_fds[0].events = POLLIN;
     
     // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
     // Create socket file descriptor
@@ -104,5 +111,4 @@ void Server::initDataAndServer(int port) {
     if (listen(this->_fds[0].fd, 1) < 0)
         throw(Server::ServerError(ERROR "listen() failed."));
 
-    this->_fds[0].events = POLLIN;
 }

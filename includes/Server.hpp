@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/11 11:17:38 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/11 12:30:58 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ public:
     ~Server() {}
 
     void initDataAndServer(int port);
+    void sendMessage(int clientFd, std::string msg);
 
     class ServerError: public std::exception {
     private:
