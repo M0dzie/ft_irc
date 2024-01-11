@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/11 13:45:26 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/11 13:49:58 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 without using poll() (or equivalent), your grade will be 0. */
 
 void Server::sendMessage(int clientFd, std::string msg) {
+    msg += "\r\n";
     if (send(clientFd, msg.c_str(), msg.length(), 0) < 0)
         displayErrorMessage("send() failed.");
 }
@@ -64,17 +65,13 @@ Server::Server(int port) {
                     std::string command = tmpSentence.substr(0, indexEnd);
                     tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
                     parseLine(command);
-                    /* Send to everyone
-                    for (int j = 0; j < this->_nbClient + 1; j++) {
-                        int destFd = this->_fds[j].fd;
-                        if (destFd != this->_fds[0].fd && destFd != this->_fds[i].fd) {
-                            if (send(destFd, command, sizeof(command), 0) < 0) {
-                                displayErrorMessage("send() failed.");
-                            }
-                        }
-                    }
-                    */
-                    this->sendMessage(this->_fds[i].fd, command + "\r\n");
+                    // Send to everyone
+                    // for (int j = 1; j <= this->_nbClient + 1; j++) {
+                    //     int destFd = this->_fds[j].fd;
+                    //     if (destFd != this->_fds[0].fd && destFd != this->_fds[i].fd)
+                    //         this->sendMessage(this->_fds[j].fd, command);
+                    // }
+                    this->sendMessage(this->_fds[i].fd, command);
                     indexEnd = tmpSentence.find("\r\n");
                 }
                 for (int i = 0; i <= bufferSize; i++)
