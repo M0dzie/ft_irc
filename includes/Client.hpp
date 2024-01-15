@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 15:58:35 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 13:44:25 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef USER_HPP
-# define USER_HPP
+#ifndef CLIENT_HPP
+# define CLIENT_HPP
 
 # include "ft_irc.hpp"
 
-class User {
+class Client {
 private:
-    User() {}
+    Client() {}
+
+    int _id;
+    std::string _nickname;
+    std::string _user;
 
 public:
+    void setID(int const &id) {this->_id = id;}
+    void setNickname(std::string const &nickname) {this->_nickname = nickname;}
+    void setUser(std::string const &user) {this->_user = user;}
+
+    int const &getID() const {return this->_id;}
+    std::string const &getNickname() const {return this->_nickname;}
+    std::string const &getUser() const {return this->_user;}
 };
 
 #endif
