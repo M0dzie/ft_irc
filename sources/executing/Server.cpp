@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/11 13:49:58 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 12:57:47 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ Server::Server(int port) {
     while (this->_interrupt == false) {
         poll(this->_fds, this->_nbClient + 1, -1);
         
+        // handling new clients
         if (this->_fds[0].revents & POLLIN) {
             if (this->_nbClient + 1 < MAXCLIENT) {
                 this->_nbClient += 1;
@@ -52,6 +53,7 @@ Server::Server(int port) {
             }
         }
         
+        //handling msg from known clients
         for (int i = 1; i <= this->_nbClient + 1; i++) {
             if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
                 if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) == 0) {
