@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/11 12:30:58 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 12:11:50 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "ft_irc.hpp"
 
-# define MAXCLIENT 200
+# define MAXCLIENT 1000
 
 class Server {
 private:
