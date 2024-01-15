@@ -1,17 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.cpp                                         :+:      :+:    :+:   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 11:09:45 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 16:26:34 by thmeyer          ###   ########.fr       */
+/*   Created: 2023/11/28 10:38:04 by thmeyer           #+#    #+#             */
+/*   Updated: 2024/01/15 13:35:34 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/ft_irc.hpp"
-
-void displayErrorMessage(std::string const &msg) {
-    std::cerr << ERROR << msg << std::endl;
-}
+#include "../../includes/Client.hpp"

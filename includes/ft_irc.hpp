@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/09 17:42:38 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:21:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@
 # include <sstream>
 # include <cstdlib>
 # include <poll.h>
+# include <algorithm>
+# include <map>
 # include <sys/socket.h>
 # include <netinet/in.h>
 
 # include "Server.hpp"
-# include "User.hpp"
+# include "Client.hpp"
 
 # define BLACK "\033[0;30m"
 # define RED "\033[0;31m"
@@ -39,16 +41,14 @@
 /* ---------- EXECUTING ---------- */
 /* ---------- main.cpp ---------- */
 
-/* ---------- User.cpp ---------- */
+/* ---------- Client.cpp ---------- */
 
 /* ---------- Server.cpp ---------- */
 
 
 /* ---------- PARSING ---------- */
-/* ---------- errors.cpp ---------- */
-void displayErrorMessage(std::string const &msg);
-
 /* ---------- parsing.cpp ---------- */
 bool isPortValid(char *argv);
+void displayErrorMessage(std::string const &msg);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2023/12/19 13:36:29 by thmeyer          ###   ########.fr        #
+#    Updated: 2024/01/15 13:46:51 by thmeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ UNAME		=	$(shell uname)
 NOCOLOR		=	\033[0m
 BGREEN		=	\033[1;32m
 
-HEADER		=	includes/ft_irc.hpp includes/User.hpp includes/Server.hpp
+HEADER		=	includes/ft_irc.hpp includes/Client.hpp includes/Server.hpp
 
 MAKEFILE	=	Makefile
 
@@ -50,9 +50,9 @@ OBJS_DIRS	=	$(OBJ_PARSING_PATH) $(OBJ_EXECUTING_PATH)
 #                SOURCES                #
 # ##################################### #
 
-SRC_PARSING_FILES		=	parsing.cpp errors.cpp
+SRC_PARSING_FILES		=	parsing.cpp
 
-SRC_EXECUTING_FILES		=	main.cpp User.cpp Server.cpp
+SRC_EXECUTING_FILES		=	main.cpp Client.cpp Server.cpp
 
 SRCS_PARSING		=	$(addprefix $(SRC_PARSING_PATH), $(SRC_PARSING_FILES))
 SRCS_EXECUTING		=	$(addprefix $(SRC_EXECUTING_PATH), $(SRC_EXECUTING_FILES))

@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/15 12:57:47 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:31:39 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ Server::Server(int port) {
                 }
                 this->_fds[this->_nbClient].events = POLLIN;
                 this->_fds[this->_nbClient].revents = 0;
+                this->_clientList.insert(std::pair<int, Client *>(this->_nbClient, new Client(this->_fds[this->_nbClient].fd, "undefined")));
+                std::cout << this->_clientList[this->_nbClient]->getFD() << std::endl;
             } else { // There is no places left
                 displayErrorMessage("The number of client available is full.");
                 this->_interrupt = true;
