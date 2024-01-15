@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/15 13:44:25 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:20:02 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ private:
     std::string _user;
 
 public:
+    Client(int id) : _id(id) {}
+
     void setID(int const &id) {this->_id = id;}
     void setNickname(std::string const &nickname) {this->_nickname = nickname;}
     void setUser(std::string const &user) {this->_user = user;}

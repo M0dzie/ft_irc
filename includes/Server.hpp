@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/15 12:11:50 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:23:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "ft_irc.hpp"
 
 # define MAXCLIENT 1000
+
+class Client;
 
 class Server {
 private:
@@ -27,6 +29,7 @@ private:
     socklen_t _addrLen;
     struct pollfd _fds[MAXCLIENT + 1]; // + 1 for serverFd
     struct sockaddr_in _address;
+    std::map<int, Client *> _clientList;
 
 public:
     Server(int port);
