@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/15 14:31:10 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:49:50 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,18 @@ private:
 
     int _fd;
     std::string _nickname;
-    std::string _user;
+    std::string _username;
 
 public:
     Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname) {}
 
-    void setID(int fd) {this->_fd = fd;}
+    void setFD(int fd) {this->_fd = fd;}
     void setNickname(std::string const &nickname) {this->_nickname = nickname;}
-    void setUser(std::string const &user) {this->_user = user;}
+    void setUsername(std::string const &username) {this->_username = username;}
 
     int const &getFD() const {return this->_fd;}
     std::string const &getNickname() const {return this->_nickname;}
-    std::string const &getUser() const {return this->_user;}
+    std::string const &getUsername() const {return this->_username;}
 };
 
 #endif
