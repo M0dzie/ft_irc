@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/15 14:31:39 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/16 12:48:57 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ Server::Server(int port) {
 
     this->initDataAndServer(port);
 
+
     while (this->_interrupt == false) {
         poll(this->_fds, this->_nbClient + 1, -1);
         
@@ -47,8 +48,7 @@ Server::Server(int port) {
                 }
                 this->_fds[this->_nbClient].events = POLLIN;
                 this->_fds[this->_nbClient].revents = 0;
-                this->_clientList.insert(std::pair<int, Client *>(this->_nbClient, new Client(this->_fds[this->_nbClient].fd, "undefined")));
-                std::cout << this->_clientList[this->_nbClient]->getFD() << std::endl;
+                this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
             } else { // There is no places left
                 displayErrorMessage("The number of client available is full.");
                 this->_interrupt = true;
@@ -69,12 +69,6 @@ Server::Server(int port) {
                     std::string command = tmpSentence.substr(0, indexEnd);
                     tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
                     parseLine(command);
-                    // Send to everyone
-                    // for (int j = 1; j <= this->_nbClient + 1; j++) {
-                    //     int destFd = this->_fds[j].fd;
-                    //     if (destFd != this->_fds[0].fd && destFd != this->_fds[i].fd)
-                    //         this->sendMessage(this->_fds[j].fd, command);
-                    // }
                     this->sendMessage(this->_fds[i].fd, command);
                     indexEnd = tmpSentence.find("\r\n");
                 }

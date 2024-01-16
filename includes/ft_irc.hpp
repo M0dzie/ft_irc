@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/15 14:21:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/16 12:58:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,6 @@
 # define BOLD "\033[1m"
 # define ERROR RED BOLD "Error: " RESET
 
-/* ---------- EXECUTING ---------- */
-/* ---------- main.cpp ---------- */
-
-/* ---------- Client.cpp ---------- */
-
-/* ---------- Server.cpp ---------- */
-
-
-/* ---------- PARSING ---------- */
-/* ---------- parsing.cpp ---------- */
-bool isPortValid(char *argv);
 void displayErrorMessage(std::string const &msg);
 
 #endif
