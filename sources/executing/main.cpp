@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/16 12:59:06 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/16 13:28:38 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,23 @@ static bool isPortValid(char *argv) {
             return (displayErrorMessage("Port must be a positive number."), false);
     if (std::atoi(argv) > 65535)
         return (displayErrorMessage("Port available : [0-65535]"), false);
-    if (std::atoi(argv) < 1025) {
-        std::cerr << YELLOW << BOLD << "Warning: " << RESET << "This port might be reserved to a root access." << std::endl;
-        return (true);
+    if (std::atoi(argv) < 1024) {
+        std::cerr << YELLOW << BOLD << "Warning: " << RESET << "Those ports : [0-1023] are used by system processes and might not work." << std::endl;
+        return true;
     }
+    return true;
+}
+
+static bool isPasswordValid(char *argv) {
+    if (!argv[0])
+        return (displayErrorMessage("Password can't be empty."), false);
     return true;
 }
 
 int main(int argc, char **argv) {
     if (argc != 3)
         return(displayErrorMessage("This program must run as follows : \n" BOLD "./ircserv <port> <password>" RESET), -1);
-    if (!isPortValid(argv[1]))
+    if (!isPortValid(argv[1]) || !isPasswordValid(argv[2]))
         return -1;
 
     try {
