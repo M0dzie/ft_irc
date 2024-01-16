@@ -6,23 +6,34 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2023/12/19 16:13:10 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/16 12:59:06 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_irc.hpp"
-
-/* ---------- DOCUMENTATION HEXCHAT ----------
-
--> Les discussions instantanées sont exclusivement textuelles mais on peut aussi envoyer des fichiers à travers le protocole DCC.
-
-*/
 
 /* ---------- HOW TO CONNECT WITH ANOTHER TERMINAL ----------
 
 -> nc -C 127.0.0.1 6667
 
 */
+
+void displayErrorMessage(std::string const &msg) {
+    std::cerr << ERROR << msg << std::endl;
+}
+
+static bool isPortValid(char *argv) {
+    for (int i = 0; argv[i]; i++)
+        if (!std::isdigit(argv[i]))
+            return (displayErrorMessage("Port must be a positive number."), false);
+    if (std::atoi(argv) > 65535)
+        return (displayErrorMessage("Port available : [0-65535]"), false);
+    if (std::atoi(argv) < 1025) {
+        std::cerr << YELLOW << BOLD << "Warning: " << RESET << "This port might be reserved to a root access." << std::endl;
+        return (true);
+    }
+    return true;
+}
 
 int main(int argc, char **argv) {
     if (argc != 3)
