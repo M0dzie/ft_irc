@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/16 12:58:56 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/16 15:49:34 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@
 # include <map>
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <string>
+# include <vector>
+# include <map>
+# include <iostream>
 
 # include "Server.hpp"
 # include "Client.hpp"
