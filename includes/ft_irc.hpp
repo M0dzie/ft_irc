@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/16 15:49:34 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/17 11:31:05 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,9 @@
 # include <poll.h>
 # include <algorithm>
 # include <map>
+# include <vector>
 # include <sys/socket.h>
 # include <netinet/in.h>
-# include <string>
-# include <vector>
-# include <map>
-# include <iostream>
 
 # include "Server.hpp"
 # include "Client.hpp"
