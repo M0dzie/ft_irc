@@ -6,24 +6,33 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/16 17:08:37 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/17 16:00:55 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-// void	executeUser(std::vector<std::string> commandLine, int fd) {
+# define USERLEN 18	// put in ft_irc 
+
+bool isUsernameValid(std::string & username) {
+
+	if (username.empty())
+		return std::cout << "<client> <command> :Not enough parameters" << std::endl, false;	// ERR_NEEDMOREPARAMS
+	else if (username.size() > USERLEN)
+		username = username.substr(0, USERLEN);
+	return true;
+}
+
 void	executeUser(Commands & command) {
 	
-	(void)command;
+	// std::cout << "Execute USER" << std::endl;
+	std::string username = *command.getArgSplit().begin();
 
-	std::cout << "Execute JOIN" << std::endl;
-	// std::vector<std::string>::iterator itChannel = commandLine.begin();
-	// std::string command = *itChannel;
-	// std::string userName = *(++itChannel);
+	if (isUsernameValid(username))
+	{
+		// std::cout << "Set username " << username << std::endl;
+		command.getClientPtr()->setUsername(username);
 
-	// // sendMessage(fd, "USER " + userName + " 0 * :realname");		// don't send but update username
-	// // check if not already connected and all arg valid, password, username, nickname
-	// // loginClient(userName, fd);
-	// sendMessage(fd, ":localhost 376 " + userName + ":" + userName + "connected!");
+		sendMessage(command.getClientPtr()->getFD(), ":localhost 376 " + username + " :" + username + " connected!");
+	}
 }
