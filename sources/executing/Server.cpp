@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/16 17:12:00 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/17 16:10:24 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ Server::Server(int port) {
                 std::size_t indexEnd = tmpSentence.find("\r\n");
                 while(indexEnd != std::string::npos)
                 {
-                    std::string command = tmpSentence.substr(0, indexEnd);
+                    Commands cmd(tmpSentence.substr(0, indexEnd), this->_clientList[this->_fds[i].fd]);
+                    cmd.executeCommand();
                     tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
-                    parseLine(command);
-                    this->sendMessage(this->_fds[i].fd, command);
+                    // this->sendMessage(this->_fds[i].fd, command);
                     indexEnd = tmpSentence.find("\r\n");
                 }
                 for (int i = 0; i <= bufferSize; i++)
@@ -93,7 +93,6 @@ void Server::initDataAndServer(int port) {
     // Create socket file descriptor
     if ((this->_fds[0].fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         throw(Server::ServerError(ERROR "Creation of socket failed."));
-        // return(displayErrorMessage("Creation of socket failed."), -1);
     
     // Forcefully attaching socket to the current port passing in paramater (port)
     if (setsockopt(this->_fds[0].fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
