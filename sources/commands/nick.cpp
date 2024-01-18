@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/16 17:08:43 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/18 18:14:26 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,23 @@ bool isNicknameValid(std::string nickname) {
 	return true;
 }
 
-// void	loginClient(std::string userName, int fd) {
-
-// 	sendMessage(fd, ":localhost 376 " + userName + ":" + userName + "connected!");
-// }
-
 void	executeNick(Commands & command) {
 
 	(void)command;
 
-	std::cout << "Execute NICK" << std::endl;
-	
-	// std::vector<std::string>::iterator itChannel = commandLine.begin();
-	// std::string command = *itChannel;
-	// std::string nickname = *(++itChannel);
-	// std::string oldNickname = "Undefined";
+	std::string nickname = *(command.getArgSplit().begin());
+	std::string oldNickname = command.getClient().getNickname();
 
-	// if (isNicknameValid(nickname))
-	// {
-	// 	if (oldNickname == "Undefined")
-	// 	{
-	// 		// std::cout << ":" + nickname + " NICK " + nickname << std::endl;
-	// 		sendMessage(fd, ":" + nickname + " NICK " + nickname);
-	// 	}
-	// }
-	// // check if not already connected and all arg valid, password, username, nickname
-	// std::string tmpUserName = "msapin";
-	// // loginClient(tmpUserName, fd);
-	// sendMessage(fd, ":localhost 376 " + userName + ":" + userName + "connected!");
+	if (isNicknameValid(nickname))
+	{
+		command.getClient().setNickname(nickname);
+		// check if not first use of nick function
+		if (!oldNickname.empty())
+		{
+			sendMessage(command.getClient().getFD(), ":" + oldNickname + " NICK " + nickname);
+			displayMessage(SERVER, ":" + oldNickname + " NICK " + nickname);
+		}
+		// check if nick trigger login
+		// login(command);
+	}
 }

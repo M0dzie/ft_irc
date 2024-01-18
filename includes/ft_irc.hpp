@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 13:07:21 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 17:10:52 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 
 # include "Server.hpp"
 # include "Client.hpp"
-# include "Commands.hpp"
 
 # define BLACK "\033[0;30m"
 # define RED "\033[0;31m"
@@ -43,5 +42,6 @@
 # define ERROR RED BOLD "Error: " RESET
 
 void displayErrorMessage(std::string const &msg);
+void displayMessage(int from, std::string message);
 
 #endif

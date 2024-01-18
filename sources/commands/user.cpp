@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/17 16:00:55 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/18 17:39:43 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,24 @@ bool isUsernameValid(std::string & username) {
 	return true;
 }
 
+std::string extractRealname() {
+
+	std::string realname;
+
+	realname = "test";
+	return realname;
+}
+
 void	executeUser(Commands & command) {
+
+	(void)command;
 	
-	// std::cout << "Execute USER" << std::endl;
 	std::string username = *command.getArgSplit().begin();
 
 	if (isUsernameValid(username))
 	{
-		// std::cout << "Set username " << username << std::endl;
-		command.getClientPtr()->setUsername(username);
+		command.getClient().setUsername(username);
 
-		sendMessage(command.getClientPtr()->getFD(), ":localhost 376 " + username + " :" + username + " connected!");
+		login(command);
 	}
 }
