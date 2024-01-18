@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 13:52:36 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 14:06:04 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define MAXCLIENT 1000
 
 class Client;
+class Channel;
 
 class Server {
 private:
@@ -29,6 +30,7 @@ private:
     struct pollfd _fds[MAXCLIENT + 1]; // + 1 for serverFd
     struct sockaddr_in _address;
     std::map<int, Client *> _clientList;
+    std::map<std::string, Channel *> _channelList;
     
     static bool interrupt;
 
