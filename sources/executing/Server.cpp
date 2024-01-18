@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 13:50:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 14:06:37 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ void Server::exit() {
     for (std::map<int, Client *>::iterator it = this->_clientList.begin(); it != this->_clientList.end(); it++)
         delete it->second;
     this->_clientList.clear();
+
+    // for (std::map<std::string, Channel *>::iterator it = this->_channelList.begin(); it != this->_channelList.end(); it++)
+    //     delete it->second;
+    this->_channelList.clear();
 }
 
 void Server::initDataAndServer(int port, char *password) {

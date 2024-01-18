@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: msapin <msapin@student.42.fr>              +#+  +:+       +#+         #
+#    By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2024/01/17 16:04:55 by msapin           ###   ########.fr        #
+#    Updated: 2024/01/18 14:02:36 by thmeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ NOCOLOR		=	\033[0m
 BGREEN		=	\033[1;32m
 
 HEADER		=	includes/ft_irc.hpp includes/Client.hpp includes/Server.hpp	\
-				includes/Commands.hpp
+				includes/Commands.hpp includes/Channel.hpp
 
 MAKEFILE	=	Makefile
 
@@ -53,7 +53,7 @@ OBJS_DIRS	=	$(OBJ_EXECUTING_PATH)	$(OBJ_COMMANDS_PATH)
 # ##################################### #
 
 SRC_COMMANDS_FILES		=	Commands.cpp join.cpp	nick.cpp user.cpp	ping.cpp
-SRC_EXECUTING_FILES		=	main.cpp Client.cpp Server.cpp
+SRC_EXECUTING_FILES		=	main.cpp Client.cpp Server.cpp Channel.cpp
 
 SRCS_COMMANDS		=	$(addprefix $(SRC_COMMANDS_PATH), $(SRC_COMMANDS_FILES))
 SRCS_EXECUTING		=	$(addprefix $(SRC_EXECUTING_PATH), $(SRC_EXECUTING_FILES))
