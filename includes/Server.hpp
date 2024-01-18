@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/16 17:00:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 13:02:03 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "ft_irc.hpp"
 # include <signal.h>
+# include <unistd.h>
 
 # define MAXCLIENT 1000
 
@@ -26,6 +27,7 @@ private:
 
     int _opt;
     int _nbClient;
+    std::string _password;
     socklen_t _addrLen;
     struct pollfd _fds[MAXCLIENT + 1]; // + 1 for serverFd
     struct sockaddr_in _address;
@@ -34,11 +36,12 @@ private:
     static bool interrupt;
 
 public:
-    Server(int port);
-    ~Server() {}
+    Server(int port, char *password);
+    ~Server();
 
+    void exit();
     void handlingSignal();
-    void initDataAndServer(int port);
+    void initDataAndServer(int port, char *password);
     void sendMessage(int clientFd, std::string msg);
     
     static void handleBreak(int sig);

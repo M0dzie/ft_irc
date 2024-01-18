@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/16 13:28:38 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 13:00:48 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
         return -1;
 
     try {
-        Server server(std::atoi(argv[1]));
+        Server server(std::atoi(argv[1]), argv[2]);
     } catch (std::exception const &e) {
         std::cerr << e.what() << std::endl;
     }
