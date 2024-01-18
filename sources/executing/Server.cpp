@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 13:03:57 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 13:17:05 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ Server::Server(int port, char *password) {
         }
         
         //handling msg from known clients
-        for (int i = 1; i <= this->_nbClient + 1; i++) {
+        for (int i = 1; i < this->_nbClient + 1; i++) {
             if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
                 if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) == 0) {
                     displayErrorMessage("recv() failed.");
@@ -89,7 +89,7 @@ Server::~Server() {
 void Server::exit() {
     Server::interrupt = true;
     
-    for (int i = 0; i < this->_nbClient; i++)
+    for (int i = 0; i < this->_nbClient + 1; i++)
         close(this->_fds[i].fd);
 
     for (std::map<int, Client *>::iterator it = this->_clientList.begin(); it != this->_clientList.end(); it++)
@@ -97,7 +97,7 @@ void Server::exit() {
 }
 
 void Server::initDataAndServer(int port, char *password) {
-    this->_opt = 1;
+    int opt = 1;
     this->_nbClient = 0;
     this->_password = password;
     this->_addrLen = sizeof(this->_address);
@@ -106,6 +106,7 @@ void Server::initDataAndServer(int port, char *password) {
     this->_address.sin_port = htons(port); // htons function converts the unsigned short integer hostshort from host byte order to network byte order.
     this->_addrLen = sizeof(this->_address);
     this->_fds[0].events = POLLIN;
+    this->_fds[0].revents = 0;
     
     // AF_INET = domain IPv4; SOCK_STREAM = socket oriente connexion (type TCP); 0 = protocole adapte au type
     // Create socket file descriptor
@@ -113,7 +114,7 @@ void Server::initDataAndServer(int port, char *password) {
         throw(Server::ServerError(ERROR "Creation of socket failed."));
     
     // Forcefully attaching socket to the current port passing in paramater (port)
-    if (setsockopt(this->_fds[0].fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_opt, sizeof(this->_opt)))
+    if (setsockopt(this->_fds[0].fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
         throw(Server::ServerError(ERROR "Something went wrong."));
 
     if (bind(this->_fds[0].fd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
