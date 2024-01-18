@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 13:11:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/18 13:52:36 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ public:
     void handlingSignal();
     void initDataAndServer(int port, char *password);
     void sendMessage(int clientFd, std::string msg);
+
+    std::string const &getPassword() const {return this->_password;}
     
     static void handleBreak(int sig);
 
