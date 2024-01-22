@@ -6,45 +6,55 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/22 17:14:30 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/22 18:13:24 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-void displayVectorContent(std::vector<std::string> vectorContent) {
+// void displayVectorContent(std::vector<std::string> vectorContent) {
 
-	std::vector<std::string>::iterator it;
+// 	std::vector<std::string>::iterator it;
 
-	for (it = vectorContent.begin(); it != vectorContent.end(); it++)
-	{
-		std::cout << *it << std::endl;
-	}
-}
+// 	for (it = vectorContent.begin(); it != vectorContent.end(); it++)
+// 	{
+// 		std::cout << *it << std::endl;
+// 	}
+// }
 
-std::vector<std::string> getChannelVector(std::string itChannel) {
+// std::vector<std::string> getChannelVector(std::string itChannel) {
 
-	std::vector<std::string> tmpVector;
-	std::string word;
+// 	std::vector<std::string> tmpVector;
+// 	std::string word;
 
-	if ((itChannel).find(",") != std::string::npos)
-	{
-		std::stringstream streamLine(itChannel);
+// 	if ((itChannel).find(",") != std::string::npos)
+// 	{
+// 		std::stringstream streamLine(itChannel);
 
-		while(!streamLine.eof())
-		{
-			std::getline(streamLine, word, ',');
-			tmpVector.push_back(word);
-		}
-	}
-	else
-	{
-		tmpVector.push_back(itChannel);
-	}
-	return tmpVector;
-}
+// 		while(!streamLine.eof())
+// 		{
+// 			std::getline(streamLine, word, ',');
+// 			tmpVector.push_back(word);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		tmpVector.push_back(itChannel);
+// 	}
+// 	return tmpVector;
+// }
+
+// void createChannel(Comands & command) {}
 
 void	executeJoin(Commands & command) {
+	
+	std::vector<std::string>::iterator it = command.getArgSplit().begin();
+	std::vector<std::string>::iterator ite = command.getArgSplit().end();
+
+	while (it != ite) {
+		
+		++it;
+	}
 	
 	if (command.getArgSplit()[0][0] != '#')
 		return;
