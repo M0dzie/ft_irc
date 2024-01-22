@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/18 18:23:00 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/22 17:36:52 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void login(Commands & command) {
 	const std::string & password = tmpClient.getPassword();
 
 	if (!isPassValidate && password.empty())
-		std::cout << PURPLE << "Warning: " << RESET << "You must register." << std::endl;
+		displayError(ERR_NOTREGISTERED, command);
 	else if (!isPassValidate && !password.empty())
-		std::cout << RED << "Error: " << RESET << "Invalid password." << std::endl;
+		displayError(ERR_PASSWDMISMATCH, command);
 	else
 		sendMessage(tmpClient.getFD(), ":localhost 376 " + tmpClient.getUsername() + " :" + tmpClient.getUsername() + " connected!");
 }

@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
 /*   Updated: 2024/01/22 16:36:56 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/22 18:15:25 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +16,10 @@
 # include "Server.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
+# define ERR_NOTREGISTERED 451
+# define ERR_NEEDMOREPARAMS 461
+# define ERR_ALREADYREGISTERED 462
+# define ERR_PASSWDMISMATCH 464
 
 class Commands {
 
@@ -39,5 +44,6 @@ class Commands {
 
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
+void    displayError(int errorCode, Commands & command);
 
 #endif
