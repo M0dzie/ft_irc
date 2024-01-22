@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
+/*   Updated: 2024/01/22 16:36:56 by thmeyer          ###   ########.fr       */
 /*   Updated: 2024/01/22 18:15:25 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -15,7 +16,6 @@
 # include "Server.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-
 # define ERR_NOTREGISTERED 451
 # define ERR_NEEDMOREPARAMS 461
 # define ERR_ALREADYREGISTERED 462
