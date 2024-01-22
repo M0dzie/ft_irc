@@ -6,7 +6,7 @@
 #    By: msapin <msapin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2024/01/18 17:34:09 by msapin           ###   ########.fr        #
+#    Updated: 2024/01/22 17:12:43 by msapin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ OBJS_DIRS	=	$(OBJ_EXECUTING_PATH)	$(OBJ_COMMANDS_PATH)
 # ##################################### #
 
 SRC_COMMANDS_FILES		=	Commands.cpp join.cpp	nick.cpp user.cpp	ping.cpp	pass.cpp
-SRC_EXECUTING_FILES		=	main.cpp Client.cpp Server.cpp Channel.cpp
+SRC_EXECUTING_FILES		=	main.cpp Client.cpp Server.cpp Channel.cpp	display_messages.cpp
 
 SRCS_COMMANDS		=	$(addprefix $(SRC_COMMANDS_PATH), $(SRC_COMMANDS_FILES))
 SRCS_EXECUTING		=	$(addprefix $(SRC_EXECUTING_PATH), $(SRC_EXECUTING_FILES))
