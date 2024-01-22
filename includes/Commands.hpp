@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/18 17:12:44 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/22 16:36:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define COMMANDS_HPP
 # include "Server.hpp"
 # include "Client.hpp"
+# include "Channel.hpp"
 
 class Commands {
 

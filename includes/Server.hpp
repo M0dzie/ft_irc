@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 17:08:51 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/22 16:19:12 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ public:
     void sendMessage(int clientFd, std::string msg);
 
     std::string const &getPassword() const {return this->_password;}
+    std::map<std::string, Channel *> &getChannelList() {return this->_channelList;}
     
     static void handleBreak(int sig);
 

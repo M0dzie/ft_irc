@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 16:07:54 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/22 16:34:01 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ void Server::exit() {
 		delete it->second;
 	this->_clientList.clear();
 
-	// for (std::map<std::string, Channel *>::iterator it = this->_channelList.begin(); it != this->_channelList.end(); it++)
-	//     delete it->second;
+	for (std::map<std::string, Channel *>::iterator it = this->_channelList.begin(); it != this->_channelList.end(); it++)
+	    delete it->second;
 	this->_channelList.clear();
 }
 

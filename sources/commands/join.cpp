@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/16 17:08:40 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/22 16:25:33 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ std::vector<std::string> getChannelVector(std::string itChannel) {
 }
 
 void	executeJoin(Commands & command) {
-
-	(void)command;
-
-	std::cout << "Execute JOIN" << std::endl;
+	
+	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0])));
+	displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
+	sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
+	
 	// std::vector<std::string>::iterator itChannel = commandLine.begin();
 	// std::string command = *itChannel;
 	// std::vector<std::string> channelVector = getChannelVector(*(++itChannel));
