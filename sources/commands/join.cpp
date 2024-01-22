@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/22 16:25:33 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/22 17:14:30 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,13 @@ std::vector<std::string> getChannelVector(std::string itChannel) {
 
 void	executeJoin(Commands & command) {
 	
-	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0])));
+	if (command.getArgSplit()[0][0] != '#')
+		return;
+	
+	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
 	displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
 	sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
+	sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
 	
 	// std::vector<std::string>::iterator itChannel = commandLine.begin();
 	// std::string command = *itChannel;
