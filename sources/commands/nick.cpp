@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:17:49 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/23 18:40:21 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,38 @@ bool isNicknameValid(std::string nickname, Commands & command) {
 	return true;
 }
 
+bool isUseElsewhere(Commands & command) {
+
+	Server & tmpServer = command.getServer();
+	(void)tmpServer;
+
+	std::map<int, Client *> tmpMap = tmpServer.getClientList();
+	std::map<int, Client *>::iterator it = tmpMap.begin();
+	(void)tmpMap;
+	(void)it;
+
+	// std::cout << tmpServer << std::endl;
+
+	// std::cout << tmpMap.size() << std::endl;
+	// std::cout << *it.getUsername() << std::endl;
+
+	return false;
+}
+
 void	executeNick(Commands & command) {
 
+	// check if nickname pass as argument
 	std::string nickname = *(command.getArgSplit().begin());
 	std::string oldNickname = command.getClient().getNickname();
 
 	if (!command.getClient().getPassValidate())
 		displayError(ERR_NOTREGISTERED, command);
+	else if (isUseElsewhere(command))
+		displayError(ERR_NICKNAMEINUSE, command);
 	else if (isNicknameValid(nickname, command))
 	{
 		command.getClient().setNickname(nickname);
-		// check if not first use of nick function
-		if (oldNickname != "undefined")
-		{
-			sendMessage(command.getClient().getFD(), ":" + oldNickname + " NICK " + nickname);
-			displayMessage(SERVER, ":" + oldNickname + " NICK " + nickname);
-		}
+		sendMessage(command.getClient().getFD(), ":" + oldNickname + " NICK " + nickname);
+		displayMessage(SERVER, ":" + oldNickname + " NICK " + nickname);
 	}
 }
