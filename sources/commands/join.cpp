@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 17:14:00 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 17:35:18 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,6 @@ static std::vector<std::string> splitArg(std::string arg) {
 	return tmpVector;
 }
 
-// static std::vector<std::string> splitMultiChannels(std::vector<std::string> vectorContent) {
-
-// 	std::vector<std::string> splitJoin;
-// 	std::vector<std::string> tmp;
-// 	std::vector<std::string>::iterator it;
-
-// 	for (it = vectorContent.begin(); it != vectorContent.end(); it++) {
-// 		tmp = getChannelVector(*it);
-// 		splitJoin.insert(splitJoin.end(), tmp.begin(), tmp.end());
-// 	}
-// 	return splitJoin;
-// }
-
 static std::map<std::string, std::string> createPair(std::vector<std::string> args) {
 	
 	std::vector<std::string> channelName;
@@ -51,13 +38,19 @@ static std::map<std::string, std::string> createPair(std::vector<std::string> ar
 	channelName = splitArg(args.at(0));
 	password = splitArg(args.at(1));
 
-	std::vector<std::string>::iterator it;
-	std::vector<std::string>::iterator ite;
-	for (it = channelName.begin(); it != channelName.end(); it++)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-	for (it = password.begin(); it != password.end(); it++)
-		std::cout << *it << " ";
+	std::vector<std::string>::iterator itCN = channelName.begin();
+	std::vector<std::string>::iterator iteCN = channelName.end();
+	std::vector<std::string>::iterator itP = password.begin();
+	std::vector<std::string>::iterator iteP = password.end();
+
+	while (itCN != iteCN) {
+		if (itP != iteP) {
+			pairs.insert(std::pair<std::string, std::string>(*itCN, *itP));
+			itP++;
+		} else
+			pairs.insert(std::pair<std::string, std::string>(*itCN, ""));
+		itCN++;
+	}
 
 	return pairs;
 }
@@ -72,20 +65,11 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	}
  
 	std::map<std::string, std::string> pairs = createPair(args);
-	// channelName = splitJoin.at(0);
-	// splitJoin.erase(splitJoin.begin());
-	
-	// if (splitJoin.size() == 1) {
-	// 	password = splitJoin.at(1);
-	// 	splitJoin.erase(splitJoin.begin());
-	// }
 
 	return true;
 }
 
 void	executeJoin(Commands & command) {
-
-	// std::vector<std::string> splitJoin = splitMultiChannels(command.getArgSplit());
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
