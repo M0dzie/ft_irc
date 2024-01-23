@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:28:24 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/18 18:23:26 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/23 14:20:04 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,34 @@
 
 void	executePass(Commands & command) {
 
-	std::string password = *(command.getArgSplit().begin());
+	std::vector<std::string> tmpArgs = command.getArgSplit();
 
-    Client & tmpClient = command.getClient();
-
-    tmpClient.setPassword(password);
-    if (password == command.getServer().getPassword())
+	if (tmpArgs.begin() == tmpArgs.end())
+		displayError(ERR_NEEDMOREPARAMS, command);
+	else
 	{
-        // std::cout << "PASSWORD Valid" << std::endl;
-        tmpClient.setPassValidate(true);
+		std::string password = *(command.getArgSplit().begin());
+		Client & tmpClient = command.getClient();
+		bool isRegistered = tmpClient.getRegister();
+
+		if (password.empty())
+			displayError(ERR_NEEDMOREPARAMS, command);
+
+		// std::cout << "|" << password << "|" << std::endl;
+		if (isRegistered)
+			displayError(ERR_ALREADYREGISTERED, command);
+		else
+		{
+			if (password.empty())
+				displayError(ERR_NEEDMOREPARAMS, command);
+			else
+			{
+				tmpClient.setPassword(password);
+				if (password == command.getServer().getPassword())
+					tmpClient.setPassValidate(true);
+				else
+					tmpClient.setPassValidate(false);
+			}
+		}
 	}
-    else
-    {
-        // std::cout << "PASSWORD Invalid" << std::endl;
-        tmpClient.setPassValidate(false);
-    }
 }
