@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 13:57:24 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/23 16:13:27 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 # include "Channel.hpp"
 ///////////////////////////////// SETUP OTHER NUMBER LATER
 # define ERR_CANNOTBEUNDEFINED -1
+# define ERR_INVALIDARG -2
 
+# define ERR_NONICKNAMEGIVEN 431
 # define ERR_NOTREGISTERED 451
 # define ERR_NEEDMOREPARAMS 461
 # define ERR_ALREADYREGISTERED 462
