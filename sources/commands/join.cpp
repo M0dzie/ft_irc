@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 17:35:18 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 17:49:42 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,24 @@ static std::map<std::string, std::string> createPair(std::vector<std::string> ar
 
 static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	
+	if (args.size() > 2)
+		return false;
 	if (args.size() < 1 || args.at(0).empty()) {
 		displayError(ERR_NEEDMOREPARAMS, command);
-		return false;
-	} else if (args.at(0)[0] != '#' || args.at(0).size() < 2) {
 		return false;
 	}
  
 	std::map<std::string, std::string> pairs = createPair(args);
+
+	std::map<std::string, std::string>::iterator it = pairs.begin();
+	std::map<std::string, std::string>::iterator ite = pairs.end();
+	while (it != ite) {
+		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
+			return false;
+		it++;
+	}
+
+	std::cout << "test" << std::endl;
 
 	return true;
 }
@@ -74,8 +84,8 @@ void	executeJoin(Commands & command) {
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
 
-	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
-	displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
-	sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
-	sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
+	// command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
+	// displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
+	// sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
+	// sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
 }
