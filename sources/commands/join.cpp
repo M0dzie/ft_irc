@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:03:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 14:20:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,15 @@ static std::vector<std::string> getChannelVector(std::string itChannel) {
 	std::vector<std::string> tmpVector;
 	std::string word;
 
-	if ((itChannel).find(",") != std::string::npos)
-	{
+	if ((itChannel).find(",") != std::string::npos) {
 		std::stringstream streamLine(itChannel);
 
-		while(!streamLine.eof())
-		{
+		while(!streamLine.eof()) {
 			std::getline(streamLine, word, ',');
 			tmpVector.push_back(word);
 		}
-	}
-	else
-	{
+	} else
 		tmpVector.push_back(itChannel);
-	}
 	return tmpVector;
 }
 
@@ -47,9 +42,22 @@ static std::vector<std::string> splitMultiChannels(std::vector<std::string> vect
 	return splitJoin;
 }
 
-// bool getArg(Commands &command, std::string &channelName, std::string &password) {
+static bool isArgValid(Commands &command, std::vector<std::string> splitJoin, std::string &channelName, std::string &password) {
 	
-// }
+	if (splitJoin.size() < 1 || splitJoin.at(0).empty()) {
+		displayError(ERR_NEEDMOREPARAMS, command);
+		return false;
+	}
+
+	channelName = splitJoin.at(0);
+	if (splitJoin.size() == 2 && !splitJoin.at(1).empty())
+		password = splitJoin.at(1);
+
+	if (channelName[0] != '#' || channelName.size() < 2 || channelName.find('#', 1) != std::string::npos)
+		return false;
+		
+	return true;
+}
 
 void	executeJoin(Commands & command) {
 
@@ -57,24 +65,14 @@ void	executeJoin(Commands & command) {
 	std::string password;
 	std::vector<std::string> splitJoin = splitMultiChannels(command.getArgSplit());
 
+	if (!isArgValid(command, splitJoin, channelName, password))
+		return;
 
-	// std::map<std::string, Channel *>::iterator it = command.getServer().getChannelList().find(name);
-	
+	std::cout << "channelName: " << channelName << std::endl;
+	std::cout << "password: " << password << std::endl;
+
 	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
 	displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
 	sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
 	sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
-	
-	// std::vector<std::string>::iterator itChannel = commandLine.begin();
-	// std::string command = *itChannel;
-	// std::vector<std::string> channelVector = getChannelVector(*(++itChannel));
-
-	// std::cout << "CHANNEL:" << std::endl;
-	// displayVectorContent(channelVector);
-	// if ((itChannel) != commandLine.end())
-	// {
-	// 	std::vector<std::string> passwordVector = getChannelVector(*(++itChannel));
-	// 	std::cout << std::endl << "PASSWORD: " << std::endl;
-	// 	displayVectorContent(passwordVector);
-	// }
 }
