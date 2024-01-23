@@ -6,58 +6,59 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/22 18:13:24 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 14:03:01 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-// void displayVectorContent(std::vector<std::string> vectorContent) {
+static std::vector<std::string> getChannelVector(std::string itChannel) {
 
-// 	std::vector<std::string>::iterator it;
+	std::vector<std::string> tmpVector;
+	std::string word;
 
-// 	for (it = vectorContent.begin(); it != vectorContent.end(); it++)
-// 	{
-// 		std::cout << *it << std::endl;
-// 	}
+	if ((itChannel).find(",") != std::string::npos)
+	{
+		std::stringstream streamLine(itChannel);
+
+		while(!streamLine.eof())
+		{
+			std::getline(streamLine, word, ',');
+			tmpVector.push_back(word);
+		}
+	}
+	else
+	{
+		tmpVector.push_back(itChannel);
+	}
+	return tmpVector;
+}
+
+static std::vector<std::string> splitMultiChannels(std::vector<std::string> vectorContent) {
+
+	std::vector<std::string> splitJoin;
+	std::vector<std::string> tmp;
+	std::vector<std::string>::iterator it;
+
+	for (it = vectorContent.begin(); it != vectorContent.end(); it++) {
+		tmp = getChannelVector(*it);
+		splitJoin.insert(splitJoin.end(), tmp.begin(), tmp.end());
+	}
+	return splitJoin;
+}
+
+// bool getArg(Commands &command, std::string &channelName, std::string &password) {
+	
 // }
-
-// std::vector<std::string> getChannelVector(std::string itChannel) {
-
-// 	std::vector<std::string> tmpVector;
-// 	std::string word;
-
-// 	if ((itChannel).find(",") != std::string::npos)
-// 	{
-// 		std::stringstream streamLine(itChannel);
-
-// 		while(!streamLine.eof())
-// 		{
-// 			std::getline(streamLine, word, ',');
-// 			tmpVector.push_back(word);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		tmpVector.push_back(itChannel);
-// 	}
-// 	return tmpVector;
-// }
-
-// void createChannel(Comands & command) {}
 
 void	executeJoin(Commands & command) {
-	
-	std::vector<std::string>::iterator it = command.getArgSplit().begin();
-	std::vector<std::string>::iterator ite = command.getArgSplit().end();
 
-	while (it != ite) {
-		
-		++it;
-	}
-	
-	if (command.getArgSplit()[0][0] != '#')
-		return;
+	std::string channelName;
+	std::string password;
+	std::vector<std::string> splitJoin = splitMultiChannels(command.getArgSplit());
+
+
+	// std::map<std::string, Channel *>::iterator it = command.getServer().getChannelList().find(name);
 	
 	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
 	displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
