@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 18:28:28 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/23 14:12:40 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ public:
     void setFD(int fd) {this->_fd = fd;}
     void setNickname(std::string const &nickname) {this->_nickname = nickname;}
     void setUsername(std::string const &username) {this->_username = username;}
+    void setRealname(std::string const &realname) {this->_realname = realname;}
     void setPassword(std::string const &password) {this->_password = password;}
     void setLastPing(std::string const &lastPing) {this->_lastPing = lastPing;}
     void setPassValidate(bool value) {this->_passValidate = value;}
@@ -42,7 +43,9 @@ public:
 
     int const &getFD() const {return this->_fd;}
     std::string const &getNickname() const {return this->_nickname;}
-    std::string const &getUsername() const {return this->_username;}
+    std::string const &getUsername() const;
+    std::string const &getRealname() const;
+
     std::string const &getPassword() const {return this->_password;}
     std::string const &getLastPing() const {return this->_lastPing;}
     bool getPassValidate() const {return this->_passValidate;}
