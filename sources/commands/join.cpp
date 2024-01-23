@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:20:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 16:29:16 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,16 @@ static bool isArgValid(Commands &command, std::vector<std::string> splitJoin, st
 	}
 
 	channelName = splitJoin.at(0);
-	if (splitJoin.size() == 2 && !splitJoin.at(1).empty())
+	splitJoin.erase(splitJoin.begin());
+	
+	if (splitJoin.size() == 1) {
 		password = splitJoin.at(1);
+		splitJoin.erase(splitJoin.begin());
+	}
 
 	if (channelName[0] != '#' || channelName.size() < 2 || channelName.find('#', 1) != std::string::npos)
 		return false;
-		
+	
 	return true;
 }
 
