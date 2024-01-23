@@ -6,11 +6,13 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 17:49:42 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 18:01:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
+
+std::map<std::string, std::string> gPairs;
 
 static std::vector<std::string> splitArg(std::string arg) {
 
@@ -29,11 +31,10 @@ static std::vector<std::string> splitArg(std::string arg) {
 	return tmpVector;
 }
 
-static std::map<std::string, std::string> createPair(std::vector<std::string> args) {
+static void createPair(std::vector<std::string> args) {
 	
 	std::vector<std::string> channelName;
 	std::vector<std::string> password;
-	std::map<std::string, std::string> pairs;
 
 	channelName = splitArg(args.at(0));
 	password = splitArg(args.at(1));
@@ -45,14 +46,12 @@ static std::map<std::string, std::string> createPair(std::vector<std::string> ar
 
 	while (itCN != iteCN) {
 		if (itP != iteP) {
-			pairs.insert(std::pair<std::string, std::string>(*itCN, *itP));
+			gPairs.insert(std::pair<std::string, std::string>(*itCN, *itP));
 			itP++;
 		} else
-			pairs.insert(std::pair<std::string, std::string>(*itCN, ""));
+			gPairs.insert(std::pair<std::string, std::string>(*itCN, ""));
 		itCN++;
 	}
-
-	return pairs;
 }
 
 static bool isArgValid(Commands &command, std::vector<std::string> args) {
@@ -63,18 +62,16 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 		displayError(ERR_NEEDMOREPARAMS, command);
 		return false;
 	}
- 
-	std::map<std::string, std::string> pairs = createPair(args);
 
-	std::map<std::string, std::string>::iterator it = pairs.begin();
-	std::map<std::string, std::string>::iterator ite = pairs.end();
+	createPair(args);
+ 
+	std::map<std::string, std::string>::iterator it = gPairs.begin();
+	std::map<std::string, std::string>::iterator ite = gPairs.end();
 	while (it != ite) {
 		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
 			return false;
 		it++;
 	}
-
-	std::cout << "test" << std::endl;
 
 	return true;
 }
