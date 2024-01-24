@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:09:38 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:17:48 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@
 # define ERR_NOSUCHCHANNEL 403
 # define ERR_NONICKNAMEGIVEN 431
 # define ERR_NICKNAMEINUSE 433
+# define ERR_USERONCHANNEL 443
 # define ERR_NOTREGISTERED 451
 # define ERR_NEEDMOREPARAMS 461
+# define ERR_CHANNELISFULL 471
+# define ERR_BADCHANNELKEY 475
 # define ERR_ALREADYREGISTERED 462
 # define ERR_PASSWDMISMATCH 464
 
