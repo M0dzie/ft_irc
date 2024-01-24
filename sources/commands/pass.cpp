@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:28:24 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:20:04 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:35:53 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,14 @@ void	executePass(Commands & command) {
 
 		if (password.empty())
 			displayError(ERR_NEEDMOREPARAMS, command);
-
-		// std::cout << "|" << password << "|" << std::endl;
-		if (isRegistered)
+		else if (isRegistered)
 			displayError(ERR_ALREADYREGISTERED, command);
 		else
 		{
 			if (password.empty())
 				displayError(ERR_NEEDMOREPARAMS, command);
 			else
-			{
 				tmpClient.setPassword(password);
-				if (password == command.getServer().getPassword())
-					tmpClient.setPassValidate(true);
-				else
-					tmpClient.setPassValidate(false);
-			}
 		}
 	}
 }
