@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:38:37 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 16:41:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void	executeJoin(Commands & command) {
 	
 	while (it != ite) {
 		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
-		
 		if (channelIt == command.getServer().getChannelList().end()) {
 			displayError(ERR_NOSUCHCHANNEL, command);
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
