@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 12:24:16 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 14:02:20 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,18 @@ bool isNicknameValid(std::string nickname, Commands & command) {
 	return true;
 }
 
-bool isUseElsewhere(Commands & command) {
+bool isUseElsewhere(Commands & command, std::string nickname) {
 
 	Server & tmpServer = command.getServer();
-	(void)tmpServer;
-
 	std::map<int, Client *> tmpMap = tmpServer.getClientList();
-	std::map<int, Client *>::iterator it = tmpMap.begin();
-	(void)tmpMap;
-	(void)it;
+	std::map<int, Client *>::iterator  it = tmpMap.begin();
 
-	// std::cout << tmpServer << std::endl;
-
-	// std::cout << tmpMap.size() << std::endl;
-	// std::cout << *it.getUsername() << std::endl;
-
+	while (it != tmpMap.end())
+	{
+		if (it->second->getNickname() == nickname && it->second->getNickname() != "undefined")
+			return true;
+		it++;
+	}
 	return false;
 }
 
@@ -53,7 +50,7 @@ void	executeNick(Commands & command) {
 
 	if (command.getClient().getPassword().empty())
 		displayError(ERR_NOTREGISTERED, command);
-	else if (isUseElsewhere(command))
+	else if (isUseElsewhere(command, nickname))
 		displayError(ERR_NICKNAMEINUSE, command);
 	else if (isNicknameValid(nickname, command))
 	{

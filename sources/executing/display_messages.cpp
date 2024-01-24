@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 17:42:56 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 13:45:38 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void    displayError(int errorCode, Commands & command) {
 		std::cout << RED << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :No nickname given" << std::endl;
 		break;
 	case ERR_NICKNAMEINUSE:
-		std::cout << RED << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << command.getClient().getNickname() << " :Nickname is already in use" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :Nickname is already in use" << std::endl;
 		break;
 
 	case ERR_CANNOTBEUNDEFINED:
