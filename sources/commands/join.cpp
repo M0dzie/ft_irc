@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:03:32 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 16:41:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 
 void	executeJoin(Commands & command) {
 
+	std::string clientName = command.getClient().getNickname();
+
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
 
@@ -87,10 +89,29 @@ void	executeJoin(Commands & command) {
 	
 	while (it != ite) {
 		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
-		
 		if (channelIt == command.getServer().getChannelList().end()) {
-			// ERR_NOSUCHCHANNEL
+			displayError(ERR_NOSUCHCHANNEL, command);
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
+			command.getServer().getChannelList()[it->first]->updateClientIn(clientName);
+			sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + it->first);
+			it++;
+			continue;
+		}
+
+		Channel *channel = command.getServer().getChannelList()[it->first];
+		
+		if (channel->isAlreadyIn(clientName)) {
+			displayError(ERR_USERONCHANNEL, command);
+			it++;
+			continue;
+		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
+			displayError(ERR_BADCHANNELKEY, command);
+			it++;
+			continue;
+		} else if (channel->getClientIn().size() >= channel->getChannelLimit()) {
+			displayError(ERR_CHANNELISFULL, command);
+			it++;
+			continue;
 		}
 		
 		sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + it->first);
