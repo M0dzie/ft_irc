@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:09:16 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:14:12 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ void    displayError(int errorCode, Commands & command) {
 		break;
 	case ERR_NOSUCHCHANNEL:	// ADD access of channel name
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :No such channel" << std::endl;
+		break;
+	case ERR_USERONCHANNEL:	// ADD access of channel name
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << command.getClient().getNickname() << " <channel> :is already on channel" << std::endl;
 		break;
 
 	case ERR_CANNOTBEUNDEFINED:
