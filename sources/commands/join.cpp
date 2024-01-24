@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:24:52 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 16:38:37 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	executeJoin(Commands & command) {
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
 			command.getServer().getChannelList()[it->first]->updateClientIn(clientName);
 			sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + it->first);
+			it++;
 			continue;
 		}
 
@@ -102,12 +103,15 @@ void	executeJoin(Commands & command) {
 		
 		if (channel->isAlreadyIn(clientName)) {
 			displayError(ERR_USERONCHANNEL, command);
+			it++;
 			continue;
 		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
 			displayError(ERR_BADCHANNELKEY, command);
+			it++;
 			continue;
 		} else if (channel->getClientIn().size() >= channel->getChannelLimit()) {
 			displayError(ERR_CHANNELISFULL, command);
+			it++;
 			continue;
 		}
 		
