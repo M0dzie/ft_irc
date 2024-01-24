@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:09:43 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:16:19 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define ERR_USERONCHANNEL 443
 # define ERR_NOTREGISTERED 451
 # define ERR_NEEDMOREPARAMS 461
+# define ERR_CHANNELISFULL 471
 # define ERR_ALREADYREGISTERED 462
 # define ERR_PASSWDMISMATCH 464
 
