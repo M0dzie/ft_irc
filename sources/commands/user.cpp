@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 16:59:50 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:38:20 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	executeUser(Commands & command) {
 
 	if (command.getClient().getRegister())
 		displayError(ERR_ALREADYREGISTERED, command);
-	else if (!command.getClient().getPassValidate() && command.getClient().getPassword().empty())
+	else if (command.getClient().getPassword().empty())
 		displayError(ERR_NOTREGISTERED, command);
 	else if (command.getClient().getNickname() == "undefined")
 		displayError(ERR_CANNOTBEUNDEFINED, command);
