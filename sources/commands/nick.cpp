@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 18:40:21 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:24:16 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,16 @@ void	executeNick(Commands & command) {
 	std::string nickname = *(command.getArgSplit().begin());
 	std::string oldNickname = command.getClient().getNickname();
 
-	if (!command.getClient().getPassValidate())
+	if (command.getClient().getPassword().empty())
 		displayError(ERR_NOTREGISTERED, command);
 	else if (isUseElsewhere(command))
 		displayError(ERR_NICKNAMEINUSE, command);
 	else if (isNicknameValid(nickname, command))
 	{
+		std::string cmdToSend = ":" + oldNickname + " NICK " + nickname;
+		
 		command.getClient().setNickname(nickname);
-		sendMessage(command.getClient().getFD(), ":" + oldNickname + " NICK " + nickname);
-		displayMessage(SERVER, ":" + oldNickname + " NICK " + nickname);
+		sendMessage(command.getClient().getFD(), cmdToSend);
+		displayMessage(SERVER, cmdToSend);
 	}
 }

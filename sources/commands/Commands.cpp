@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 12:17:29 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:37:16 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,14 @@ Commands::~Commands(void) {
 void login(Commands & command) {
 
 	Client & tmpClient = command.getClient();
-	bool isPassValidate = tmpClient.getPassValidate();
 	bool isRegistered = tmpClient.getRegister();
 	const std::string & password = tmpClient.getPassword();
 
 	if (isRegistered)
 		displayError(ERR_ALREADYREGISTERED, command);
-	else if (!isPassValidate && password.empty())
+	else if (password.empty())
 		displayError(ERR_NOTREGISTERED, command);
-	else if (!isPassValidate && !password.empty())
+	else if (password != command.getServer().getPassword())
 		displayError(ERR_PASSWDMISMATCH, command);
 	else
 	{
