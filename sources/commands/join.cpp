@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 13:08:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 14:03:32 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,15 @@ void	executeJoin(Commands & command) {
 
 	std::map<std::string, std::string>::iterator it = gPairs.begin();
 	std::map<std::string, std::string>::iterator ite = gPairs.end();
-
+	
 	while (it != ite) {
+		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
+		
+		if (channelIt == command.getServer().getChannelList().end()) {
+			// ERR_NOSUCHCHANNEL
+			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
+		}
+		
 		sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + it->first);
 		it++;
 	}
