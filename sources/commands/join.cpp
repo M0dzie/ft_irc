@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/23 18:01:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 12:35:50 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static std::vector<std::string> splitArg(std::string arg) {
 	std::vector<std::string> tmpVector;
 	std::string word;
 
-	if ((arg).find(",") != std::string::npos) {
+	if (arg.find(',') != std::string::npos) {
 		std::stringstream streamLine(arg);
 
 		while(!streamLine.eof()) {
@@ -37,7 +37,7 @@ static void createPair(std::vector<std::string> args) {
 	std::vector<std::string> password;
 
 	channelName = splitArg(args.at(0));
-	password = splitArg(args.at(1));
+	password = splitArg(args.at(0));
 
 	std::vector<std::string>::iterator itCN = channelName.begin();
 	std::vector<std::string>::iterator iteCN = channelName.end();
@@ -73,6 +73,7 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 		it++;
 	}
 
+	std::cout << "test" << std::endl;
 	return true;
 }
 
@@ -81,8 +82,14 @@ void	executeJoin(Commands & command) {
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
 
+	std::map<std::string, std::string>::iterator it = gPairs.begin();
+	std::map<std::string, std::string>::iterator ite = gPairs.end();
+
+	while (it != ite) {
+		sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + it->first);
+		it++;
+	}
 	// command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
 	// displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
-	// sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
 	// sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
 }
