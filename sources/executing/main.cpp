@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 13:00:48 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/23 16:23:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static bool isPortValid(char *argv) {
     for (int i = 0; argv[i]; i++)
         if (!std::isdigit(argv[i]))
             return (displayErrorMessage("Port must be a positive number."), false);
-    if (std::atoi(argv) > 65535)
+    if (std::atoll(argv) > 65535)
         return (displayErrorMessage("Port available : [0-65535]"), false);
-    if (std::atoi(argv) < 1024) {
+    if (std::atoll(argv) < 1024) {
         std::cerr << YELLOW << BOLD << "Warning: " << RESET << "Those ports : [0-1023] are used by system processes and might not work." << std::endl;
         return true;
     }

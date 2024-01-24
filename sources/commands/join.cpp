@@ -6,74 +6,90 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/22 18:13:24 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 13:08:31 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-// void displayVectorContent(std::vector<std::string> vectorContent) {
+std::map<std::string, std::string> gPairs;
 
-// 	std::vector<std::string>::iterator it;
+static std::vector<std::string> splitArg(std::string arg) {
 
-// 	for (it = vectorContent.begin(); it != vectorContent.end(); it++)
-// 	{
-// 		std::cout << *it << std::endl;
-// 	}
-// }
+	std::vector<std::string> tmpVector;
+	std::string word;
 
-// std::vector<std::string> getChannelVector(std::string itChannel) {
+	if (arg.find(',') != std::string::npos) {
+		std::stringstream streamLine(arg);
 
-// 	std::vector<std::string> tmpVector;
-// 	std::string word;
+		while(!streamLine.eof()) {
+			std::getline(streamLine, word, ',');
+			tmpVector.push_back(word);
+		}
+	} else
+		tmpVector.push_back(arg);
+	return tmpVector;
+}
 
-// 	if ((itChannel).find(",") != std::string::npos)
-// 	{
-// 		std::stringstream streamLine(itChannel);
+static void createPair(std::vector<std::string> args) {
+	
+	std::vector<std::string> channelName;
+	std::vector<std::string> password;
 
-// 		while(!streamLine.eof())
-// 		{
-// 			std::getline(streamLine, word, ',');
-// 			tmpVector.push_back(word);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		tmpVector.push_back(itChannel);
-// 	}
-// 	return tmpVector;
-// }
+	channelName = splitArg(args.at(0));
+	if (args.size() == 2)
+		password = splitArg(args.at(1));
 
-// void createChannel(Comands & command) {}
+	std::vector<std::string>::iterator itCN = channelName.begin();
+	std::vector<std::string>::iterator iteCN = channelName.end();
+	std::vector<std::string>::iterator itP = password.begin();
+	std::vector<std::string>::iterator iteP = password.end();
+
+	while (itCN != iteCN) {
+		if (itP != iteP) {
+			gPairs.insert(std::pair<std::string, std::string>(*itCN, *itP));
+			itP++;
+		} else
+			gPairs.insert(std::pair<std::string, std::string>(*itCN, ""));
+		itCN++;
+	}
+}
+
+static bool isArgValid(Commands &command, std::vector<std::string> args) {
+	
+	if (args.size() > 2)
+		return false;
+	if (args.size() < 1 || args.at(0).empty()) {
+		displayError(ERR_NEEDMOREPARAMS, command);
+		return false;
+	}
+
+	createPair(args);
+ 
+	std::map<std::string, std::string>::iterator it = gPairs.begin();
+	std::map<std::string, std::string>::iterator ite = gPairs.end();
+	while (it != ite) {
+		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
+			return false;
+		it++;
+	}
+
+	return true;
+}
 
 void	executeJoin(Commands & command) {
-	
-	std::vector<std::string>::iterator it = command.getArgSplit().begin();
-	std::vector<std::string>::iterator ite = command.getArgSplit().end();
+
+	if (!isArgValid(command, command.getArgSplit()))
+		return;
+
+	std::map<std::string, std::string>::iterator it = gPairs.begin();
+	std::map<std::string, std::string>::iterator ite = gPairs.end();
 
 	while (it != ite) {
-		
-		++it;
+		sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + it->first);
+		it++;
 	}
-	
-	if (command.getArgSplit()[0][0] != '#')
-		return;
-	
-	command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
-	displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
-	sendMessage(command.getClient().getFD(), ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
-	sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
-	
-	// std::vector<std::string>::iterator itChannel = commandLine.begin();
-	// std::string command = *itChannel;
-	// std::vector<std::string> channelVector = getChannelVector(*(++itChannel));
-
-	// std::cout << "CHANNEL:" << std::endl;
-	// displayVectorContent(channelVector);
-	// if ((itChannel) != commandLine.end())
-	// {
-	// 	std::vector<std::string> passwordVector = getChannelVector(*(++itChannel));
-	// 	std::cout << std::endl << "PASSWORD: " << std::endl;
-	// 	displayVectorContent(passwordVector);
-	// }
+	// command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(command.getArgSplit()[0], new Channel(command.getArgSplit()[0], "")));
+	// displayMessage(SERVER, ":" + command.getClient().getNickname() + " JOIN " + command.getArgSplit()[0]);
+	// sendMessage(command.getClient().getFD(), command.getClient().getNickname() + " is joining the channel " + command.getArgSplit()[0]);
 }
