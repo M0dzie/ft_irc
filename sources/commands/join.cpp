@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 12:35:50 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/24 13:08:31 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static void createPair(std::vector<std::string> args) {
 	std::vector<std::string> password;
 
 	channelName = splitArg(args.at(0));
-	password = splitArg(args.at(0));
+	if (args.size() == 2)
+		password = splitArg(args.at(1));
 
 	std::vector<std::string>::iterator itCN = channelName.begin();
 	std::vector<std::string>::iterator iteCN = channelName.end();
@@ -73,7 +74,6 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 		it++;
 	}
 
-	std::cout << "test" << std::endl;
 	return true;
 }
 
