@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_messages.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:58:20 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/25 16:24:50 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ void    displayError(int errorCode, Commands & command) {
 		break;
 	case ERR_INVITEONLYCHAN:	// ADD access of channel name
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " <channel> :Cannot join channel (+i)" << std::endl;
+		break;
+	case ERR_NOSUCHNICK:
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :No such nick/channel" << std::endl;
 		break;
 
 	case ERR_CANNOTBEUNDEFINED:

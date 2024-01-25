@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:36:34 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/25 16:24:41 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define ERR_CANNOTBEUNDEFINED -1
 # define ERR_INVALIDARG -2
 
+# define ERR_NOSUCHNICK 401
 # define ERR_NOSUCHCHANNEL 403
 # define ERR_NONICKNAMEGIVEN 431
 # define ERR_NICKNAMEINUSE 433
