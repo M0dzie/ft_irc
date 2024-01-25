@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:36:58 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/25 14:58:20 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
 			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :No topic is set");
 			break;
 		case RPL_TOPIC:
-			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :" + "<topic>");
+			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
 			break;
 		
 		default:
