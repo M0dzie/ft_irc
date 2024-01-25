@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:18:09 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/25 13:38:11 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ void    displayError(int errorCode, Commands & command) {
 		break;
 	case ERR_BADCHANNELKEY:	// ADD access of channel name
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " <channel> :Cannot join channel (+k)" << std::endl;
+		break;
+	case ERR_INVITEONLYCHAN:	// ADD access of channel name
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " <channel> :Cannot join channel (+i)" << std::endl;
 		break;
 
 	case ERR_CANNOTBEUNDEFINED:
