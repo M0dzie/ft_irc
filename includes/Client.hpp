@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/24 12:36:56 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/25 16:21:23 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ public:
 	void setPassword(std::string const &password) {this->_password = password;}
 	void setLastPing(std::string const &lastPing) {this->_lastPing = lastPing;}
 	void setRegister(bool value) {this->_registered = value;}
+
+	bool operator==(Client const & rhs) const {return this->_nickname == rhs.getNickname();}
 
 	int const &getFD() const {return this->_fd;}
 	std::string const &getNickname() const {return this->_nickname;}
