@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:18:04 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/25 14:47:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 static void joinMessage(Channel const &channel, Client const &client) {
 	sendMessage(client.getFD(), ":" + client.getNickname() + " JOIN " + channel.getName());
 	sendMessage(client.getFD(), client.getNickname() + " join " + channel.getName());
+	if (channel.getTopic().empty())
+		return displayRPL(RPL_NOTOPIC, client, channel);
+	sendMessage(client.getFD(), ":" + client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
 }
 
 void	executeJoin(Commands & command) {
