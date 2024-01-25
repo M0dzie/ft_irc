@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:58:20 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/25 16:45:31 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,21 @@ void    displayError(int errorCode, Commands & command) {
 }
 
 void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
+	std::string msg = client.getNickname() + " " + channel.getName() + " ";
+
 	switch(RPLCode) {
 		case RPL_NOTOPIC:
 			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :No topic is set");
 			break;
 		case RPL_TOPIC:
 			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
+			break;
+		case RPL_NAMREPLY:
+			for (size_t i = 0; i < channel.getClientIn().size(); i++)
+				msg += channel.getClientIn()[i] + " ";
+			sendMessage(client.getFD(), msg);
+			break;
+		case RPL_ENDOFNAMES:
 			break;
 		
 		default:

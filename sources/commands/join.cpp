@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:58:36 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/01/25 15:11:46 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,11 @@ static void joinMessage(Channel const &channel, Client const &client) {
 	sendMessage(client.getFD(), ":" + client.getNickname() + " JOIN " + channel.getName());
 	sendMessage(client.getFD(), client.getNickname() + " join " + channel.getName());
 	if (channel.getTopic().empty())
-		return displayRPL(RPL_NOTOPIC, client, channel);
-	displayRPL(RPL_TOPIC, client, channel);
+		displayRPL(RPL_NOTOPIC, client, channel);
+	else
+		displayRPL(RPL_TOPIC, client, channel);
+	displayRPL(RPL_NAMREPLY, client, channel);
+	displayRPL(RPL_ENDOFNAMES, client, channel);
 }
 
 void	executeJoin(Commands & command) {
