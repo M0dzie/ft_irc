@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 13:37:46 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/25 14:36:34 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 # define ERR_INVITEONLYCHAN 473
 # define ERR_BADCHANNELKEY 475
 
+# define RPL_NOTOPIC 331
+# define RPL_TOPIC 332
+
 class Commands {
 
 	private:
@@ -56,5 +59,6 @@ class Commands {
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
+void 	displayRPL(int RPLCode, Client const &client, Channel const &channel);
 
 #endif

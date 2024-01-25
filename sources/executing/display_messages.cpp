@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_messages.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 13:38:11 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/25 14:58:20 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "../../includes/Client.hpp"
 
 void    displayError(int errorCode, Commands & command) {
-	(void)command;
 
 	switch (errorCode)
 	{
@@ -61,5 +60,19 @@ void    displayError(int errorCode, Commands & command) {
 	
 	default:
 		break;
+	}
+}
+
+void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
+	switch(RPLCode) {
+		case RPL_NOTOPIC:
+			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :No topic is set");
+			break;
+		case RPL_TOPIC:
+			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
+			break;
+		
+		default:
+			break;
 	}
 }
