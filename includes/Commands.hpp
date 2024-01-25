@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 16:24:41 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/25 15:11:14 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 
 # define RPL_NOTOPIC 331
 # define RPL_TOPIC 332
+# define RPL_NAMREPLY 353
+# define RPL_ENDOFNAMES 366
 
 class Commands {
 
