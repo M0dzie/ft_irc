@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:28:31 by msapin           ###   ########.fr       */
+/*   Updated: 2024/01/25 15:16:58 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	executeNick(Commands & command);
 void	executeUser(Commands & command);
 void	executePing(Commands & command);
 void	executeQuit(Commands & command);
+void	executePrivateMsg(Commands & command);
 
 Commands::Commands(std::string & line, Client & client, Server & server) : _client(client),  _server(server) {
 
@@ -57,10 +58,10 @@ void login(Commands & command) {
 
 void Commands::executeCommand() {
 
-	std::string arrayCommand[] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT"};
-	void (*arrayFunction[6])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit};
+	std::string arrayCommand[] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT", "PRIVMSG"};
+	void (*arrayFunction[7])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit, executePrivateMsg};
 
-	for (int i = 0; i <= 6; i++)
+	for (int i = 0; i <= 7; i++)
 	{
 		if (arrayCommand[i] == this->_name)
 		{
