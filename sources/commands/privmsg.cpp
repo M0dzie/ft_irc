@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:43:21 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/01 18:11:05 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 		displayError(ERR_NOSUCHCHANNEL, command);
 	else
 	{
-		std::vector<Client *> const & listClient = tmpChannel.getClientIn();
+		std::map<Client *, bool> const & listClient = tmpChannel.getClients();
 
-		for (std::vector<Client *>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
+		for (std::map<Client *, bool>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
 		{
-			int tmpFdReceiver = (*it)->getFD();
+			int tmpFdReceiver = it->first->getFD();
 			
 			if (tmpClient.getFD() != tmpFdReceiver)
 			{
