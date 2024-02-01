@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 15:11:14 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 16:04:44 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ class Commands {
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
-void 	displayRPL(int RPLCode, Client const &client, Channel const &channel);
+void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
 
 #endif

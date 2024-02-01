@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 14:58:43 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 16:10:45 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void    displayError(int errorCode, Commands & command) {
 	case ERR_NOSUCHNICK:
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :No such nick/channel" << std::endl;
 		break;
-
 	case ERR_CANNOTBEUNDEFINED:
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :Nickname cannot be \"undefined\"" << std::endl;
 		break;
@@ -66,9 +65,8 @@ void    displayError(int errorCode, Commands & command) {
 	}
 }
 
-void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
-	std::string msg = ":localhost 353 " + client.getNickname() + " = " + channel.getName() + " ";
-
+void displayRPL(int RPLCode, Client const &client, Channel &channel) {
+	
 	switch(RPLCode) {
 		case RPL_NOTOPIC:
 			sendMessage(client.getFD(), ":localhost 331 " + client.getNickname() + " " + channel.getName() + " :No topic is set");
@@ -77,12 +75,10 @@ void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
 			sendMessage(client.getFD(), ":localhost 332 " + client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
 			break;
 		case RPL_NAMREPLY:
-			for (size_t i = 0; i < channel.getClientIn().size(); i++)
-				msg += channel.getClientIn()[i]->getNickname() + " ";
-			sendMessage(client.getFD(), msg);
+			sendMessage(client.getFD(), ":localhost 353 " + client.getNickname() + " = " + channel.getName() + " :" + channel.displayClientList());
 			break;
 		case RPL_ENDOFNAMES:
-			sendMessage(client.getFD(), ":localhost 366 " + client.getNickname() + " " + channel.getName() + ": End of /NAMES list");
+			sendMessage(client.getFD(), ":localhost 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list");
 			break;
 		
 		default:
