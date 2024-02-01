@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/01 18:07:06 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 18:32:54 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ std::string Channel::getClientList() {
 
     for(std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
         Client *client = it->first;
+        if (this->_clients[client])
+            display += "@";
         display += client->getNickname() + " ";
     }
     
