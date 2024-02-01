@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:44:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 18:10:39 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 }
 
 static void sendMessageToChannel(Channel &channel, std::string msg) {
-	std::vector<Client *> listClient = channel.getClientIn();
-	for (std::vector<Client *>::iterator it = listClient.begin(); it != listClient.end(); it++)
-		sendMessage((*it)->getFD(), msg);
+	std::map<Client *, bool> listClient = channel.getClients();
+	for (std::map<Client *, bool>::iterator it = listClient.begin(); it != listClient.end(); it++)
+		sendMessage((it->first)->getFD(), msg);
 }
 
 static void joinChannel(Channel &channel, Client &client) {
@@ -97,8 +97,6 @@ void	executeJoin(Commands & command) {
 	if (!command.getClient().getRegister())
 		return;
 
-	// std::string clientName = command.getClient().getNickname();
-
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
 
@@ -110,9 +108,9 @@ void	executeJoin(Commands & command) {
 		if (channelIt == command.getServer().getChannelList().end()) {
 			displayError(ERR_NOSUCHCHANNEL, command);
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
-			command.getServer().getChannelList()[it->first]->updateClients(&command.getClient());
+			command.getServer().getChannelList()[it->first]->updateClients(&command.getClient(), true);
 			joinChannel(*command.getServer().getChannelList()[it->first], command.getClient());
-			command.getServer().getChannelList()[it->first]->getClientList();
+			command.getServer().getChannelList()[it->first]->displayClientList();
 			it++;
 			continue;
 		}
@@ -127,7 +125,7 @@ void	executeJoin(Commands & command) {
 			displayError(ERR_BADCHANNELKEY, command);
 			it++;
 			continue;
-		} else if (channel->getClientIn().size() >= channel->getChannelLimit()) {
+		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
 			displayError(ERR_CHANNELISFULL, command);
 			it++;
 			continue;
@@ -137,9 +135,9 @@ void	executeJoin(Commands & command) {
 			continue;
 		}
 		
-		command.getServer().getChannelList()[it->first]->updateClients(&command.getClient());
+		command.getServer().getChannelList()[it->first]->updateClients(&command.getClient(), false);
 		joinChannel(*command.getServer().getChannelList()[it->first], command.getClient());
-		command.getServer().getChannelList()[it->first]->getClientList();
+		command.getServer().getChannelList()[it->first]->displayClientList();
 		it++;
 	}
 

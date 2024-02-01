@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/01 17:48:45 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 18:12:10 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ private:
     std::string _topic;
     unsigned long _channelLimit;
     bool _inviteOnly;
-    std::vector<Client *> _clients;
+    std::map<Client *, bool> _clients;
     
 public:
     Channel(std::string const &name, std::string const &password) : _name(name), _password(password), _channelLimit(CHANNELBASELIMIT), _inviteOnly(false) {}
@@ -35,9 +35,11 @@ public:
 
     bool isAlreadyIn(std::string const &name);
     void displayClientList();
-    void updateClients(Client *client);
+    void updateClients(Client *client, bool first);
+    void setOperator(Client *client) {this->_clients[client] = true;}
+    void unsetOperator(Client *client) {this->_clients[client] = false;}
     std::string getClientList();
-    std::vector<Client *>  const &getClientIn() const {return this->_clients;}
+    std::map<Client *, bool>  const &getClients() const {return this->_clients;}
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
     void setInviteOnlyMode(bool const &inviteOnly) {this->_inviteOnly = inviteOnly;}
