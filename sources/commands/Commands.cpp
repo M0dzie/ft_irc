@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:08:36 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:44:08 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void login(Commands & command) {
 
 bool ignoreCommand(std::string & cmdName) {
 	
-	std::string commandToIgnore[] = {"WHO", "CP"};
+	std::string commandToIgnore[] = {"WHO", "CAP"};
 
-	for (unsigned int i = 0; i < commandToIgnore->length(); i++)
+	for (unsigned int i = 0; i < 2; i++)
 	{
 		if (commandToIgnore[i] == cmdName)
 			return true;
@@ -80,7 +80,6 @@ void Commands::executeCommand() {
 	
 	if (!ignoreCommand(this->_name))
 	{
-		// for (unsigned int i = 0; i < arrayCommand->size(); i++)
 		while (++i < 11)
 		{
 			if (arrayCommand[i] == this->_name)
