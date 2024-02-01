@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 13:58:35 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 14:58:43 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
 			break;
 		case RPL_NAMREPLY:
 			for (size_t i = 0; i < channel.getClientIn().size(); i++)
-				msg += channel.getClientIn()[i] + " ";
+				msg += channel.getClientIn()[i]->getNickname() + " ";
 			sendMessage(client.getFD(), msg);
 			break;
 		case RPL_ENDOFNAMES:
