@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_messages.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 16:45:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 12:19:10 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
 			sendMessage(client.getFD(), msg);
 			break;
 		case RPL_ENDOFNAMES:
+			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + ": End of /NAMES list");
 			break;
 		
 		default:
