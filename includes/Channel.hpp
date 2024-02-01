@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/01 15:08:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 15:35:28 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CHANNEL_HPP
 
 # include "ft_irc.hpp"
+# include "Commands.hpp"
 
 # define CHANNELBASELIMIT 20
 
@@ -32,6 +33,7 @@ public:
     Channel(std::string const &name, std::string const &password) : _name(name), _password(password), _channelLimit(CHANNELBASELIMIT), _inviteOnly(false) {}
     ~Channel() {}
 
+    void updateClientList();
     void updateClientIn(Client *client) {this->_clientIn.push_back(client);}
     bool isAlreadyIn(std::string const &name);
 
