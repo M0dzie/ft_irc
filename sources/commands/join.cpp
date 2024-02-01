@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 14:52:55 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 15:13:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	executeJoin(Commands & command) {
 	if (!command.getClient().getRegister())
 		return;
 
-	std::string clientName = command.getClient().getNickname();
+	// std::string clientName = command.getClient().getNickname();
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
@@ -114,7 +114,7 @@ void	executeJoin(Commands & command) {
 
 		Channel *channel = command.getServer().getChannelList()[it->first];
 		
-		if (channel->isAlreadyIn(&command.getClient())) {
+		if (channel->isAlreadyIn(command.getClient().getNickname())) {
 			displayError(ERR_USERONCHANNEL, command);
 			it++;
 			continue;
@@ -132,6 +132,7 @@ void	executeJoin(Commands & command) {
 			continue;
 		}
 		
+		command.getServer().getChannelList()[it->first]->updateClientIn(&command.getClient());
 		joinMessage(*command.getServer().getChannelList()[it->first], command.getClient());
 		it++;
 	}
