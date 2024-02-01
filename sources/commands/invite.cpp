@@ -6,7 +6,12 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 16:11:01 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:10:00 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../includes/Commands.hpp"
+
+void	executeInvite(Commands & command) {
+	(void)command;
+}
