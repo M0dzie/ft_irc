@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/01 15:35:28 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 15:54:37 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ public:
     Channel(std::string const &name, std::string const &password) : _name(name), _password(password), _channelLimit(CHANNELBASELIMIT), _inviteOnly(false) {}
     ~Channel() {}
 
+    bool isAlreadyIn(std::string const &name);
+    std::string displayClientList();
     void updateClientList();
     void updateClientIn(Client *client) {this->_clientIn.push_back(client);}
-    bool isAlreadyIn(std::string const &name);
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
     void setInviteOnlyMode(bool const &inviteOnly) {this->_inviteOnly = inviteOnly;}

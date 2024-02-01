@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 15:32:36 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 16:12:38 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,13 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	return true;
 }
 
-static void joinMessage(Channel const &channel, Client const &client) {
+static void joinMessage(Channel &channel, Client &client) {
 	sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " JOIN " + channel.getName());
+	// MSG TO EVERYONE
 	if (channel.getTopic().empty())
 		displayRPL(RPL_NOTOPIC, client, channel);
 	else
 		displayRPL(RPL_TOPIC, client, channel);
-	displayRPL(RPL_NAMREPLY, client, channel);
-	displayRPL(RPL_ENDOFNAMES, client, channel);
 }
 
 void	executeJoin(Commands & command) {
@@ -107,6 +106,7 @@ void	executeJoin(Commands & command) {
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
 			command.getServer().getChannelList()[it->first]->updateClientIn(&command.getClient());
 			joinMessage(*command.getServer().getChannelList()[it->first], command.getClient());
+			command.getServer().getChannelList()[it->first]->updateClientList();
 			it++;
 			continue;
 		}
