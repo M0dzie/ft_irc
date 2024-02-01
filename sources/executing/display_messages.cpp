@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_messages.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 16:45:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/01 13:58:35 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ void    displayError(int errorCode, Commands & command) {
 }
 
 void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
-	std::string msg = client.getNickname() + " " + channel.getName() + " ";
+	std::string msg = ":localhost 353 " + client.getNickname() + " = " + channel.getName() + " ";
 
 	switch(RPLCode) {
 		case RPL_NOTOPIC:
-			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :No topic is set");
+			sendMessage(client.getFD(), ":localhost 331 " + client.getNickname() + " " + channel.getName() + " :No topic is set");
 			break;
 		case RPL_TOPIC:
-			sendMessage(client.getFD(), client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
+			sendMessage(client.getFD(), ":localhost 332 " + client.getNickname() + " " + channel.getName() + " :" + channel.getTopic());
 			break;
 		case RPL_NAMREPLY:
 			for (size_t i = 0; i < channel.getClientIn().size(); i++)
@@ -82,6 +82,7 @@ void displayRPL(int RPLCode, Client const &client, Channel const &channel) {
 			sendMessage(client.getFD(), msg);
 			break;
 		case RPL_ENDOFNAMES:
+			sendMessage(client.getFD(), ":localhost 366 " + client.getNickname() + " " + channel.getName() + ": End of /NAMES list");
 			break;
 		
 		default:
