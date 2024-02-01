@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/25 15:16:58 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:44:08 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ void	executeUser(Commands & command);
 void	executePing(Commands & command);
 void	executeQuit(Commands & command);
 void	executePrivateMsg(Commands & command);
+void	executeInvite(Commands & command);
+void	executeKick(Commands & command);
+void	executeMode(Commands & command);
+void	executeTopic(Commands & command);
 
 Commands::Commands(std::string & line, Client & client, Server & server) : _client(client),  _server(server) {
 
@@ -56,16 +60,35 @@ void login(Commands & command) {
 	}
 }
 
+bool ignoreCommand(std::string & cmdName) {
+	
+	std::string commandToIgnore[] = {"WHO", "CAP"};
+
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		if (commandToIgnore[i] == cmdName)
+			return true;
+	}
+	return false;
+}
+
 void Commands::executeCommand() {
 
-	std::string arrayCommand[] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT", "PRIVMSG"};
-	void (*arrayFunction[7])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit, executePrivateMsg};
-
-	for (int i = 0; i <= 7; i++)
+	std::string arrayCommand[11] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT", "PRIVMSG", "INVITE", "KICK", "MODE", "TOPIC"};
+	void (*arrayFunction[])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit, executePrivateMsg, executeInvite, executeKick, executeMode, executeTopic};
+	unsigned int i = -1;
+	
+	if (!ignoreCommand(this->_name))
 	{
-		if (arrayCommand[i] == this->_name)
+		while (++i < 11)
 		{
-			(*arrayFunction[i])(*this);
+			if (arrayCommand[i] == this->_name)
+			{
+				(*arrayFunction[i])(*this);
+				break;
+			}
 		}
+		if (i == 11)
+			std::cout << "command not found " << i << " " << 7 << std::endl;	
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 15:29:06 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/01 17:43:21 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,56 +35,62 @@ std::string	getMessageText(std::vector<std::string> & tmpArg) {
 	{
 		messageText += *it;
 	}
-
 	return  messageText;
+}
+
+void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
+	
+	std::string target = *args.begin();
+	Client & tmpClient = command.getClient();
+	Server & tmpServer = command.getServer();
+	std::map<std::string, Channel *> & tmpChannels = tmpServer.getChannelList();
+	Channel & tmpChannel = *(tmpChannels.find(target))->second;
+
+	if (tmpChannel.getName().empty())
+		displayError(ERR_NOSUCHCHANNEL, command);
+	else
+	{
+		std::vector<Client *> const & listClient = tmpChannel.getClientIn();
+
+		for (std::vector<Client *>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
+		{
+			int tmpFdReceiver = (*it)->getFD();
+			
+			if (tmpClient.getFD() != tmpFdReceiver)
+			{
+				std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
+				sendMessage(tmpFdReceiver, serverMessageReceiver);
+			}
+		}
+	}
+}
+
+void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
+	
+	std::string target = *args.begin();
+	Client & tmpReceiver = foundClient(command, target);
+	Client & tmpClient = command.getClient();
+			
+	if (tmpReceiver == tmpClient)
+		displayError(ERR_NOSUCHNICK, command);
+	else
+	{
+		std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
+		sendMessage(tmpReceiver.getFD(), serverMessageReceiver);
+	}
 }
 
 void	executePrivateMsg(Commands & command) {
 
-	std::vector<std::string> & tmpArg = command.getArgSplit();
+	std::vector<std::string> & args = command.getArgSplit();
 
-	if (tmpArg.empty())
+	if (args.empty())
 		displayError(ERR_NEEDMOREPARAMS, command);
 	else
 	{
-		std::string tmpTarget = *tmpArg.begin();
-		Client & tmpClient = command.getClient();
-		Server & tmpServer = command.getServer();
-
-		if (tmpTarget[0] == '#')
-		{
-			std::map<std::string, Channel *> & tmpChannels = tmpServer.getChannelList();
-			Channel & tmpChannel = *(tmpChannels.find(tmpTarget))->second;
-
-			if (tmpChannel.getName().empty())
-				displayError(ERR_NOSUCHCHANNEL, command);
-			else
-			{
-				std::vector<Client *> const & listClient = tmpChannel.getClientIn();
-
-				for (std::vector<Client *>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
-				{
-					int tmpFdReceiver = (*it)->getFD();
-					
-					if ( tmpClient.getFD() != tmpFdReceiver)
-					{
-						std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + tmpTarget + " " + getMessageText(tmpArg);
-						sendMessage((*it)->getFD(), serverMessageReceiver);
-					}
-				}
-			}
-		}
+		if ((*args.begin())[0] == '#')
+			sendMessageToChannel(command, args);
 		else
-		{
-			Client & tmpReceiver = foundClient(command, tmpTarget);
-					
-			if (tmpReceiver == tmpClient)
-				displayError(ERR_NOSUCHNICK, command);
-			else
-			{
-				std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + tmpTarget + " " + getMessageText(tmpArg);
-				sendMessage(tmpReceiver.getFD(), serverMessageReceiver);
-			}
-		}
+			sendMessageToClient(command, args);
 	}
 }
