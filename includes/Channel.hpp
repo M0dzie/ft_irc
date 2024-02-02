@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/01 18:12:10 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 12:04:07 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ public:
     void setOperator(Client *client) {this->_clients[client] = true;}
     void unsetOperator(Client *client) {this->_clients[client] = false;}
     std::string getClientList();
-    std::map<Client *, bool>  const &getClients() const {return this->_clients;}
+    std::map<Client *, bool> &getClients() {return this->_clients;}
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
     void setInviteOnlyMode(bool const &inviteOnly) {this->_inviteOnly = inviteOnly;}
