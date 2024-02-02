@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: msapin <msapin@student.42.fr>              +#+  +:+       +#+         #
+#    By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/22 10:36:10 by thmeyer           #+#    #+#              #
-#    Updated: 2024/02/01 16:11:41 by msapin           ###   ########.fr        #
+#    Updated: 2024/02/02 10:57:36 by thmeyer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,8 @@ OBJS_DIRS	=	$(OBJ_EXECUTING_PATH)	$(OBJ_COMMANDS_PATH)
 
 SRC_COMMANDS_FILES		=	Commands.cpp join.cpp	nick.cpp	user.cpp	\
 							ping.cpp	pass.cpp	quit.cpp	privmsg.cpp	\
-							invite.cpp	kick.cpp	mode.cpp	topic.cpp
+							invite.cpp	kick.cpp	mode.cpp	topic.cpp \
+							part.cpp
 								
 SRC_EXECUTING_FILES		=	main.cpp Client.cpp Server.cpp Channel.cpp	display_messages.cpp
 

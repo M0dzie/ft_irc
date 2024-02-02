@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:44:08 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/02 10:58:29 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	executeInvite(Commands & command);
 void	executeKick(Commands & command);
 void	executeMode(Commands & command);
 void	executeTopic(Commands & command);
+void	executePart(Commands & command);
 
 Commands::Commands(std::string & line, Client & client, Server & server) : _client(client),  _server(server) {
 
@@ -74,13 +75,13 @@ bool ignoreCommand(std::string & cmdName) {
 
 void Commands::executeCommand() {
 
-	std::string arrayCommand[11] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT", "PRIVMSG", "INVITE", "KICK", "MODE", "TOPIC"};
-	void (*arrayFunction[])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit, executePrivateMsg, executeInvite, executeKick, executeMode, executeTopic};
+	std::string arrayCommand[12] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT", "PRIVMSG", "INVITE", "KICK", "MODE", "TOPIC", "PART"};
+	void (*arrayFunction[])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit, executePrivateMsg, executeInvite, executeKick, executeMode, executeTopic, executePart};
 	unsigned int i = -1;
 	
 	if (!ignoreCommand(this->_name))
 	{
-		while (++i < 11)
+		while (++i < 12)
 		{
 			if (arrayCommand[i] == this->_name)
 			{
@@ -88,7 +89,7 @@ void Commands::executeCommand() {
 				break;
 			}
 		}
-		if (i == 11)
+		if (i == 12)
 			std::cout << "command not found " << i << " " << 7 << std::endl;	
 	}
 }
