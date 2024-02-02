@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 17:44:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 11:26:01 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void    displayError(int errorCode, Commands & command) {
 	case ERR_BADCHANNELKEY:	// ADD access of channel name
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " <channel> :Cannot join channel (+k)" << std::endl;
 		break;
-	case ERR_INVITEONLYCHAN:	// ADD access of channel name
+	case ERR_INVITEONLYCHAN: // ADD access of channel name
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " <channel> :Cannot join channel (+i)" << std::endl;
 		break;
 	case ERR_NOSUCHNICK:
@@ -58,6 +58,9 @@ void    displayError(int errorCode, Commands & command) {
 		break;
 	case ERR_INVALIDARG:
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << command.getName() << " :Invalid arguments" << std::endl;
+		break;
+	case ERR_NOTONCHANNEL: // ADD access of channel name
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " <channel> :You're not on that channel" << std::endl;
 		break;
 	
 	default:

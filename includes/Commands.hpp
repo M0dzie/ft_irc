@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 16:04:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 11:02:26 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define ERR_NOSUCHCHANNEL 403
 # define ERR_NONICKNAMEGIVEN 431
 # define ERR_NICKNAMEINUSE 433
+# define ERR_NOTONCHANNEL 442
 # define ERR_USERONCHANNEL 443
 # define ERR_NOTREGISTERED 451
 # define ERR_NEEDMOREPARAMS 461
