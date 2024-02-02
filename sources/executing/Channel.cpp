@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 12:24:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 13:09:40 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,18 @@ bool Channel::isAlreadyIn(std::string const &name) {
 void Channel::sendMessageToChannel(std::string msg) {
 	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
 		sendMessage((it->first)->getFD(), msg);
+}
+
+void Channel::removeClient(Client *client, Server &server) {
+    for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+        if (it->first == client) {
+            this->_clients.erase(it->first);
+            break;
+        }
+    }
+
+    if (this->_clients.empty()) {
+        server.getChannelList().erase(this->_name);
+        delete this;
+    }
 }

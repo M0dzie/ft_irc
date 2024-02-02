@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 12:25:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 12:34:44 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	executePart(Commands & command) {
         if (it->first == client) {
             sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channelName + " :" + command.getArgSplit()[1]);
             channel->sendMessageToChannel(client->getNickname() + " is leaving the channel " + channelName);
+            channel->removeClient(client, command.getServer());
             return;
         }
         it++;
