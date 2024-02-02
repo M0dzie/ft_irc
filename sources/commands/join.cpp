@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/02 11:13:23 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 12:24:40 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,9 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	return true;
 }
 
-static void sendMessageToChannel(Channel &channel, std::string msg) {
-	std::map<Client *, bool> listClient = channel.getClients();
-	for (std::map<Client *, bool>::iterator it = listClient.begin(); it != listClient.end(); it++)
-		sendMessage((it->first)->getFD(), msg);
-}
-
 static void joinChannel(Channel &channel, Client &client) {
 	sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " JOIN " + channel.getName());
-	sendMessageToChannel(channel, client.getNickname() + " is joining the channel " + channel.getName());
+	channel.sendMessageToChannel(client.getNickname() + " is joining the channel " + channel.getName());
 	if (channel.getTopic().empty())
 		displayRPL(RPL_NOTOPIC, client, channel);
 	else

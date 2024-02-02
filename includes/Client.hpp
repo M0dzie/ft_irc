@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/25 16:21:23 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/02 12:10:38 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ public:
 	std::string const &getNickname() const {return this->_nickname;}
 	std::string const &getUsername() const;
 	std::string const &getRealname() const;
-
 	std::string const &getPassword() const {return this->_password;}
 	std::string const &getLastPing() const {return this->_lastPing;}
 	bool getRegister() const {return this->_registered;}
