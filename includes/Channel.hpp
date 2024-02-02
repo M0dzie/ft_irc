@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 12:04:07 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 12:27:58 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ public:
 
     bool isAlreadyIn(std::string const &name);
     void displayClientList();
-    void updateClients(Client *client, bool first);
+    void sendMessageToChannel(std::string msg);
     void setOperator(Client *client) {this->_clients[client] = true;}
+    void updateClients(Client *client, bool first);
     void unsetOperator(Client *client) {this->_clients[client] = false;}
-    std::string getClientList();
     std::map<Client *, bool> &getClients() {return this->_clients;}
+    std::string getClientList();
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
     void setInviteOnlyMode(bool const &inviteOnly) {this->_inviteOnly = inviteOnly;}
@@ -47,11 +48,11 @@ public:
     void setPassword(std::string const &password) {this->_password = password;}
     void setTopic(std::string const &topic) {this->_topic = topic;}
 
-    unsigned long const &getChannelLimit() const {return this->_channelLimit;}
     bool const &getInviteOnly() const {return this->_inviteOnly;}
     std::string const &getName() const {return this->_name;}
     std::string const &getPassword() const {return this->_password;}
     std::string const &getTopic() const {return this->_topic;}
+    unsigned long const &getChannelLimit() const {return this->_channelLimit;}
 };
 
 #endif

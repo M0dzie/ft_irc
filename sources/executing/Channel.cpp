@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/01 18:32:54 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/02 12:24:13 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,9 @@ bool Channel::isAlreadyIn(std::string const &name) {
             return true;
     }
     return false;
+}
+
+void Channel::sendMessageToChannel(std::string msg) {
+	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		sendMessage((it->first)->getFD(), msg);
 }
