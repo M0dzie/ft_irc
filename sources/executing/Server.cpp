@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/23 13:51:41 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/05 11:07:12 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,20 @@ Server::Server(int port, char *password) {
 		
 		// handling new clients
 		if (this->_fds[0].revents & POLLIN) {
+			int newFD = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen);
+			if (newFD < 0) {
+				displayErrorMessage("accept() failed.");
+				this->exit();
+			}
 			if (this->_nbClient + 1 < MAXCLIENT) {
 				this->_nbClient += 1;
-				if ((this->_fds[this->_nbClient].fd = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen)) < 0 ) {
-					displayErrorMessage("accept() failed.");
-					this->exit();
-				}
+				this->_fds[this->_nbClient].fd = newFD;
 				this->_fds[this->_nbClient].events = POLLIN;
 				this->_fds[this->_nbClient].revents = 0;
 				this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
 			} else { // There is no places left
 				displayErrorMessage("The number of client available is full.");
-				this->exit();
+				close(newFD);
 			}
 		}
 		
