@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 10:24:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 16:36:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	std::map<std::string, std::string>::iterator ite = gPairs.end();
 	while (it != ite) {
 		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
-			return false;
+			return (gPairs.clear(), false);
 		it++;
 	}
 
@@ -86,10 +86,44 @@ static void joinChannel(Channel &channel, Client &client) {
 		displayRPL(RPL_TOPIC, client, channel);
 }
 
+static void joinAllChannels(Client &client, Server &server) {
+	std::map<std::string, Channel *>::iterator it = server.getChannelList().begin();
+	std::map<std::string, Channel *>::iterator ite = server.getChannelList().end();
+
+	while (it != ite) {
+		Channel *channel = server.getChannelList()[it->first];
+		if (channel->isAlreadyIn(client.getNickname())) {
+			displayErrorChannel(ERR_USERONCHANNEL, client, *channel);
+			it++;
+			continue;
+		} else if (!channel->getPassword().empty()) {
+			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
+			it++;
+			continue;
+		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
+			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
+			it++;
+			continue;
+		} else if (channel->getInviteOnly()) {
+			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
+			it++;
+			continue;
+		}
+		
+		server.getChannelList()[it->first]->updateClients(&client, false);
+		joinChannel(*channel, client);
+		server.getChannelList()[it->first]->displayClientList();
+		it++;
+	}
+}
+
 void	executeJoin(Commands & command) {
 
 	if (!command.getClient().getRegister())
 		return;
+
+	if (command.getArgSplit()[0][0] == '0')
+		return (joinAllChannels(command.getClient(), command.getServer()));
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
@@ -100,7 +134,7 @@ void	executeJoin(Commands & command) {
 	while (it != ite) {
 		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
 		if (channelIt == command.getServer().getChannelList().end()) {
-			displayError(ERR_NOSUCHCHANNEL, command);
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << it->first << " :No such channel" << std::endl;
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
 			command.getServer().getChannelList()[it->first]->updateClients(&command.getClient(), true);
 			joinChannel(*command.getServer().getChannelList()[it->first], command.getClient());
@@ -110,7 +144,6 @@ void	executeJoin(Commands & command) {
 		}
 
 		Channel *channel = command.getServer().getChannelList()[it->first];
-		
 		if (channel->isAlreadyIn(command.getClient().getNickname())) {
 			displayErrorChannel(ERR_USERONCHANNEL, command.getClient(), *channel);
 			it++;
