@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/02 12:24:40 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 10:24:01 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,19 +112,19 @@ void	executeJoin(Commands & command) {
 		Channel *channel = command.getServer().getChannelList()[it->first];
 		
 		if (channel->isAlreadyIn(command.getClient().getNickname())) {
-			displayError(ERR_USERONCHANNEL, command);
+			displayErrorChannel(ERR_USERONCHANNEL, command.getClient(), *channel);
 			it++;
 			continue;
 		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
-			displayError(ERR_BADCHANNELKEY, command);
+			displayErrorChannel(ERR_BADCHANNELKEY, command.getClient(), *channel);
 			it++;
 			continue;
 		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
-			displayError(ERR_CHANNELISFULL, command);
+			displayErrorChannel(ERR_CHANNELISFULL, command.getClient(), *channel);
 			it++;
 			continue;
 		} else if (channel->getInviteOnly()) {
-			displayError(ERR_INVITEONLYCHAN, command);
+			displayErrorChannel(ERR_INVITEONLYCHAN, command.getClient(), *channel);
 			it++;
 			continue;
 		}
