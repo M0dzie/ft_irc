@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 16:44:15 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 17:09:44 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	executeTopic(Commands & command) {
 	if (!channel->isAlreadyIn(client.getNickname()))
 		return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
 	
+	// Only display the topic
 	if (command.getArgSplit().size() == 1) {
 		if (channel->getTopic().empty())
 			displayRPL(RPL_NOTOPIC, client, *channel);
@@ -33,8 +34,11 @@ void	executeTopic(Commands & command) {
 		return;
 	}
 
+	// Check if the client is an operator
 	if (!channel->getClients()[&client])
 		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
+
+	// Update topic
 	std::string newTopic;
 	if (command.getArgSplit()[1].empty() || (command.getArgSplit()[1][0] == ':' && command.getArgSplit()[1][1] == ':' && !command.getArgSplit()[1][2]))
 		newTopic = "";
@@ -48,6 +52,7 @@ void	executeTopic(Commands & command) {
 	}
 	channel->setTopic(newTopic);
 
+	// Display the change for every clients inside the channel
 	for (std::map<Client *, bool>::iterator it = channel->getClients().begin(); it != channel->getClients().end(); it++) {
 		if (channel->getTopic().empty())
 			displayRPL(RPL_NOTOPIC, *it->first, *channel);
