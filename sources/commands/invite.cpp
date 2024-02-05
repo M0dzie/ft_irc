@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 18:46:25 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 19:01:25 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ void	executeInvite(Commands & command) {
 	// If user and client exist and invite is possible, send a RPL_INVITING
 	if (!isIn(*channel, target.getNickname()))
 		channel->getInvitedList().push_back(target.getNickname());
-	displayRPL(RPL_INVITING, client, *channel);
+	sendMessage(client.getFD(), ":localhost 341 " + client.getNickname() + " " + target.getNickname() + " " + channel->getName());
+	sendMessage(target.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " INVITE " + target.getNickname() + " " + channel->getName());
 }
