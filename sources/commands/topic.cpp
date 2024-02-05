@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 15:46:20 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 15:55:35 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,11 @@ void	executeTopic(Commands & command) {
 		newTopic = newTopic.substr(1);
 	}
 	channel->setTopic(newTopic);
+
+	for (std::map<Client *, bool>::iterator it = channel->getClients().begin(); it != channel->getClients().end(); it++) {
+		if (channel->getTopic().empty())
+			displayRPL(RPL_NOTOPIC, *it->first, *channel);
+		else
+			displayRPL(RPL_TOPIC, *it->first, *channel);
+	}
 }
