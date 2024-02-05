@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 15:55:35 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 16:44:15 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ void	executeTopic(Commands & command) {
 		return;
 	else if (command.getArgSplit().size() < 1)
     	return (displayError(ERR_NEEDMOREPARAMS, command));
-	else if (command.getArgSplit()[0][0] != '#') {
-		std::cout << "ft_irc topic" << std::endl;
+	else if (command.getArgSplit()[0][0] != '#')
 		return;
-	}
 
 	Client &client = command.getClient();
 	Channel *channel = command.getServer().getChannelList()[command.getArgSplit()[0]];
