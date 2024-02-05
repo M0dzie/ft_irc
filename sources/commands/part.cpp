@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 12:34:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 10:25:24 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,5 @@ void	executePart(Commands & command) {
         }
         it++;
     }
-    displayError(ERR_NOTONCHANNEL, command);
+    displayErrorChannel(ERR_NOTONCHANNEL, *client, *channel);
 }

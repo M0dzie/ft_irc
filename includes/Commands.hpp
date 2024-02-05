@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/02 11:02:26 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 10:23:15 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class Commands {
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
+void	displayErrorChannel(int errorCode, Client const &client, Channel &channel);
 void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
 
 #endif
