@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 18:31:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 18:54:22 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,7 @@ void displayRPL(int RPLCode, Client const &client, Channel &channel) {
 		case RPL_ENDOFNAMES:
 			sendMessage(client.getFD(), ":localhost 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list");
 			break;
-		case RPL_INVITING:
-			sendMessage(client.getFD(), ":localhost 341 " + client.getNickname() + " " + channel.getInvitedList().back() + " " + channel.getName());
-			break;
-		
+
 		default:
 			break;
 	}
