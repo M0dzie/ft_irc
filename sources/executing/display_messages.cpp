@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 10:29:10 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 13:57:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void	displayErrorChannel(int errorCode, Client const &client, Channel &channel) 
 			break;
 		case ERR_NOTONCHANNEL:
 			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << channel.getName() << " :You're not on that channel" << std::endl;
+			break;
+		case ERR_CHANOPRIVSNEEDED:
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << channel.getName() << " :You're not channel operator" << std::endl;
 			break;
 
 		default:
