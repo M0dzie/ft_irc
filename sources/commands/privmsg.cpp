@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/01 18:11:05 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 16:52:07 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ std::string	getMessageText(std::vector<std::string> & tmpArg) {
 	
 	for (std::vector<std::string>::iterator it = ++tmpArg.begin(); it != tmpArg.end(); it++)
 	{
+		std::vector<std::string>::iterator tmpIt = it;
+		tmpIt++;
+		
 		messageText += *it;
+		if (tmpIt != tmpArg.end())
+			messageText += " ";
 	}
 	return  messageText;
 }
