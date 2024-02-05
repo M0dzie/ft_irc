@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 16:21:10 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 16:36:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,35 @@ static void joinChannel(Channel &channel, Client &client) {
 		displayRPL(RPL_TOPIC, client, channel);
 }
 
-static void joinAllChannels(Client const &client, Server const &server) {
-	(void)client;
-	(void)server;
+static void joinAllChannels(Client &client, Server &server) {
+	std::map<std::string, Channel *>::iterator it = server.getChannelList().begin();
+	std::map<std::string, Channel *>::iterator ite = server.getChannelList().end();
+
+	while (it != ite) {
+		Channel *channel = server.getChannelList()[it->first];
+		if (channel->isAlreadyIn(client.getNickname())) {
+			displayErrorChannel(ERR_USERONCHANNEL, client, *channel);
+			it++;
+			continue;
+		} else if (!channel->getPassword().empty()) {
+			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
+			it++;
+			continue;
+		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
+			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
+			it++;
+			continue;
+		} else if (channel->getInviteOnly()) {
+			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
+			it++;
+			continue;
+		}
+		
+		server.getChannelList()[it->first]->updateClients(&client, false);
+		joinChannel(*channel, client);
+		server.getChannelList()[it->first]->displayClientList();
+		it++;
+	}
 }
 
 void	executeJoin(Commands & command) {
