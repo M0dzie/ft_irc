@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 12:34:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 18:33:05 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ private:
     unsigned long _channelLimit;
     bool _inviteOnly;
     std::map<Client *, bool> _clients;
+    std::vector<std::string> _invitedList;
     
 public:
     Channel(std::string const &name, std::string const &password) : _name(name), _password(password), _channelLimit(CHANNELBASELIMIT), _inviteOnly(false) {}
@@ -42,6 +43,7 @@ public:
     void unsetOperator(Client *client) {this->_clients[client] = false;}
     std::map<Client *, bool> &getClients() {return this->_clients;}
     std::string getClientList();
+    std::vector<std::string> getInvitedList() {return this->_invitedList;}
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
     void setInviteOnlyMode(bool const &inviteOnly) {this->_inviteOnly = inviteOnly;}
