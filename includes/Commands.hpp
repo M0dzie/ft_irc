@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 16:36:43 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/05 17:35:42 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
 void	displayErrorChannel(int errorCode, Client const &client, Channel &channel);
 void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
+Client & foundClient(Commands & command, std::string nickname);
 
 #endif
