@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/05 10:25:24 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 15:39:51 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ void	executePart(Commands & command) {
     std::map<Client *, bool>::iterator ite = channel->getClients().end();
     while (it != ite) {
         if (it->first == client) {
-            sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channelName + " :" + command.getArgSplit()[1]);
+            std::string reason;
+            for (size_t i = 1; i < command.getArgSplit().size(); i++) {
+                reason += command.getArgSplit()[i];
+                if (i != command.getArgSplit().size() - 1)
+				    reason += " ";
+            }
+            reason = reason.substr(1);
+            sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channelName + " :" + reason);
             channel->sendMessageToChannel(client->getNickname() + " is leaving the channel " + channelName);
             channel->removeClient(client, command.getServer());
             return;
