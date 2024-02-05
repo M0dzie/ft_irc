@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_messages.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:57:49 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 16:39:04 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void    displayError(int errorCode, Commands & command) {
 void	displayErrorChannel(int errorCode, Client const &client, Channel &channel) {
 	switch (errorCode) {
 		case ERR_USERONCHANNEL:
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << client.getNickname() << channel.getName() << " :is already on channel" << std::endl;
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << client.getNickname() << " " << channel.getName() << " :is already on channel" << std::endl;
 			break;
 		case ERR_CHANNELISFULL:
 			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << channel.getName() << " :Cannot join channel (+l)" << std::endl;
@@ -66,6 +66,9 @@ void	displayErrorChannel(int errorCode, Client const &client, Channel &channel) 
 			break;
 		case ERR_INVITEONLYCHAN:
 			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << channel.getName() << " :Cannot join channel (+i)" << std::endl;
+			break;
+		case ERR_USERNOTINCHANNEL:
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << channel.getName() << " :They aren't on that channel" << std::endl;
 			break;
 		case ERR_NOTONCHANNEL:
 			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << channel.getName() << " :You're not on that channel" << std::endl;
