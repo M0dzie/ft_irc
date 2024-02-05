@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/23 18:26:27 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/05 10:54:38 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ public:
     std::string const &getPassword() const {return this->_password;}
     std::map<int, Client *> &getClientList() {return this->_clientList;}
     std::map<std::string, Channel *> &getChannelList() {return this->_channelList;}
+    int getNbClient() const {return this->_nbClient;}
+
+    void setNbClient(int value) {this->_nbClient = value;}
+    void setFDValue(int value, int index) {this->_fds[index].fd = value;}
     
     static void handleBreak(int sig);
 
