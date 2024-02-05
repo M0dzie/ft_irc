@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 10:23:15 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 13:56:59 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define ERR_CHANNELISFULL 471
 # define ERR_INVITEONLYCHAN 473
 # define ERR_BADCHANNELKEY 475
+# define ERR_CHANOPRIVSNEEDED 482
 
 # define RPL_NOTOPIC 331
 # define RPL_TOPIC 332
