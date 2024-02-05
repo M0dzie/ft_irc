@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 17:58:09 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/05 18:15:29 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ std::string getKickReason(std::vector<std::string> args) {
 	
 	while (it != args.end())
 	{
-		std::cout << *it << std::endl;	
+		std::cout << *it << std::endl;
+		it++;
 	}
 	return "test";
 }
