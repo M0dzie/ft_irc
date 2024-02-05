@@ -6,11 +6,17 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 18:21:07 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 18:46:25 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
+
+static bool isIn(Channel &channel, std::string toFind) {
+	if (std::find(channel.getInvitedList().begin(), channel.getInvitedList().end(), toFind) != channel.getInvitedList().end())
+		return true;
+	return false;
+}
 
 void	executeInvite(Commands & command) {
 	if (!command.getClient().getRegister())
@@ -21,6 +27,8 @@ void	executeInvite(Commands & command) {
 	Client &client = command.getClient();
 	Client &target = foundClient(command, command.getArgSplit()[0]);
 	Channel *channel = command.getServer().getChannelList()[command.getArgSplit()[1]];
+
+	// Check if conditions are true
 	if (!channel) {
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[1] << " :No such channel" << std::endl;
 		return;
@@ -33,4 +41,9 @@ void	executeInvite(Commands & command) {
 		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 	else if (channel->isAlreadyIn(target.getNickname()))
 		return (displayErrorChannel(ERR_USERONCHANNEL, client, *channel));
+
+	// If user and client exist and invite is possible, send a RPL_INVITING
+	if (!isIn(*channel, target.getNickname()))
+		channel->getInvitedList().push_back(target.getNickname());
+	displayRPL(RPL_INVITING, client, *channel);
 }
