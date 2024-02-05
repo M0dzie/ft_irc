@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 13:22:34 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 13:07:51 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,17 @@ void Channel::removeClient(Client *client, Server &server) {
         }
     }
 
+    // check if an operator is still available, if not, upgrade the older member
+    bool found = false;
+    for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+        if (it->second)
+            found = true;
+    if (!found) {
+        this->setOperator(this->_clients.begin()->first);
+        this->displayClientList();
+    }
+
+    // if there's no member left, delete the channel
     if (this->_clients.empty()) {
         server.getChannelList().erase(this->_name);
         delete this;
