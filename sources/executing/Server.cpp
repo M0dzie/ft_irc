@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/23 13:51:41 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/05 12:43:15 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ void Server::sendMessage(int clientFd, std::string msg) {
 	
 	if (send(clientFd, msg.c_str(), msg.length(), 0) < 0)
 		displayErrorMessage("send() failed.");
-}
-
-void	parseLine(std::string line) {
-	std::cout << "LINE: " << line << std::endl;
 }
 
 Server::Server(int port, char *password) {
@@ -43,40 +39,56 @@ Server::Server(int port, char *password) {
 		
 		// handling new clients
 		if (this->_fds[0].revents & POLLIN) {
+			int newFD = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen);
+			if (newFD < 0) {
+				displayErrorMessage("accept() failed.");
+				this->exit();
+			}
+			// for (int i = 0; i < MAXCLIENT + 1; i++) {
+			// 	if (this->_fds[i].fd != 0)
+			// 		continue;
+			// 	this->_nbClient += 1;
+			// 	this->_fds[i].fd = newFD;
+			// 	this->_fds[i].events = POLLIN;
+			// 	this->_fds[i].revents = 0;
+			// 	this->_clientList.insert(std::pair<int, Client *>(this->_fds[i].fd, new Client(this->_fds[i].fd, "undefined")));
+			// 	break;
+			// 	if (i == MAXCLIENT) { // There is no places left
+			// 		displayErrorMessage("The number of client available is full.");
+			// 		close(newFD);
+			// 	}
+			// }
+			// }
 			if (this->_nbClient + 1 < MAXCLIENT) {
 				this->_nbClient += 1;
-				if ((this->_fds[this->_nbClient].fd = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen)) < 0 ) {
-					displayErrorMessage("accept() failed.");
-					this->exit();
-				}
+				this->_fds[this->_nbClient].fd = newFD;
 				this->_fds[this->_nbClient].events = POLLIN;
 				this->_fds[this->_nbClient].revents = 0;
 				this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
 			} else { // There is no places left
 				displayErrorMessage("The number of client available is full.");
-				this->exit();
+				close(newFD);
 			}
 		}
 		
 		//handling msg from known clients
 		for (int i = 1; i < this->_nbClient + 1; i++) {
-			if (this->_fds[i].revents & POLLIN) { // there is data ready to recv()
+			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
 				if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) == 0) {
 					displayErrorMessage("recv() failed.");
 					this->exit();
 				}
 				tmpSentence.append(buffer);
 				std::size_t indexEnd = tmpSentence.find("\r\n");
+				
 				while(indexEnd != std::string::npos)
 				{
 					std::string line = tmpSentence.substr(0, indexEnd);
 					displayMessage(CLIENT, line);
 					Commands cmd(line, *this->_clientList[this->_fds[i].fd], *this);
 
-					// Commands cmd(tmpSentence.substr(0, indexEnd), this->_clientList[this->_fds[i].fd]);
 					cmd.executeCommand();
 					tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
-					// this->sendMessage(this->_fds[i].fd, command);
 					indexEnd = tmpSentence.find("\r\n");
 				}
 				for (int i = 0; i <= bufferSize; i++)
@@ -141,6 +153,8 @@ void Server::initDataAndServer(int port, char *password) {
 	if (listen(this->_fds[0].fd, 1) < 0)
 		throw(Server::ServerError(ERROR "listen() failed."));
 
+	// for (int i = 1; i < MAXCLIENT + 1; i++)
+	// 	this->_fds[i].fd = 0;
 }
 
 void Server::handleBreak(int sig) {
