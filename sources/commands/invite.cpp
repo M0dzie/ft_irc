@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 18:55:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/05 19:01:25 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,5 @@ void	executeInvite(Commands & command) {
 	if (!isIn(*channel, target.getNickname()))
 		channel->getInvitedList().push_back(target.getNickname());
 	sendMessage(client.getFD(), ":localhost 341 " + client.getNickname() + " " + target.getNickname() + " " + channel->getName());
+	sendMessage(target.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " INVITE " + target.getNickname() + " " + channel->getName());
 }
