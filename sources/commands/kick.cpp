@@ -6,25 +6,15 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 18:15:29 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:34:37 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-
-// ERR_NEEDMOREPARAMS (461)
-
-// ERR_NOSUCHCHANNEL (403)
-// ERR_NOTONCHANNEL (442)
-// ERR_USERNOTINCHANNEL (441)
-// ERR_CHANOPRIVSNEEDED (482)
-
 std::string	getKickChannelName(std::vector<std::string> args) {
 
 	std::vector<std::string>::iterator it = args.begin();
-	std::vector<std::string>::iterator itEnd = args.end();
-	(void)itEnd;
 
 	while (it != args.end())
 	{
@@ -46,6 +36,7 @@ std::pair<bool, bool> areOnChannel(Channel & tmpChannel, std::string receiverNam
 
 	returnPair.first = false;
 	returnPair.second = false;
+
 	if (tmpChannel.getName().empty())
 		return returnPair;
 	else
@@ -65,17 +56,37 @@ std::pair<bool, bool> areOnChannel(Channel & tmpChannel, std::string receiverNam
 	return returnPair;
 }
 
-std::string getKickReason(std::vector<std::string> args) {
-
-	std::vector<std::string>::iterator it = args.begin();
-	std::string reason = "";
+std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & args) {
 	
+	std::vector<std::string>::iterator it = args.begin();
+
 	while (it != args.end())
 	{
-		std::cout << *it << std::endl;
+		if ((*it)[0] == ':')
+			return it;
 		it++;
 	}
-	return "test";
+	return it;
+}
+
+std::string getKickReason(std::vector<std::string> & args) {
+
+	std::vector<std::string>::iterator reasonIt = getReasonIterator(args);
+
+	if (reasonIt == args.end())
+		return "Without any particular reason";
+	std::string reason = "";
+	
+	while (reasonIt != args.end())
+	{
+		std::vector<std::string>::iterator tmpIt = reasonIt;
+		
+		reason += *reasonIt;
+		if (++tmpIt != args.end())
+			reason += " ";
+		reasonIt++;
+	}
+	return reason;
 }
 
 void	executeKick(Commands & command) {
@@ -96,23 +107,19 @@ void	executeKick(Commands & command) {
 		if (tmpChannel.getName().empty())
 			displayKickErrorMessage(command, channelName);
 		else if (!senderReceiverOnChannel.first)
-			displayError(ERR_NOTONCHANNEL, command);
-		else if (!senderReceiverOnChannel.second)
-			displayError(ERR_USERNOTINCHANNEL, command);
+			displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, tmpChannel);
+		else if (senderReceiverOnChannel.second == 0)
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << tmpClient.getUsername() << " " << receiverName << " " << tmpChannel.getName() << " :They aren't on that channel" << std::endl;
 		else if (!tmpChannel.getClients()[&tmpClient])
-			return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, tmpClient, tmpChannel));
+			displayErrorChannel(ERR_CHANOPRIVSNEEDED, tmpClient, tmpChannel);
 		else
 		{
-			// add check if reason define or not
-			std::string reason = getKickReason(tmpArgs);
-			
-			std::string commandMessage	= ":" + senderName + "!" + tmpClient.getUsername() + "@localhost KICK " + channelName + " " + receiverName + " " + reason;
-			sendMessage(tmpClient.getFD(), commandMessage);
-			// channel->sendMessageToChannel(tmpClient->getNickname() + " is leaving the channel " + channelName);
-			
 			Client & clientReceiver = foundClient(command, receiverName);
-			sendMessage(clientReceiver.getFD(), ":" + clientReceiver.getNickname() + "!" + clientReceiver.getUsername() + "@localhost" + " PART " + channelName + " :" + reason);
+			std::string reason = getKickReason(tmpArgs);
+			std::string commandMessage	= ":" + senderName + "!" + tmpClient.getUsername() + "@localhost KICK " + channelName + " " + receiverName + " " + reason;
 			
+			sendMessage(tmpClient.getFD(), commandMessage);
+			sendMessage(clientReceiver.getFD(), ":" + clientReceiver.getNickname() + "!" + clientReceiver.getUsername() + "@localhost" + " PART " + channelName + " " + reason);
 			tmpChannel.removeClient(&clientReceiver, command.getServer());
 		}
 	}
