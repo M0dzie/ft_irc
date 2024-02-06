@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/05 15:39:51 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:27:42 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	executePart(Commands & command) {
             reason = reason.substr(1);
             sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channelName + " :" + reason);
             channel->sendMessageToChannel(client->getNickname() + " is leaving the channel " + channelName);
+            client->removeOneChannel(channel);
             channel->removeClient(client, command.getServer());
             return;
         }
