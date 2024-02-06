@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 15:40:29 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 18:54:12 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,38 @@ bool Channel::isInvited(std::string const &name) {
 		it++;
 	}
 	return false;
+}
+
+bool Channel::setOperator(Client *client) {
+    std::map<Client *, bool>::iterator it = this->_clients.begin();
+    std::map<Client *, bool>::iterator ite = this->_clients.end();
+    bool found = false;
+    while (it != ite) {
+        if (it->first == client && !this->_clients[client])
+            found = true;
+        it++;
+    }
+
+    if (found) {
+        this->_clients[client] = true;
+        return true;
+    }
+    return false;
+}
+
+bool Channel::unsetOperator(Client *client) {
+    std::map<Client *, bool>::iterator it = this->_clients.begin();
+    std::map<Client *, bool>::iterator ite = this->_clients.end();
+    bool found = false;
+    while (it != ite) {
+        if (it->first == client && this->_clients[client])
+            found = true;
+        it++;
+    }
+
+    if (found) {
+        this->_clients[client] = false;
+        return true;
+    }
+    return false;
 }

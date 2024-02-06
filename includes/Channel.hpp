@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 17:03:34 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 18:03:20 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ public:
 
     bool isAlreadyIn(std::string const &name);
     bool isInvited(std::string const &name);
+    bool setOperator(Client *client);
+    bool unsetOperator(Client *client);
     void displayClientList();
     void removeClient(Client *client, Server &server);
     void sendMessageToChannel(std::string msg);
-    void setOperator(Client *client) {this->_clients[client] = true;}
     void updateClients(Client *client, bool first);
-    void unsetOperator(Client *client) {this->_clients[client] = false;}
     std::map<Client *, bool> &getClients() {return this->_clients;}
     std::string getClientList();
     std::vector<std::string> &getInvitedList() {return this->_invitedList;}
