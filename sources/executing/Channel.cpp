@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 13:31:22 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:40:29 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ void Channel::removeClient(Client *client, Server &server) {
 
 void Channel::setModes(std::string const &mode, bool plus) {
 	if (plus) {
-		this->_modes.push_back(mode);
+		std::vector<std::string>::iterator find = std::find(this->_modes.begin(), this->_modes.end(), mode);
+		if (find == this->_modes.end())
+			this->_modes.push_back(mode);
 	} else {
 		std::vector<std::string>::iterator find = std::find(this->_modes.begin(), this->_modes.end(), mode);
 		if (find != this->_modes.end())
@@ -94,7 +96,7 @@ void Channel::setModes(std::string const &mode, bool plus) {
 std::string Channel::getModes() {
 	std::vector<std::string>::iterator it = this->_modes.begin();
 	std::vector<std::string>::iterator ite = this->_modes.end();
-	std::string ret;
+	std::string ret = " ";
 	
 	while (it != ite) {
 		std::vector<std::string>::iterator tmp = it;
@@ -104,5 +106,19 @@ std::string Channel::getModes() {
 			ret += " ";
 		it++;
 	}
+	if (ret.size() == 1)
+		ret += "None";
 	return ret;
+}
+
+bool Channel::isInvited(std::string const &name) {
+	std::vector<std::string>::iterator it = this->_invitedList.begin();
+	std::vector<std::string>::iterator ite = this->_invitedList.end();
+
+	while (it != ite) {
+		if (*it == name)
+			return true;
+		it++;
+	}
+	return false;
 }

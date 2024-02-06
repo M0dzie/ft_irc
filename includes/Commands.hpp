@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 13:44:03 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:58:13 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,15 @@
 # define RPL_ENDOFNAMES 366
 
 # define PASS "+k"
+# define RMVPASS "-k"
 # define INVITEONLY "+i"
+# define RMVINVITEONLY "-i"
 # define TOPICRESTRICT "+t"
+# define RMVTOPICRESTRICT "-t"
 # define OPECHAN "+o"
+# define RMVOPECHAN "-o"
 # define CHANLIMIT "+l"
+# define RMVCHANLIMIT "-l"
 
 class Commands {
 
