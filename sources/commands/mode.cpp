@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 14:06:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 14:52:35 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,54 @@ static bool isValidModeString(std::string const &string) {
 	return true;
 }
 
-static void setupModes(std::vector<std::string> modes, Client &client, Channel &channel) {
-	(void)modes;
+static void handlePass(std::vector<std::string> modeString, Client &client, Channel &channel){
+	if (*modeString.begin() == RMVPASS)
+		return (channel.setPassword(""));
+	(void)modeString;
 	(void)client;
 	(void)channel;
+	
+}
+
+static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel){
+	(void)modeString;
+	(void)client;
+	(void)channel;
+}
+
+static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel){
+	(void)modeString;
+	(void)client;
+	(void)channel;
+}
+
+static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel){
+	(void)modeString;
+	(void)client;
+	(void)channel;
+}
+
+static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel){
+	(void)modeString;
+	(void)client;
+	(void)channel;
+}
+
+
+static void splitModes(std::vector<std::string> modeString, Client &client, Channel &channel) {
+	std::string modes[10] = {PASS, RMVPASS, INVITEONLY, RMVINVITEONLY, TOPICRESTRICT, RMVTOPICRESTRICT, OPECHAN, RMVOPECHAN, CHANLIMIT, RMVCHANLIMIT};
+	void (*arrayFunction[])(std::vector<std::string>, Client &, Channel &) = {handlePass, handleInviteOnly, handleTopicRestrict, handleOpeChan, handleChanLimit};
+	int i = -1;
+	
+	while (++i < 10)
+	{
+		if (i < 9 && (modes[i] == *modeString.begin() || modes[i + 1] == *modeString.begin()))
+		{
+			(*arrayFunction[i])(modeString, client, channel);
+			break;
+		}
+		i++;
+	}
 }
 
 void	executeMode(Commands & command) {
@@ -40,17 +84,13 @@ void	executeMode(Commands & command) {
 		server.getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	}
-	if (command.getArgSplit().size() == 1)
+	if (command.getArgSplit().size() == 1 || !isValidModeString(command.getArgSplit()[1]))
 		return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
-	for (size_t i = 1; i < command.getArgSplit().size(); i++) {
-		if (!isValidModeString(command.getArgSplit()[i]))
-			return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
-	}
 	if (!channel->getClients()[&client])
 		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
 	// if everything good, split and setup modes
 	std::vector<std::string> modes;
 	std::copy(command.getArgSplit().begin() + 1, command.getArgSplit().end(), std::back_inserter(modes));
-	setupModes(modes, client, *channel);
+	splitModes(modes, client, *channel);
 }
