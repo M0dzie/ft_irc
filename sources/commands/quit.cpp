@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 13:36:55 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/06 16:50:24 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,17 @@ int	getClientFDIndex(Server & tmpServer, Client & tmpClient) {
 }
 
 void	clearFromChannel(Server & tmpServer, Client & tmpClient) {
-	(void)tmpServer;
-	(void)tmpClient;
-	
+	// std::cout << "clear from all channel:" << std::endl;
+	std::vector<Channel *> & tmpChannels = tmpClient.getChannels();
+
+	for (std::vector<Channel *>::iterator it = tmpChannels.begin(); it != tmpChannels.end(); it++)
+	{
+		std::cout << (*it)->getName() << std::endl;
+		
+		(*it)->sendMessageToChannel(tmpClient.getNickname() + " is leaving the channel " + (*it)->getName());
+		(*it)->removeClient(&tmpClient, tmpServer);
+	}
+	tmpChannels.clear();
 }
 
 void	clearClient(Server & tmpServer, Client & tmpClient) {
