@@ -6,16 +6,14 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:59:27 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:15:02 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-static bool isValidModeString(std::string string) {
-	if (string.empty())
-		return false;
-	if (string[0] != '+' || string[0] != '-')
+static bool isValidModeString(std::string const &string) {
+	if (string[0] != '+' && string[0] != '-')
 		return false;
 	return true;
 }
@@ -34,7 +32,12 @@ void	executeMode(Commands & command) {
 		server.getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	}
-	for (size_t i = 1; i < command.getArgSplit().size(); i++)
+	if (command.getArgSplit().size() == 1)
+		return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
+	for (size_t i = 1; i < command.getArgSplit().size(); i++) {
 		if (!isValidModeString(command.getArgSplit()[i]))
 			return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
+	}
+	if (!channel->getClients()[&client])
+		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 }
