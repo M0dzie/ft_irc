@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:49:37 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 11:19:30 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
 
-# define MODESTRING SETPASS SPC RMVPASS SPC SETINVONLY SPC RMVINVONLY SPC SETTOPICRESTR SPC RMVTOPICRESTR SPC SETOPCHAN SPC RMVOPCHAN SPC SETCHANLIM SPC RMVCHANLIM
+# define MODESTRING SPC SETPASS SPC RMVPASS SPC SETINVONLY SPC RMVINVONLY SPC SETTOPICRESTR SPC RMVTOPICRESTR SPC SETOPCHAN SPC RMVOPCHAN SPC SETCHANLIM SPC RMVCHANLIM
 # define SETPASS "+k"
 # define RMVPASS "-k"
 # define SETINVONLY "+i"
