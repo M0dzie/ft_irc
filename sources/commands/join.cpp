@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 13:39:59 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:53:30 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static void joinAllChannels(Client &client, Server &server) {
 			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
 			it++;
 			continue;
-		} else if (channel->getInviteOnly()) {
+		} else if (channel->getInviteOnly() && !channel->isInvited(client.getNickname())) {
 			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
 			it++;
 			continue;
@@ -142,6 +142,8 @@ void	executeJoin(Commands & command) {
 			channel->updateClients(&client, true);
 			joinChannel(*channel, client);
 			channel->displayClientList();
+			if (!it->second.empty())
+				channel->setModes(PASS, true);
 			it++;
 			continue;
 		}
@@ -159,7 +161,7 @@ void	executeJoin(Commands & command) {
 			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
 			it++;
 			continue;
-		} else if (channel->getInviteOnly()) {
+		} else if (channel->getInviteOnly() && !channel->isInvited(client.getNickname())) {
 			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
 			it++;
 			continue;

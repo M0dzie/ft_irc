@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 15:26:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:37:56 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ public:
     ~Channel() {}
 
     bool isAlreadyIn(std::string const &name);
+    bool isInvited(std::string const &name);
     void displayClientList();
     void removeClient(Client *client, Server &server);
     void sendMessageToChannel(std::string msg);

@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 15:14:03 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:40:29 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,16 @@ std::string Channel::getModes() {
 	if (ret.size() == 1)
 		ret += "None";
 	return ret;
+}
+
+bool Channel::isInvited(std::string const &name) {
+	std::vector<std::string>::iterator it = this->_invitedList.begin();
+	std::vector<std::string>::iterator ite = this->_invitedList.end();
+
+	while (it != ite) {
+		if (*it == name)
+			return true;
+		it++;
+	}
+	return false;
 }
