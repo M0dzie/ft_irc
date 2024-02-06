@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 16:36:49 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:39:59 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,9 @@ static void joinAllChannels(Client &client, Server &server) {
 			continue;
 		}
 		
-		server.getChannelList()[it->first]->updateClients(&client, false);
+		channel->updateClients(&client, false);
 		joinChannel(*channel, client);
-		server.getChannelList()[it->first]->displayClientList();
+		channel->displayClientList();
 		it++;
 	}
 }
@@ -133,38 +133,41 @@ void	executeJoin(Commands & command) {
 	
 	while (it != ite) {
 		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
+		Client &client = command.getClient();
+		
 		if (channelIt == command.getServer().getChannelList().end()) {
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << it->first << " :No such channel" << std::endl;
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << it->first << " :No such channel" << std::endl;
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
-			command.getServer().getChannelList()[it->first]->updateClients(&command.getClient(), true);
-			joinChannel(*command.getServer().getChannelList()[it->first], command.getClient());
-			command.getServer().getChannelList()[it->first]->displayClientList();
+			Channel *channel = command.getServer().getChannelList()[it->first];
+			channel->updateClients(&client, true);
+			joinChannel(*channel, client);
+			channel->displayClientList();
 			it++;
 			continue;
 		}
 
 		Channel *channel = command.getServer().getChannelList()[it->first];
-		if (channel->isAlreadyIn(command.getClient().getNickname())) {
-			displayErrorChannel(ERR_USERONCHANNEL, command.getClient(), *channel);
+		if (channel->isAlreadyIn(client.getNickname())) {
+			displayErrorChannel(ERR_USERONCHANNEL, client, *channel);
 			it++;
 			continue;
 		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
-			displayErrorChannel(ERR_BADCHANNELKEY, command.getClient(), *channel);
+			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
 			it++;
 			continue;
 		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
-			displayErrorChannel(ERR_CHANNELISFULL, command.getClient(), *channel);
+			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
 			it++;
 			continue;
 		} else if (channel->getInviteOnly()) {
-			displayErrorChannel(ERR_INVITEONLYCHAN, command.getClient(), *channel);
+			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
 			it++;
 			continue;
 		}
 		
-		command.getServer().getChannelList()[it->first]->updateClients(&command.getClient(), false);
-		joinChannel(*command.getServer().getChannelList()[it->first], command.getClient());
-		command.getServer().getChannelList()[it->first]->displayClientList();
+		channel->updateClients(&client, false);
+		joinChannel(*channel, client);
+		channel->displayClientList();
 		it++;
 	}
 

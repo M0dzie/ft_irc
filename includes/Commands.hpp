@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:49:37 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:44:03 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,11 @@
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
 
-# define MODESTRING SETPASS SPC RMVPASS SPC SETINVONLY SPC RMVINVONLY SPC SETTOPICRESTR SPC RMVTOPICRESTR SPC SETOPCHAN SPC RMVOPCHAN SPC SETCHANLIM SPC RMVCHANLIM
-# define SETPASS "+k"
-# define RMVPASS "-k"
-# define SETINVONLY "+i"
-# define RMVINVONLY "-i"
-# define SETTOPICRESTR "+t"
-# define RMVTOPICRESTR "-t"
-# define SETOPCHAN "+o"
-# define RMVOPCHAN "-o"
-# define SETCHANLIM "+l"
-# define RMVCHANLIM "-l"
-# define SPC " "
+# define PASS "+k"
+# define INVITEONLY "+i"
+# define TOPICRESTRICT "+t"
+# define OPECHAN "+o"
+# define CHANLIMIT "+l"
 
 class Commands {
 
