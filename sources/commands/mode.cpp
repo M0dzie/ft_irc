@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 14:52:35 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:15:13 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ static bool isValidModeString(std::string const &string) {
 }
 
 static void handlePass(std::vector<std::string> modeString, Client &client, Channel &channel){
-	if (*modeString.begin() == RMVPASS)
-		return (channel.setPassword(""));
-	(void)modeString;
-	(void)client;
-	(void)channel;
-	
+	if (modeString.size() == 1 && *modeString.begin() == RMVPASS) {
+		channel.setPassword("");
+		channel.setModes(PASS, false);
+	} else if (modeString.size() == 2 && !modeString[1].empty() && *modeString.begin() == PASS) {
+		channel.setPassword(modeString[1]);
+		channel.setModes(PASS, true);
+	} else
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel){
