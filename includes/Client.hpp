@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/02 12:10:38 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 16:50:39 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CLIENT_HPP
 
 # include "ft_irc.hpp"
+
+class Channel;
 
 class Client {
 private:
@@ -25,6 +27,8 @@ private:
 	std::string _realname;
 	std::string _password;
 	std::string _lastPing;
+
+	std::vector<Channel *> _channels;
 
 	bool _registered;
 
@@ -39,6 +43,9 @@ public:
 	void setLastPing(std::string const &lastPing) {this->_lastPing = lastPing;}
 	void setRegister(bool value) {this->_registered = value;}
 
+	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
+	void removeOneChannel(Channel * channel);
+
 	bool operator==(Client const & rhs) const {return this->_nickname == rhs.getNickname();}
 
 	int const &getFD() const {return this->_fd;}
@@ -47,6 +54,7 @@ public:
 	std::string const &getRealname() const;
 	std::string const &getPassword() const {return this->_password;}
 	std::string const &getLastPing() const {return this->_lastPing;}
+	std::vector<Channel *> & getChannels() {return this->_channels;}
 	bool getRegister() const {return this->_registered;}
 };
 
