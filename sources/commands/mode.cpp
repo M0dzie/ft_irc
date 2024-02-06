@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 15:35:47 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 16:46:41 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,14 @@ static void handleInviteOnly(std::vector<std::string> modeString, Client &client
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel){
-	(void)modeString;
-	(void)client;
-	(void)channel;
+	if (modeString.size() == 1 && *modeString.begin() == RMVTOPICRESTRICT) {
+		channel.setTopicRestrict(false);
+		channel.setModes(TOPICRESTRICT, false);
+	} else if (modeString.size() == 1 && *modeString.begin() == TOPICRESTRICT) {
+		channel.setTopicRestrict(true);
+		channel.setModes(TOPICRESTRICT, true);
+	} else
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
 static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel){

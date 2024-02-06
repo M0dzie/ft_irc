@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 11:06:16 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 16:50:29 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	executeTopic(Commands & command) {
 		return;
 	}
 
-	// Check if the client is an operator
-	if (!channel->getClients()[&client])
+	// Check if the client is an operator if topicRestriction is off
+	if (channel->getTopicRestrict() && !channel->getClients()[&client])
 		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
 	// Update topic
