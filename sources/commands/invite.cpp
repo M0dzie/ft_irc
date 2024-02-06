@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 19:01:25 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 11:00:47 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	executeInvite(Commands & command) {
 	// Check if conditions are true
 	if (!channel) {
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[1] << " :No such channel" << std::endl;
+		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	} else if (client == target) {
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :didn't exist" << std::endl;
