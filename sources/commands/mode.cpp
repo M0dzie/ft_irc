@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:46:41 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 18:49:27 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static bool isValidModeString(std::string const &string) {
 	return true;
 }
 
-static void handlePass(std::vector<std::string> modeString, Client &client, Channel &channel){
+static void handlePass(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVPASS) {
 		channel.setPassword("");
 		channel.setModes(PASS, false);
@@ -31,7 +31,7 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
-static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel){
+static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVINVITEONLY) {
 		channel.setInviteOnlyMode(false);
 		channel.setModes(INVITEONLY, false);
@@ -42,7 +42,7 @@ static void handleInviteOnly(std::vector<std::string> modeString, Client &client
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
-static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel){
+static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVTOPICRESTRICT) {
 		channel.setTopicRestrict(false);
 		channel.setModes(TOPICRESTRICT, false);
@@ -53,13 +53,31 @@ static void handleTopicRestrict(std::vector<std::string> modeString, Client &cli
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
-static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel){
-	(void)modeString;
-	(void)client;
-	(void)channel;
+static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel) {
+	std::map<Client *, bool>::iterator it = channel.getClients().begin();
+    std::map<Client *, bool>::iterator ite = channel.getClients().end();
+	Client *target = NULL;
+	while (it != ite) {
+		if (it->first->getNickname() == modeString[1]) {
+			target = it->first;
+			break;
+		}
+		it++;
+	}
+	if (!target)
+		return (displayErrorChannel(ERR_USERNOTINCHANNEL, client, channel));
+	
+	if (modeString.size() == 2 && *modeString.begin() == RMVOPECHAN) {
+		if (channel.unsetOperator(target))
+			channel.displayClientList();
+	} else if (modeString.size() == 2 && *modeString.begin() == OPECHAN) {
+		if (channel.setOperator(target))
+			channel.displayClientList();
+	} else
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
-static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel){
+static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	(void)modeString;
 	(void)client;
 	(void)channel;
