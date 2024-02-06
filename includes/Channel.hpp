@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 13:27:47 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:26:13 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ public:
     std::vector<std::string> getInvitedList() {return this->_invitedList;}
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
-    void setInviteOnlyMode(bool const &inviteOnly) {this->_inviteOnly = inviteOnly;}
+    void setInviteOnlyMode(bool inviteOnly) {this->_inviteOnly = inviteOnly;}
     void setName(std::string const &name) {this->_name = name;}
     void setPassword(std::string const &password) {this->_password = password;}
     void setTopic(std::string const &topic) {this->_topic = topic;}

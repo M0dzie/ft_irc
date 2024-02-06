@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 15:15:13 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 15:35:47 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,14 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel){
-	(void)modeString;
-	(void)client;
-	(void)channel;
+	if (modeString.size() == 1 && *modeString.begin() == RMVINVITEONLY) {
+		channel.setInviteOnlyMode(false);
+		channel.setModes(INVITEONLY, false);
+	} else if (modeString.size() == 1 && *modeString.begin() == INVITEONLY) {
+		channel.setInviteOnlyMode(true);
+		channel.setModes(INVITEONLY, true);
+	} else
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel){
@@ -65,7 +70,8 @@ static void splitModes(std::vector<std::string> modeString, Client &client, Chan
 	{
 		if (i < 9 && (modes[i] == *modeString.begin() || modes[i + 1] == *modeString.begin()))
 		{
-			(*arrayFunction[i])(modeString, client, channel);
+			int tmpI = i / 2;
+				(*arrayFunction[tmpI])(modeString, client, channel);
 			break;
 		}
 		i++;
