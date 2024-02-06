@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 16:46:24 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 16:56:36 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ public:
 
     void setChannelLimit(unsigned long const &limit) {this->_channelLimit = limit;}
     void setInviteOnlyMode(bool inviteOnly) {this->_inviteOnly = inviteOnly;}
-    void setTopicRestrict(bool _topicRestrict) {this->_topicRestrict = topicRestrict;}
+    void setTopicRestrict(bool topicRestrict) {this->_topicRestrict = topicRestrict;}
     void setName(std::string const &name) {this->_name = name;}
     void setPassword(std::string const &password) {this->_password = password;}
     void setTopic(std::string const &topic) {this->_topic = topic;}

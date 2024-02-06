@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 15:53:30 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 16:53:03 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ static void joinAllChannels(Client &client, Server &server) {
 		channel->updateClients(&client, false);
 		joinChannel(*channel, client);
 		channel->displayClientList();
+		client.addChannels(channel);
 		it++;
 	}
 }
@@ -142,6 +143,7 @@ void	executeJoin(Commands & command) {
 			channel->updateClients(&client, true);
 			joinChannel(*channel, client);
 			channel->displayClientList();
+			client.addChannels(channel);
 			if (!it->second.empty())
 				channel->setModes(PASS, true);
 			it++;
@@ -170,6 +172,7 @@ void	executeJoin(Commands & command) {
 		channel->updateClients(&client, false);
 		joinChannel(*channel, client);
 		channel->displayClientList();
+		client.addChannels(channel);
 		it++;
 	}
 
