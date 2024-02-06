@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 17:09:44 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 11:06:16 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ void	executeTopic(Commands & command) {
 
 	Client &client = command.getClient();
 	Channel *channel = command.getServer().getChannelList()[command.getArgSplit()[0]];
-	if (!channel->isAlreadyIn(client.getNickname()))
+	if (!channel) {
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :No such channel" << std::endl;
+		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
+		return;
+	} else if (!channel->isAlreadyIn(client.getNickname()))
 		return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
 	
 	// Only display the topic
