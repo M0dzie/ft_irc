@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/05 13:35:57 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:31:22 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,30 @@ void Channel::removeClient(Client *client, Server &server) {
         this->setOperator(this->_clients.begin()->first);
         this->displayClientList();
     }
+}
+
+void Channel::setModes(std::string const &mode, bool plus) {
+	if (plus) {
+		this->_modes.push_back(mode);
+	} else {
+		std::vector<std::string>::iterator find = std::find(this->_modes.begin(), this->_modes.end(), mode);
+		if (find != this->_modes.end())
+			this->_modes.erase(find);
+	}
+}
+
+std::string Channel::getModes() {
+	std::vector<std::string>::iterator it = this->_modes.begin();
+	std::vector<std::string>::iterator ite = this->_modes.end();
+	std::string ret;
+	
+	while (it != ite) {
+		std::vector<std::string>::iterator tmp = it;
+		tmp++;
+		ret += *it;
+		if (tmp != ite)
+			ret += " ";
+		it++;
+	}
+	return ret;
 }

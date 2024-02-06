@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/05 18:33:05 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:27:47 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ private:
     bool _inviteOnly;
     std::map<Client *, bool> _clients;
     std::vector<std::string> _invitedList;
+    std::vector<std::string> _modes;
     
 public:
     Channel(std::string const &name, std::string const &password) : _name(name), _password(password), _channelLimit(CHANNELBASELIMIT), _inviteOnly(false) {}
@@ -50,11 +51,13 @@ public:
     void setName(std::string const &name) {this->_name = name;}
     void setPassword(std::string const &password) {this->_password = password;}
     void setTopic(std::string const &topic) {this->_topic = topic;}
+    void setModes(std::string const &mode, bool plus);
 
     bool const &getInviteOnly() const {return this->_inviteOnly;}
     std::string const &getName() const {return this->_name;}
     std::string const &getPassword() const {return this->_password;}
     std::string const &getTopic() const {return this->_topic;}
+    std::string getModes();
     unsigned long const &getChannelLimit() const {return this->_channelLimit;}
 };
 

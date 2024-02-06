@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 13:09:56 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/06 13:15:02 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,6 @@ void	executeMode(Commands & command) {
 		if (!isValidModeString(command.getArgSplit()[i]))
 			return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
 	}
+	if (!channel->getClients()[&client])
+		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 }
