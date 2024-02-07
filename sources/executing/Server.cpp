@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 09:21:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 09:34:02 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,8 @@ Server::Server(int port, char *password) {
 		for (int i = 1; i < this->_nbClient + 1; i++) {
 			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
 				if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) < 1) {
-					// 
-					// displayErrorMessage("recv() failed.");
-					// this->exit();
+					clearFromChannel(*this, *this->_clientList[this->_fds[i].fd]);
+					clearClient(*this, *this->_clientList[this->_fds[i].fd]);
 				}
 				tmpSentence.append(buffer);
 				std::size_t indexEnd = tmpSentence.find("\r\n");
