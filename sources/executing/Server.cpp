@@ -124,7 +124,7 @@ void displayMessage(int from, std::string message) {
 	else if (from == CLIENT)
 		std::cout << YELLOW << "[CLIENT] " << RESET << message << std::endl;
 	else if (from == INFO)
-		std::cout << BLACK << "[INFO] " << RESET << message << std::endl;
+		std::cout << BLACK << BOLD << "[INFO] " << RESET << BLACK << message << RESET << std::endl;
 }
 
 Server::~Server() {

@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 09:07:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 14:55:34 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,38 +31,44 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 	if (modeString.size() == 1 && *modeString.begin() == RMVPASS) {
 		channel.setPassword("");
 		channel.setModes(PASS, false);
+		displayMessage(INFO, "Remove password successfully");
 	} else if (modeString.size() == 2 && !modeString[1].empty() && *modeString.begin() == PASS) {
 		channel.setPassword(modeString[1]);
 		channel.setModes(PASS, true);
+		displayMessage(INFO, "Set password successfully : " + modeString[1]);
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVINVITEONLY) {
 		channel.setInviteOnlyMode(false);
 		channel.setModes(INVITEONLY, false);
+		displayMessage(INFO, "Remove invite only successfully");
 	} else if (modeString.size() == 1 && *modeString.begin() == INVITEONLY) {
 		channel.setInviteOnlyMode(true);
 		channel.setModes(INVITEONLY, true);
+		displayMessage(INFO, "Set invite only successfully");
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVTOPICRESTRICT) {
 		channel.setTopicRestrict(false);
 		channel.setModes(TOPICRESTRICT, false);
+		displayMessage(INFO, "Remove topic restriction successfully");
 	} else if (modeString.size() == 1 && *modeString.begin() == TOPICRESTRICT) {
 		channel.setTopicRestrict(true);
 		channel.setModes(TOPICRESTRICT, true);
+		displayMessage(INFO, "Set topic restriction successfully");
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 }
 
 static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() != 2) {
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 			return;
 	}
 	
@@ -80,30 +86,36 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 		return (displayErrorChannel(ERR_USERNOTINCHANNEL, client, channel));
 	
 	if (modeString.size() == 2 && *modeString.begin() == RMVOPECHAN) {
-		if (channel.unsetOperator(target))
+		if (channel.unsetOperator(target)) {
 			channel.displayClientList();
+			displayMessage(INFO, "Remove " + target->getNickname() + " from operators successfully");
+		}
 	} else if (modeString.size() == 2 && *modeString.begin() == OPECHAN) {
-		if (channel.setOperator(target))
+		if (channel.setOperator(target)) {
 			channel.displayClientList();
+			displayMessage(INFO, "Set " + target->getNickname() + " operator successfully");
+		}
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 }
 
 static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVCHANLIMIT) {
 		channel.setChannelLimited(false);
 		channel.setModes(CHANLIMIT, false);
+		displayMessage(INFO, "Remove channel limit successfully");
 	} else if (modeString.size() == 2 && *modeString.begin() == CHANLIMIT) {
 		if (!isNumber(modeString[1]))
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 		std::stringstream ss(modeString[1]);
 		unsigned long limit;
 		ss >> limit;
 		channel.setChannelLimited(true);
 		channel.setChannelLimit(limit);
 		channel.setModes(CHANLIMIT, true);
+		displayMessage(INFO, "Set channel limit to " + modeString[1] + " successfully");
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 }
 
 
