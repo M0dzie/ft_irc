@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 14:45:22 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 16:58:08 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ public:
     void setFDValue(int value, int index) {this->_fds[index].fd = value;}
     
     static void handleBreak(int sig);
+    int	recoverCommandLine(Client & tmpClient);
 
     class ServerError: public std::exception {
     private:
