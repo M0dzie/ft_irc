@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 12:38:20 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 18:18:25 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & command) {
 
 	if (*(++it) != "0")
 		return displayError(ERR_INVALIDARG, command), false;	// check if need to display with argument
-	if (*(++it) != "*")
+	if (!(*(++it) == "*" || *(it) == "0"))
 		return displayError(ERR_INVALIDARG, command), false;	// check if need to display with argument
 
 	std::string realname = *(++it);
@@ -46,7 +46,7 @@ void	executeUser(Commands & command) {
 		displayError(ERR_CANNOTBEUNDEFINED, command);
 	else
 	{
-		if (tmpArgs.empty() || tmpArgs.size() != 4)
+		if (tmpArgs.empty() || tmpArgs.size() != 4)	// if realname has space change that
 			displayError(ERR_NEEDMOREPARAMS, command);
 		else
 		{

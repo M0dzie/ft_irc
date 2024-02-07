@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 14:57:18 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 18:47:48 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,33 @@
 // non-member attribute to handle signal with sigaction
 bool Server::interrupt = false;
 
-void Server::sendMessage(int clientFd, std::string msg) {
+void sendMessage(int clientFd, std::string msg) {
 	msg += "\r\n";
-	
-	if (send(clientFd, msg.c_str(), msg.length(), 0) < 0)
+
+	if (send(clientFd, msg.c_str(), msg.length(), MSG_NOSIGNAL + MSG_DONTWAIT) < 0)
 		displayErrorMessage("send() failed.");
+}
+
+int	Server::recoverCommandLine(Client & tmpClient) {
+	char buffer[BUFFERSIZE];
+
+	for (int i = 0; i < BUFFERSIZE; i++)
+		buffer[i] = '\0';
+	if (recv(tmpClient.getFD(), buffer, BUFFERSIZE, 0) < 1) {
+		return -1;
+	}
+	else
+	{
+		std::string & refBuffer = tmpClient.getBufferLine();
+
+		refBuffer.append(buffer);
+		return 1;
+	}
+	return 0;
 }
 
 Server::Server(int port, char *password) {
 	std::string tmpSentence;
-	char buffer[BUFFERSIZE];
-	
-	for (int i = 0; i < BUFFERSIZE; i++)
-		buffer[i] = '\0';
 
 	this->initDataAndServer(port, password);
 	this->handlingSignal();
@@ -57,35 +71,45 @@ Server::Server(int port, char *password) {
 				close(newFD);
 			}
 		}
-		
+
 		//handling msg from known clients
 		for (int i = 1; i < this->_nbClient + 1; i++) {
 			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
 				Client & tmpClient = *this->_clientList[this->_fds[i].fd];
-
-				// if (recv(this->_fds[i].fd, tmpClient.getBuffer(), BUFFERSIZE, 0) < 1) {
-				if (recv(this->_fds[i].fd, buffer, BUFFERSIZE, 0) < 1) {
+				int lineFull = 0;
+				
+				lineFull = recoverCommandLine(tmpClient);
+				if (lineFull == -1)
+				{
 					clearFromChannel(*this, tmpClient);
 					clearClient(*this, tmpClient);
 				}
-				else
+				else if (lineFull == 1)
 				{
-					tmpSentence.append(buffer);
-					std::size_t indexEnd = tmpSentence.find("\r\n");
-					
-					while(indexEnd != std::string::npos)
-					{
-						std::string line = tmpSentence.substr(0, indexEnd);
-						displayMessage(CLIENT, line);
-						Commands cmd(line, tmpClient, *this);
+					std::string & tmpBuffer = tmpClient.getBufferLine();
+					std::size_t indexEnd = tmpBuffer.find("\r\n");
 
-						cmd.executeCommand();
-						tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
-						indexEnd = tmpSentence.find("\r\n");
-					}
-					// tmpClient.clearBuffer();
-					for (int i = 0; i <= BUFFERSIZE; i++)
-						buffer[i] = '\0';
+					// if (indexEnd == std::string::npos)
+					// {
+					// 	displayMessage(CLIENT, tmpBuffer);
+					// 	Commands cmd(tmpBuffer, tmpClient, *this);
+
+					// 	cmd.executeCommand();	
+					// }
+					// else
+					// {
+						while(indexEnd != std::string::npos)
+						{
+							std::string line = tmpBuffer.substr(0, indexEnd);
+							
+							displayMessage(CLIENT, line);
+							Commands cmd(line, tmpClient, *this);
+
+							cmd.executeCommand();
+							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());;
+							indexEnd = tmpBuffer.find("\r\n");
+						}
+					// }
 				}
 			}
 		}
