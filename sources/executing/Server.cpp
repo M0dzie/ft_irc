@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 13:31:11 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:45:37 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ void displayMessage(int from, std::string message) {
 		std::cout << BLUE << "[SERVER] " << RESET << message << std::endl;
 	else if (from == CLIENT)
 		std::cout << YELLOW << "[CLIENT] " << RESET << message << std::endl;
+	else if (from == INFO)
+		std::cout << BLACK << "[INFO] " << RESET << message << std::endl;
 }
 
 Server::~Server() {
