@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:50:24 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 09:35:31 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	clearFromChannel(Server & tmpServer, Client & tmpClient) {
 		(*it)->sendMessageToChannel(tmpClient.getNickname() + " is leaving the channel " + (*it)->getName());
 		(*it)->removeClient(&tmpClient, tmpServer);
 	}
-	tmpChannels.clear();
+	// tmpChannels.clear();
 }
 
 void	clearClient(Server & tmpServer, Client & tmpClient) {
