@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 11:38:07 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 09:21:01 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,6 @@ Server::Server(int port, char *password) {
 				displayErrorMessage("accept() failed.");
 				this->exit();
 			}
-			// for (int i = 0; i < MAXCLIENT + 1; i++) {
-			// 	if (this->_fds[i].fd != 0)
-			// 		continue;
-			// 	this->_nbClient += 1;
-			// 	this->_fds[i].fd = newFD;
-			// 	this->_fds[i].events = POLLIN;
-			// 	this->_fds[i].revents = 0;
-			// 	this->_clientList.insert(std::pair<int, Client *>(this->_fds[i].fd, new Client(this->_fds[i].fd, "undefined")));
-				
-			// 	std::cout << GREEN << "ADD" << RESET << " client fd: " << this->_fds[i].fd << " index: " << i << std::endl;
-			// 	break;
-			// 	if (i == MAXCLIENT) { // There is no places left
-			// 		displayErrorMessage("The number of client available is full.");
-			// 		close(newFD);
-			// 	}
-			// }
 			
 			if (this->_nbClient + 1 < MAXCLIENT) {
 				this->_nbClient += 1;
@@ -78,9 +62,10 @@ Server::Server(int port, char *password) {
 		//handling msg from known clients
 		for (int i = 1; i < this->_nbClient + 1; i++) {
 			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
-				if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) == 0) {
-					displayErrorMessage("recv() failed.");
-					this->exit();
+				if (recv(this->_fds[i].fd, &buffer, bufferSize, 0) < 1) {
+					// 
+					// displayErrorMessage("recv() failed.");
+					// this->exit();
 				}
 				tmpSentence.append(buffer);
 				std::size_t indexEnd = tmpSentence.find("\r\n");
@@ -156,9 +141,6 @@ void Server::initDataAndServer(int port, char *password) {
 		
 	if (listen(this->_fds[0].fd, 1) < 0)
 		throw(Server::ServerError(ERROR "listen() failed."));
-
-	// for (int i = 1; i < MAXCLIENT + 1; i++)
-	// 	this->_fds[i].fd = 0;
 }
 
 void Server::handleBreak(int sig) {
