@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/05 16:52:07 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:29:05 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,20 @@ void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
 
 void	executePrivateMsg(Commands & command) {
 
-	std::vector<std::string> & args = command.getArgSplit();
-
-	if (args.empty())
-		displayError(ERR_NEEDMOREPARAMS, command);
+	if (!command.getClient().getRegister())
+		displayError(ERR_NOTREGISTERED, command);
 	else
 	{
-		if ((*args.begin())[0] == '#')
-			sendMessageToChannel(command, args);
+		std::vector<std::string> & args = command.getArgSplit();
+
+		if (args.empty())
+			displayError(ERR_NEEDMOREPARAMS, command);
 		else
-			sendMessageToClient(command, args);
+		{
+			if ((*args.begin())[0] == '#')
+				sendMessageToChannel(command, args);
+			else
+				sendMessageToClient(command, args);
+		}
 	}
 }

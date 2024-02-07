@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/02 10:58:29 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 11:19:23 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ void Commands::executeCommand() {
 			}
 		}
 		if (i == 12)
-			std::cout << "command not found " << i << " " << 7 << std::endl;	
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << this->getClient().getUsername() << " " << this->_name << " :Unknown command" << std::endl;
 	}
 }
