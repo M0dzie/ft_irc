@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 11:02:11 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:45:22 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define MAXCLIENT 1000
 # define SERVER 1
 # define CLIENT 2
+# define INFO 3
 
 class Client;
 class Channel;
