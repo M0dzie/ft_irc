@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 12:59:57 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:31:11 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ void Server::sendMessage(int clientFd, std::string msg) {
 
 Server::Server(int port, char *password) {
 	std::string tmpSentence;
+	char buffer[BUFFERSIZE];
+	
+	for (int i = 0; i < BUFFERSIZE; i++)
+		buffer[i] = '\0';
 
 	this->initDataAndServer(port, password);
 	this->handlingSignal();
@@ -59,24 +63,30 @@ Server::Server(int port, char *password) {
 			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
 				Client & tmpClient = *this->_clientList[this->_fds[i].fd];
 
-				if (recv(this->_fds[i].fd, tmpClient.getBuffer(), BUFFERSIZE, 0) < 1) {
+				// if (recv(this->_fds[i].fd, tmpClient.getBuffer(), BUFFERSIZE, 0) < 1) {
+				if (recv(this->_fds[i].fd, buffer, BUFFERSIZE, 0) < 1) {
 					clearFromChannel(*this, tmpClient);
 					clearClient(*this, tmpClient);
 				}
-				tmpSentence.append(tmpClient.getBuffer());
-				std::size_t indexEnd = tmpSentence.find("\r\n");
-				
-				while(indexEnd != std::string::npos)
+				else
 				{
-					std::string line = tmpSentence.substr(0, indexEnd);
-					displayMessage(CLIENT, line);
-					Commands cmd(line, tmpClient, *this);
+					tmpSentence.append(buffer);
+					std::size_t indexEnd = tmpSentence.find("\r\n");
+					
+					while(indexEnd != std::string::npos)
+					{
+						std::string line = tmpSentence.substr(0, indexEnd);
+						displayMessage(CLIENT, line);
+						Commands cmd(line, tmpClient, *this);
 
-					cmd.executeCommand();
-					tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
-					indexEnd = tmpSentence.find("\r\n");
+						cmd.executeCommand();
+						tmpSentence = tmpSentence.substr(indexEnd + 2, tmpSentence.size());;
+						indexEnd = tmpSentence.find("\r\n");
+					}
+					// tmpClient.clearBuffer();
+					for (int i = 0; i <= BUFFERSIZE; i++)
+						buffer[i] = '\0';
 				}
-				tmpClient.clearBuffer();
 			}
 		}
 	}
