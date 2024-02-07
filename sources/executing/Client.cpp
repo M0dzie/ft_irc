@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:38:04 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 15:34:42 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 12:53:30 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ void Client::removeOneChannel(Channel * channel) {
 	{
 		if (channelName == (*it)->getName())
 		{
-			std::cout << "channel " << channelName << " found and removed!" << std::endl;
 			tmpChannels.erase(it);
 			break;
 		}
 	}
+}
 
-	std::cout << "new list of channel:" << std::endl;
-	for (std::vector<Channel *>::iterator it = tmpChannels.begin(); it != tmpChannels.end(); it++)
-	{
-		std::cout << (*it)->getName() << std::endl;
-	}
+void	Client::clearBuffer() {
+	for (int i = 0; i < BUFFERSIZE; i++)
+		this->_buffer[i] = '\0';
 }

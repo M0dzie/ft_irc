@@ -6,12 +6,14 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/06 16:50:39 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:00:47 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
+
+# define BUFFERSIZE 1024
 
 # include "ft_irc.hpp"
 
@@ -30,10 +32,12 @@ private:
 
 	std::vector<Channel *> _channels;
 
+	char	_buffer[BUFFERSIZE];
+
 	bool _registered;
 
 public:
-	Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {}
+	Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {this->clearBuffer();}
 
 	void setFD(int fd) {this->_fd = fd;}
 	void setNickname(std::string const &nickname) {this->_nickname = nickname;}
@@ -46,6 +50,8 @@ public:
 	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
 	void removeOneChannel(Channel * channel);
 
+	void	clearBuffer();
+
 	bool operator==(Client const & rhs) const {return this->_nickname == rhs.getNickname();}
 
 	int const &getFD() const {return this->_fd;}
@@ -55,6 +61,7 @@ public:
 	std::string const &getPassword() const {return this->_password;}
 	std::string const &getLastPing() const {return this->_lastPing;}
 	std::vector<Channel *> & getChannels() {return this->_channels;}
+	char *	getBuffer() {return this->_buffer;}
 	bool getRegister() const {return this->_registered;}
 };
 
