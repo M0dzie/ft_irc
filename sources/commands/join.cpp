@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:58:59 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 08:43:35 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void joinAllChannels(Client &client, Server &server) {
 			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
 			it++;
 			continue;
-		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
+		} else if (channel->getChannelLimited() && channel->getClients().size() >= channel->getChannelLimit()) {
 			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
 			it++;
 			continue;
@@ -147,6 +147,7 @@ void	executeJoin(Commands & command) {
 			if (!it->second.empty())
 				channel->setModes(PASS, true);
 			channel->setModes(TOPICRESTRICT, true);
+			channel->setModes(CHANLIMIT, true);
 			it++;
 			continue;
 		}
@@ -160,7 +161,7 @@ void	executeJoin(Commands & command) {
 			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
 			it++;
 			continue;
-		} else if (channel->getClients().size() >= channel->getChannelLimit()) {
+		} else if (channel->getChannelLimited() && channel->getClients().size() >= channel->getChannelLimit()) {
 			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
 			it++;
 			continue;

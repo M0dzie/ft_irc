@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 18:49:27 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 09:07:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ static bool isValidModeString(std::string const &string) {
 	return true;
 }
 
+static bool isNumber(std::string const &string) {
+	std::string::const_iterator it = string.begin();
+	while (it != string.end() && std::isdigit(*it))
+		it++;
+	return it == string.end();
+}
+
 static void handlePass(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVPASS) {
 		channel.setPassword("");
@@ -28,7 +35,7 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 		channel.setPassword(modeString[1]);
 		channel.setModes(PASS, true);
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -39,7 +46,7 @@ static void handleInviteOnly(std::vector<std::string> modeString, Client &client
 		channel.setInviteOnlyMode(true);
 		channel.setModes(INVITEONLY, true);
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -50,10 +57,15 @@ static void handleTopicRestrict(std::vector<std::string> modeString, Client &cli
 		channel.setTopicRestrict(true);
 		channel.setModes(TOPICRESTRICT, true);
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
 }
 
 static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel) {
+	if (modeString.size() != 2) {
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+			return;
+	}
+	
 	std::map<Client *, bool>::iterator it = channel.getClients().begin();
     std::map<Client *, bool>::iterator ite = channel.getClients().end();
 	Client *target = NULL;
@@ -74,13 +86,24 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 		if (channel.setOperator(target))
 			channel.displayClientList();
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Not enough parameters" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
 }
 
 static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel) {
-	(void)modeString;
-	(void)client;
-	(void)channel;
+	if (modeString.size() == 1 && *modeString.begin() == RMVCHANLIMIT) {
+		channel.setChannelLimited(false);
+		channel.setModes(CHANLIMIT, false);
+	} else if (modeString.size() == 2 && *modeString.begin() == CHANLIMIT) {
+		if (!isNumber(modeString[1]))
+			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
+		std::stringstream ss(modeString[1]);
+		unsigned long limit;
+		ss >> limit;
+		channel.setChannelLimited(true);
+		channel.setChannelLimit(limit);
+		channel.setModes(CHANLIMIT, true);
+	} else
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong amount of parameters" << std::endl;
 }
 
 
