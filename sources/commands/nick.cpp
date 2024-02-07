@@ -6,17 +6,11 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 10:48:39 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 18:50:47 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
-
-void sendMessage(int clientFd, std::string msg) {
-	msg += "\r\n";
-	if (send(clientFd, msg.c_str(), msg.length(), 0) < 0)
-		displayErrorMessage("send() failed.");
-}
 
 bool isNicknameValid(std::string nickname, Commands & command) {
 
