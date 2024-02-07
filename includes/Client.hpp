@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 13:00:47 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 18:49:01 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ private:
 	std::string _realname;
 	std::string _password;
 	std::string _lastPing;
+	
+	std::string _bufferLine;
 
 	std::vector<Channel *> _channels;
 
-	char	_buffer[BUFFERSIZE];
+	// char	_buffer[BUFFERSIZE];
 
 	bool _registered;
 
@@ -61,7 +63,8 @@ public:
 	std::string const &getPassword() const {return this->_password;}
 	std::string const &getLastPing() const {return this->_lastPing;}
 	std::vector<Channel *> & getChannels() {return this->_channels;}
-	char *	getBuffer() {return this->_buffer;}
+	// char *	getBuffer() {return this->_buffer;}
+	std::string & getBufferLine() {return this->_bufferLine;}
 	bool getRegister() const {return this->_registered;}
 };
 
