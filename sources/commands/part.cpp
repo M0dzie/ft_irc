@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 11:30:17 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/07 12:51:29 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ void executePart(Commands & command) {
     std::map<std::string, Channel *> channels = command.getServer().getChannelList();
     Client *client = &command.getClient();
     std::vector<std::string> channelNames = getChannelNames(command.getArgSplit()[0]);
-    // std::string channelName = command.getArgSplit()[0];
     
     for (size_t i = 0; i < channelNames.size(); i++) {
         if (channels.find(channelNames[i]) == channels.end()) {
             std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelNames[i] << " :No such channel" << std::endl;
+            i++;
             continue;
         }
 
@@ -48,18 +48,17 @@ void executePart(Commands & command) {
         while (it != ite) {
             if (it->first == client) {
                 std::string reason;
-                for (size_t i = 1; i < command.getArgSplit().size(); i++) {
-                    reason += command.getArgSplit()[i];
-                    if (i != command.getArgSplit().size() - 1)
+                for (size_t j = 1; j < command.getArgSplit().size(); j++) {
+                    reason += command.getArgSplit()[j];
+                    if (j != command.getArgSplit().size() - 1)
                         reason += " ";
                 }
                 reason = reason.substr(1);
-                sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channelNames[i] + " :" + reason);
-                channel->sendMessageToChannel(client->getNickname() + " is leaving the channel " + channelNames[i]);
+                sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channel->getName() + " :" + reason);
+                channel->sendMessageToChannel(client->getNickname() + " is leaving the channel " + channel->getName());
                 client->removeOneChannel(channel);
                 channel->removeClient(client, command.getServer());
-                it++;
-                continue;
+                break;
             }
             it++;
             
