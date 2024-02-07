@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 18:49:01 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 18:55:42 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ private:
 	bool _registered;
 
 public:
-	Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {this->clearBuffer();}
+	Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {}
+	// Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {this->clearBuffer();}
 
 	void setFD(int fd) {this->_fd = fd;}
 	void setNickname(std::string const &nickname) {this->_nickname = nickname;}
@@ -52,7 +53,7 @@ public:
 	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
 	void removeOneChannel(Channel * channel);
 
-	void	clearBuffer();
+	// void	clearBuffer();
 
 	bool operator==(Client const & rhs) const {return this->_nickname == rhs.getNickname();}
 

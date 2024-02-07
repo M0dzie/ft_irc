@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:38:04 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 12:53:30 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/07 18:54:42 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void Client::removeOneChannel(Channel * channel) {
 	}
 }
 
-void	Client::clearBuffer() {
-	for (int i = 0; i < BUFFERSIZE; i++)
-		this->_buffer[i] = '\0';
-}
+// void	Client::clearBuffer() {
+// 	for (int i = 0; i < BUFFERSIZE; i++)
+// 		this->_buffer[i] = '\0';
+// }
