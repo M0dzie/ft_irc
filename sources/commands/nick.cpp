@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 18:50:47 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:21:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ void	executeNick(Commands & command) {
 		
 		command.getClient().setNickname(nickname);
 		sendMessage(command.getClient().getFD(), cmdToSend);
-		displayMessage(SERVER, cmdToSend);
+		// displayMessage(SERVER, cmdToSend);
 	}
 }

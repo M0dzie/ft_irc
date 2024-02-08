@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 10:27:37 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:22:02 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 			{
 				std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
 				sendMessage(tmpFdReceiver, serverMessageReceiver);
-				displayMessage(SERVER, serverMessageReceiver);
+				// displayMessage(SERVER, serverMessageReceiver);
 			}
 		}
 	}
@@ -83,7 +83,7 @@ void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
 	{
 		std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
 		sendMessage(tmpReceiver.getFD(), serverMessageReceiver);
-		displayMessage(SERVER, serverMessageReceiver);
+		// displayMessage(SERVER, serverMessageReceiver);
 	}
 }
 

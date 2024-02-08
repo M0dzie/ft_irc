@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 11:13:58 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 11:25:03 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 bool Server::interrupt = false;
 
 void sendMessage(int clientFd, std::string msg) {
+	displayMessage(SERVER, msg);
 	msg += "\r\n";
 
 	if (send(clientFd, msg.c_str(), msg.length(), MSG_NOSIGNAL + MSG_DONTWAIT) < 0)
@@ -90,7 +91,7 @@ Server::Server(int port, char *password) {
 
 					while(indexEnd != std::string::npos)
 					{
-						std::string line = tmpBuffer.substr(0, indexEnd) + "\0";
+						std::string line = tmpBuffer.substr(0, indexEnd);
 						// line.append("\0");
 						
 						displayMessage(CLIENT, line);
