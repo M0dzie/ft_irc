@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 12:51:29 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:09:39 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void executePart(Commands & command) {
     for (size_t i = 0; i < channelNames.size(); i++) {
         if (channels.find(channelNames[i]) == channels.end()) {
             std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelNames[i] << " :No such channel" << std::endl;
-            i++;
             continue;
         }
 

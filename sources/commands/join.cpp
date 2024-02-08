@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 08:43:35 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 12:49:41 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void joinAllChannels(Client &client, Server &server) {
 	while (it != ite) {
 		Channel *channel = server.getChannelList()[it->first];
 		if (channel->isAlreadyIn(client.getNickname())) {
-			displayErrorChannel(ERR_USERONCHANNEL, client, *channel);
+			displayErrorChannelTarget(ERR_USERONCHANNEL, client, client.getNickname(), *channel);
 			it++;
 			continue;
 		} else if (!channel->getPassword().empty()) {
@@ -154,7 +154,7 @@ void	executeJoin(Commands & command) {
 
 		Channel *channel = command.getServer().getChannelList()[it->first];
 		if (channel->isAlreadyIn(client.getNickname())) {
-			displayErrorChannel(ERR_USERONCHANNEL, client, *channel);
+			displayErrorChannelTarget(ERR_USERONCHANNEL, client, client.getNickname(), *channel);
 			it++;
 			continue;
 		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
