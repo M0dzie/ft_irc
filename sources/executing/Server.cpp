@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 13:17:20 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 16:25:28 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,18 @@ int	Server::recoverCommandLine(Client & tmpClient) {
 	return 0;
 }
 
+std::string	getMessageConnection(int fd) {
+	std::string infoMessage = "New Client connected to Network (FD: ";
+	std::stringstream ss;
+	std::string fdToString;
+
+	ss << fd;
+	ss >> fdToString;
+	infoMessage.append(fdToString);
+	infoMessage.append(")");
+	return infoMessage;
+}
+
 Server::Server(int port, char *password) {
 	std::string tmpSentence;
 
@@ -64,7 +76,7 @@ Server::Server(int port, char *password) {
 				this->_fds[this->_nbClient].revents = 0;
 				this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
 
-				std::cout << GREEN << "ADD" << RESET << " client fd: " << this->_fds[this->_nbClient].fd << " index: " << this->_nbClient << std::endl;
+				displayMessage(INFO, getMessageConnection(newFD));
 			} else { // There is no places left
 				displayErrorMessage("The number of client available is full.");
 				close(newFD);
@@ -92,7 +104,6 @@ Server::Server(int port, char *password) {
 					while(indexEnd != std::string::npos)
 					{
 						std::string line = tmpBuffer.substr(0, indexEnd);
-						// line.append("\0");
 						
 						displayMessage(CLIENT, line);
 						Commands cmd(line, tmpClient, *this);
