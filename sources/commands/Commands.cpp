@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:23:42 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 15:09:16 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ void login(Commands & command) {
 		sendMessage(tmpClient.getFD(), ":localhost 001 " + tmpClient.getNickname() + " :Welcome to your IRC Network!");
 		sendMessage(tmpClient.getFD(), ":localhost 375 " + tmpClient.getNickname() + " :- ft_irc Message of the day - ");
 		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :                                          ");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + DEFAULT + " :  ███████╗████████╗    ██╗██████╗  ██████╗" + BOLD);
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + DEFAULT + " :  ██╔════╝╚══██╔══╝    ██║██╔══██╗██╔════╝" + BOLD);
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + DEFAULT + " :  █████╗     ██║       ██║██████╔╝██║     " + BOLD);
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + DEFAULT + " :  ██╔══╝     ██║       ██║██╔══██╗██║     " + BOLD);
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + DEFAULT + " :  ██║        ██║       ██║██║  ██║╚██████╗" + BOLD);
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + DEFAULT + " :  ╚═╝        ╚═╝       ╚═╝╚═╝  ╚═╝ ╚═════╝" + BOLD);
+		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :" + DEFAULT + "  ███████╗████████╗    ██╗██████╗  ██████╗");
+		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :" + DEFAULT + "  ██╔════╝╚══██╔══╝    ██║██╔══██╗██╔════╝");
+		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :" + DEFAULT + "  █████╗     ██║       ██║██████╔╝██║     ");
+		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :" + DEFAULT + "  ██╔══╝     ██║       ██║██╔══██╗██║     ");
+		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :" + DEFAULT + "  ██║        ██║       ██║██║  ██║╚██████╗");
+		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :" + DEFAULT + "  ╚═╝        ╚═╝       ╚═╝╚═╝  ╚═╝ ╚═════╝");
 		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :                                          ");
 		sendMessage(tmpClient.getFD(), ":localhost 376 " + tmpClient.getNickname() + " :End of /MOTD command.");
 	}
