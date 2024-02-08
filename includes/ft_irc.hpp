@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 13:23:36 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 17:12:57 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 # define RESET "\033[0m" 
 # define BOLD "\033[1m"
 # define ERROR RED BOLD "Error: " RESET
+
+# define USERLEN 18
 
 void displayErrorMessage(std::string const &msg);
 void displayMessage(int from, std::string message);

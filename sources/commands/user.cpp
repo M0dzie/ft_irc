@@ -6,15 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 18:18:25 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 17:13:17 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-# define USERLEN 18	// put in ft_irc 
-
-bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & command) {
+bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & command, std::string & tmpRealname) {
 
 	std::vector<std::string>::iterator it = tmpArgs.begin();
 
@@ -22,14 +20,15 @@ bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & command) {
 		return displayError(ERR_NEEDMOREPARAMS, command), false;
 	else if (it->size() > USERLEN)
 		*it = it->substr(0, USERLEN);
-
+		
 	if (*(++it) != "0")
-		return displayError(ERR_INVALIDARG, command), false;	// check if need to display with argument
+		return displayError(ERR_INVALIDARG, command), false;
 	if (!(*(++it) == "*" || *(it) == "0"))
-		return displayError(ERR_INVALIDARG, command), false;	// check if need to display with argument
-
-	std::string realname = *(++it);
-	if (realname[0] != ':')
+		return displayError(ERR_INVALIDARG, command), false;
+	
+	while (++it != tmpArgs.end())
+		tmpRealname += *(it);
+	if (tmpRealname[0] != ':' || !tmpRealname[1])
 		return displayError(ERR_INVALIDARG, command), false;
 	return true;
 }
@@ -46,14 +45,16 @@ void	executeUser(Commands & command) {
 		displayError(ERR_CANNOTBEUNDEFINED, command);
 	else
 	{
-		if (tmpArgs.empty() || tmpArgs.size() != 4)	// if realname has space change that
+		if (tmpArgs.empty() || tmpArgs.size() < 4)
 			displayError(ERR_NEEDMOREPARAMS, command);
 		else
 		{
-			if (isUserArgValid(tmpArgs, command))
+			std::string tmpRealname;
+			
+			if (isUserArgValid(tmpArgs, command, tmpRealname))
 			{
 				command.getClient().setUsername(*tmpArgs.begin());
-				command.getClient().setRealname((*(--tmpArgs.end())).erase(0, 1));
+				command.getClient().setRealname(tmpRealname);
 				login(command);
 			}
 		}
