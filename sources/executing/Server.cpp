@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 11:25:03 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:17:20 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,11 @@ Server::Server(int port, char *password) {
 void displayMessage(int from, std::string message) {
 
 	if (from == SERVER)
-		std::cout << BLUE << "[SERVER] " << RESET << message << std::endl;
+		std::cout << BLUE << "[SERVER] " << RESET << BLACK << message << RESET << std::endl;
 	else if (from == CLIENT)
 		std::cout << YELLOW << "[CLIENT] " << RESET << message << std::endl;
 	else if (from == INFO)
-		std::cout << BLACK << BOLD << "[INFO] " << RESET << BLACK << message << RESET << std::endl;
+		std::cout << BOLD << "[INFO] " << RESET << BLACK << message << RESET << std::endl;
 }
 
 Server::~Server() {

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/18 17:10:52 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 13:23:36 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define PURPLE "\033[0;35m"
 # define CYAN "\033[0;36m"
 # define GRAY "\033[0;37m"
+# define DEFAULT "\033[0;39m"
 # define RESET "\033[0m" 
 # define BOLD "\033[1m"
 # define ERROR RED BOLD "Error: " RESET
