@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 11:11:49 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 12:31:55 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
 void	displayErrorChannel(int errorCode, Client const &client, Channel &channel);
+void	displayErrorChannelTarget(int errorCode, Client const &client, std::string const &targetNickname, Channel &channel);
 void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
 void	clearClient(Server & tmpServer, Client & tmpClient);
 void	clearFromChannel(Server & tmpServer, Client & tmpClient);

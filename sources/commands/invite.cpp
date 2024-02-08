@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 11:00:47 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 12:53:15 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ void	executeInvite(Commands & command) {
 		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	} else if (client == target) {
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :didn't exist" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :wrong client" << std::endl;
 		return;
 	} else if (!channel->isAlreadyIn(client.getNickname()))
 		return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
-	else if (!channel->getClients()[&client] || (channel->getInviteOnly() && !channel->getClients()[&client]))
+	if (channel->getInviteOnly() && !channel->getClients()[&client])
 		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
-	else if (channel->isAlreadyIn(target.getNickname()))
-		return (displayErrorChannel(ERR_USERONCHANNEL, client, *channel));
+	if (channel->isAlreadyIn(target.getNickname()))
+		return (displayErrorChannelTarget(ERR_USERONCHANNEL, client, target.getNickname(), *channel));
 
 	// If user and client exist and invite is possible, send a RPL_INVITING
 	if (!isIn(*channel, target.getNickname()))

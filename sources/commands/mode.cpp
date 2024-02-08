@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 14:55:34 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 12:32:06 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 		it++;
 	}
 	if (!target)
-		return (displayErrorChannel(ERR_USERNOTINCHANNEL, client, channel));
+		return (displayErrorChannelTarget(ERR_USERNOTINCHANNEL, client, modeString[1], channel));
 	
 	if (modeString.size() == 2 && *modeString.begin() == RMVOPECHAN) {
 		if (channel.unsetOperator(target)) {
