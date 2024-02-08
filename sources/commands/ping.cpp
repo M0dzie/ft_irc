@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ping.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 16:03:54 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:27:11 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:21:39 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ void	executePing(Commands & command) {
 		std::string serverMessage = ":" + tmpClient.getNickname() + "!" + tmpClient.getUsername() + "@localhost" + " PONG " + tmpPing;
 
 		sendMessage(tmpClient.getFD(), serverMessage);
-		displayMessage(SERVER, serverMessage);
+		// displayMessage(SERVER, serverMessage);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 09:35:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 11:22:06 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	executeQuit(Commands & command) {
 	Server & tmpServer = command.getServer();
 
 	sendMessage(tmpClient.getFD(), serverMessage);
-	displayMessage(SERVER, serverMessage);
+	// displayMessage(SERVER, serverMessage);
 	
 	clearFromChannel(tmpServer, tmpClient);
 	clearClient(tmpServer, tmpClient);
