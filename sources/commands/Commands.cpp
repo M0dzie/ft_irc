@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 16:48:31 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:55:42 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,6 @@ Commands::Commands(std::string & line, Client & client, Server & server) : _clie
 	{
 		this->_argSplit.push_back(word);
 	}
-}
-
-Commands::~Commands(void) {
-
-	// std::cout << "Delete Commands " << std::endl;
 }
 
 void login(Commands & command) {
