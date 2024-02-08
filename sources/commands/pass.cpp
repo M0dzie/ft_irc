@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:28:24 by msapin            #+#    #+#             */
-/*   Updated: 2024/01/24 12:35:53 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 12:10:38 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ void	executePass(Commands & command) {
 			if (password.empty())
 				displayError(ERR_NEEDMOREPARAMS, command);
 			else
+			{
+				displayMessage(INFO, "Set connection password (" + password + ")");
 				tmpClient.setPassword(password);
+			}
 		}
 	}
 }
