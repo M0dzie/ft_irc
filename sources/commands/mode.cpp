@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 12:32:06 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:58:40 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ static void splitModes(std::vector<std::string> modeString, Client &client, Chan
 
 void	executeMode(Commands & command) {
 	if (!command.getClient().getRegister())
-		return;
+		return (displayError(ERR_NOTREGISTERED, command));
 	else if (command.getArgSplit().size() < 1)
     	return (displayError(ERR_NEEDMOREPARAMS, command));
 

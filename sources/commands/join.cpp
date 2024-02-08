@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:45:08 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:58:21 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ static void joinAllChannels(Client &client, Server &server) {
 void	executeJoin(Commands & command) {
 
 	if (!command.getClient().getRegister())
-		return;
+		return (displayError(ERR_NOTREGISTERED, command));
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
