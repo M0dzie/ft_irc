@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 12:49:41 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:58:21 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,13 @@ static void joinAllChannels(Client &client, Server &server) {
 void	executeJoin(Commands & command) {
 
 	if (!command.getClient().getRegister())
-		return;
-
-	if (command.getArgSplit()[0][0] == '0')
-		return (joinAllChannels(command.getClient(), command.getServer()));
+		return (displayError(ERR_NOTREGISTERED, command));
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
+		
+	if (command.getArgSplit()[0][0] == '0')
+		return (joinAllChannels(command.getClient(), command.getServer()));
 
 	std::map<std::string, std::string>::iterator it = gPairs.begin();
 	std::map<std::string, std::string>::iterator ite = gPairs.end();

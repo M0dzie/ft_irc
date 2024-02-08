@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 11:21:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:50:45 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ bool isUseElsewhere(Commands & command, std::string nickname) {
 }
 
 void	executeNick(Commands & command) {
+	if (command.getArgSplit().size() < 1)
+    	return (displayError(ERR_NEEDMOREPARAMS, command));
 
 	std::string nickname = *(command.getArgSplit().begin());
 	std::string oldNickname = command.getClient().getNickname();

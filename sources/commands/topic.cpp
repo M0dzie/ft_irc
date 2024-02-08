@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:50:29 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:59:00 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	executeTopic(Commands & command) {
 	if (!command.getClient().getRegister())
-		return;
+		return (displayError(ERR_NOTREGISTERED, command));
 	else if (command.getArgSplit().size() < 1)
     	return (displayError(ERR_NEEDMOREPARAMS, command));
 	else if (command.getArgSplit()[0][0] != '#')

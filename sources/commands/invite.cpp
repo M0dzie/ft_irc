@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 12:53:15 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:58:15 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static bool isIn(Channel &channel, std::string toFind) {
 
 void	executeInvite(Commands & command) {
 	if (!command.getClient().getRegister())
-		return;
+		return (displayError(ERR_NOTREGISTERED, command));
 	else if (command.getArgSplit().size() < 1)
     	return (displayError(ERR_NEEDMOREPARAMS, command));
 

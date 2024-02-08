@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 13:09:39 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:58:46 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static std::vector<std::string> getChannelNames(std::string string) {
 
 void executePart(Commands & command) {
 	if (!command.getClient().getRegister())
-		return;
+		return (displayError(ERR_NOTREGISTERED, command));
     
     if (command.getArgSplit().size() < 1)
     	return (displayError(ERR_NEEDMOREPARAMS, command));
