@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 09:34:01 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 11:11:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ class Commands {
 		Commands(std::string & line, Client & client, Server & server);
 		~Commands(void);
 
-		void executeCommand();
+		int executeCommand();
 		std::string const & getName() const {return this->_name;}
 		std::vector<std::string> & getArgSplit() {return this->_argSplit;}
 		Client & getClient() {return this->_client;}

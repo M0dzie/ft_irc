@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:19:23 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:12:07 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool ignoreCommand(std::string & cmdName) {
 	return false;
 }
 
-void Commands::executeCommand() {
+int Commands::executeCommand() {
 
 	std::string arrayCommand[12] = {"PASS", "NICK", "USER", "JOIN", "PING", "QUIT", "PRIVMSG", "INVITE", "KICK", "MODE", "TOPIC", "PART"};
 	void (*arrayFunction[])(Commands &) = {executePass, executeNick, executeUser, executeJoin, executePing, executeQuit, executePrivateMsg, executeInvite, executeKick, executeMode, executeTopic, executePart};
@@ -92,4 +92,7 @@ void Commands::executeCommand() {
 		if (i == 12)
 			std::cout << PURPLE << BOLD << "Warning: " << RESET << this->getClient().getUsername() << " " << this->_name << " :Unknown command" << std::endl;
 	}
+	if (i == 5)
+		return 0;
+	return 1;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 10:25:51 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:13:58 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ Server::Server(int port, char *password) {
 				}
 				else if (lineFull == 1)
 				{
-					std::string & tmpBuffer = tmpClient.getBufferLine();
+					std::string &tmpBuffer = tmpClient.getBufferLine();
 					std::size_t indexEnd = tmpBuffer.find("\r\n");
 
 					while(indexEnd != std::string::npos)
@@ -96,7 +96,8 @@ Server::Server(int port, char *password) {
 						displayMessage(CLIENT, line);
 						Commands cmd(line, tmpClient, *this);
 
-						cmd.executeCommand();
+						if (!cmd.executeCommand())
+							break;
 						tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());;
 						indexEnd = tmpBuffer.find("\r\n");
 					}
