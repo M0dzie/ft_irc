@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 18:47:48 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 10:25:51 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,15 @@ void sendMessage(int clientFd, std::string msg) {
 
 int	Server::recoverCommandLine(Client & tmpClient) {
 	char buffer[BUFFERSIZE];
+	size_t bufferLen = 0;
 
 	for (int i = 0; i < BUFFERSIZE; i++)
 		buffer[i] = '\0';
-	if (recv(tmpClient.getFD(), buffer, BUFFERSIZE, 0) < 1) {
+	if ((bufferLen = recv(tmpClient.getFD(), buffer, BUFFERSIZE, 0)) < 1) {
 		return -1;
-	}
-	else
-	{
+	} else {
 		std::string & refBuffer = tmpClient.getBufferLine();
-
-		refBuffer.append(buffer);
+		refBuffer.append(buffer, bufferLen);
 		return 1;
 	}
 	return 0;
@@ -77,6 +75,7 @@ Server::Server(int port, char *password) {
 			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
 				Client & tmpClient = *this->_clientList[this->_fds[i].fd];
 				int lineFull = 0;
+				std::string commandLine = "";
 				
 				lineFull = recoverCommandLine(tmpClient);
 				if (lineFull == -1)
@@ -89,27 +88,18 @@ Server::Server(int port, char *password) {
 					std::string & tmpBuffer = tmpClient.getBufferLine();
 					std::size_t indexEnd = tmpBuffer.find("\r\n");
 
-					// if (indexEnd == std::string::npos)
-					// {
-					// 	displayMessage(CLIENT, tmpBuffer);
-					// 	Commands cmd(tmpBuffer, tmpClient, *this);
+					while(indexEnd != std::string::npos)
+					{
+						std::string line = tmpBuffer.substr(0, indexEnd) + "\0";
+						// line.append("\0");
+						
+						displayMessage(CLIENT, line);
+						Commands cmd(line, tmpClient, *this);
 
-					// 	cmd.executeCommand();	
-					// }
-					// else
-					// {
-						while(indexEnd != std::string::npos)
-						{
-							std::string line = tmpBuffer.substr(0, indexEnd);
-							
-							displayMessage(CLIENT, line);
-							Commands cmd(line, tmpClient, *this);
-
-							cmd.executeCommand();
-							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());;
-							indexEnd = tmpBuffer.find("\r\n");
-						}
-					// }
+						cmd.executeCommand();
+						tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());;
+						indexEnd = tmpBuffer.find("\r\n");
+					}
 				}
 			}
 		}
