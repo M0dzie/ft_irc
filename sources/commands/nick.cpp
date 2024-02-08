@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:50:45 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:12:30 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ bool isUseElsewhere(Commands & command, std::string nickname) {
 void	executeNick(Commands & command) {
 	if (command.getArgSplit().size() < 1)
     	return (displayError(ERR_NEEDMOREPARAMS, command));
-
 	std::string nickname = *(command.getArgSplit().begin());
 	std::string oldNickname = command.getClient().getNickname();
 
@@ -53,6 +52,12 @@ void	executeNick(Commands & command) {
 		
 		command.getClient().setNickname(nickname);
 		sendMessage(command.getClient().getFD(), cmdToSend);
-		// displayMessage(SERVER, cmdToSend);
+		if (command.getClient().getRegister())
+		{
+			std::vector<Channel *> tmpChannels = command.getClient().getChannels();
+
+			for (std::vector<Channel *>::iterator it = tmpChannels.begin(); it != tmpChannels.end(); it++)
+				(*it)->displayClientList();
+		}
 	}
 }
