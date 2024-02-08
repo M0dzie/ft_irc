@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 13:58:46 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:45:18 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static std::vector<std::string> getChannelNames(std::string string) {
     }
     channelNames.push_back(string.substr(0, std::string::npos));
     return channelNames;
-} 
+}
 
 void executePart(Commands & command) {
 	if (!command.getClient().getRegister())
@@ -46,14 +46,10 @@ void executePart(Commands & command) {
         std::map<Client *, bool>::iterator ite = channel->getClients().end();
         while (it != ite) {
             if (it->first == client) {
-                std::string reason;
-                for (size_t j = 1; j < command.getArgSplit().size(); j++) {
-                    reason += command.getArgSplit()[j];
-                    if (j != command.getArgSplit().size() - 1)
-                        reason += " ";
-                }
-                reason = reason.substr(1);
-                sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channel->getName() + " :" + reason);
+                std::vector<std::string>::iterator it = command.getArgSplit().begin() + 1;
+                std::vector<std::string>::iterator ite = command.getArgSplit().end();
+                std::vector<std::string> newVec(it, ite);
+                sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channel->getName() + " :" + getReason(newVec));
                 channel->sendMessageToChannel(client->getNickname() + " is leaving the channel " + channel->getName());
                 client->removeOneChannel(channel);
                 channel->removeClient(client, command.getServer());

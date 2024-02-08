@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 15:43:00 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/08 16:48:31 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,22 @@ int Commands::executeCommand() {
 	if (i == 5)
 		return 0;
 	return 1;
+}
+
+std::string getReason(std::vector<std::string> argSplit) {
+    std::string reason;
+    
+    if (argSplit.size() < 1)
+        reason = "Leaving";
+    else {
+        for (size_t i = 0; i < argSplit.size(); i++) {
+            reason += argSplit[i];
+            if (i != argSplit.size() - 1)
+                reason += " ";
+        }
+        if (reason[0] == ':')
+            reason = reason.substr(1);
+    }
+    
+    return reason;
 }

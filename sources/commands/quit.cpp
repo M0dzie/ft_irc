@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:56:16 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:34:39 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,9 @@ void	clearClient(Server & tmpServer, Client & tmpClient) {
 void	executeQuit(Commands & command) {
 	if (!command.getClient().getRegister())
 		return (displayError(ERR_NOTREGISTERED, command));
-	else if (command.getArgSplit().size() < 1)
-    	return (displayError(ERR_NEEDMOREPARAMS, command));
 
 	Client & tmpClient = command.getClient();
-	std::string serverMessage = ":" + tmpClient.getNickname() + "!" + tmpClient.getUsername() + "@localhost" + " QUIT " + *command.getArgSplit().begin();
+	std::string serverMessage = ":" + tmpClient.getNickname() + "!" + tmpClient.getUsername() + "@localhost" + " QUIT " + getReason(command.getArgSplit());
 	Server & tmpServer = command.getServer();
 
 	sendMessage(tmpClient.getFD(), serverMessage);
