@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:17:37 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/01/23 16:23:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 15:40:30 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,10 @@ int main(int argc, char **argv) {
         return(displayErrorMessage("This program must run as follows : \n" BOLD "./ircserv <port> <password>" RESET), -1);
     if (!isPortValid(argv[1]) || !isPasswordValid(argv[2]))
         return -1;
-
     try {
         Server server(std::atoi(argv[1]), argv[2]);
     } catch (std::exception const &e) {
         std::cerr << e.what() << std::endl;
     }
-
     return 0;
 }

@@ -6,14 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 17:13:17 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:39:34 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
 bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & command, std::string & tmpRealname) {
-
 	std::vector<std::string>::iterator it = tmpArgs.begin();
 
 	if (it->empty())
@@ -34,7 +33,6 @@ bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & command, std:
 }
 
 void	executeUser(Commands & command) {
-	
 	std::vector<std::string> tmpArgs = command.getArgSplit();
 
 	if (command.getClient().getRegister())

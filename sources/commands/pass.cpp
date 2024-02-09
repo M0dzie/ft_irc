@@ -6,14 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:28:24 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 12:10:38 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:39:03 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
 void	executePass(Commands & command) {
-
 	std::vector<std::string> tmpArgs = command.getArgSplit();
 
 	if (tmpArgs.begin() == tmpArgs.end())
