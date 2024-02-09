@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 14:24:59 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 14:28:44 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ public:
 	int	handleCommand(std::string command, Client & client);
 	void	recoverInput(Client & client);
 	void	handlingNewClient();
+	void	handlingClientMessage();
 
 	class ServerError: public std::exception {
 	private:

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 14:26:24 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 14:30:43 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,25 @@ void	Server::handlingNewClient() {
 	}
 }
 
+void	Server::handlingClientMessage() {
+	for (int i = 1; i < this->_nbClient + 1; i++) {
+		if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
+			Client & tmpClient = *this->_clientList[this->_fds[i].fd];
+			int lineFull = 0;
+			std::string commandLine = "";
+			
+			lineFull = recoverCommandLine(tmpClient);
+			if (lineFull == -1)
+			{
+				clearFromChannel(*this, tmpClient);
+				clearClient(*this, tmpClient);
+			}
+			else if (lineFull == 1)
+				this->recoverInput(tmpClient);
+		}
+	}
+}
+
 Server::Server(int port, char *password) {
 	std::string tmpSentence;
 
@@ -127,24 +146,7 @@ Server::Server(int port, char *password) {
 	while (Server::interrupt == false) {
 		poll(this->_fds, this->_nbClient + 1, -1);
 		this->handlingNewClient();
-
-		//handling msg from known clients
-		for (int i = 1; i < this->_nbClient + 1; i++) {
-			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
-				Client & tmpClient = *this->_clientList[this->_fds[i].fd];
-				int lineFull = 0;
-				std::string commandLine = "";
-				
-				lineFull = recoverCommandLine(tmpClient);
-				if (lineFull == -1)
-				{
-					clearFromChannel(*this, tmpClient);
-					clearClient(*this, tmpClient);
-				}
-				else if (lineFull == 1)
-					this->recoverInput(tmpClient);
-			}
-		}
+		this->handlingClientMessage();
 	}
 	this->exit();
 }
