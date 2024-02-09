@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:16:10 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:32:28 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ static bool isValidModeString(std::string const &string) {
 	if (string[0] != '+' && string[0] != '-')
 		return false;
 	if (!std::isalpha(string[1]) || string[2])
+		return false;
+	if (!(string[1] == 'i' || string[1] == 't' || string[1] == 'k' ||
+		string[1] == 'o' || string[1] == 'l'))
 		return false;
 	return true;
 }
