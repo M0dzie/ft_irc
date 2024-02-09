@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 14:05:49 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 14:14:35 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,33 +116,15 @@ Server::Server(int port, char *password) {
 
 						if (indexNewline != std::string::npos)
 						{
-							// std::cout << "return line found for: |" << line << "|" << std::endl;
 							int handleCommand = 0;
 							
 							while (indexNewline != std::string::npos)
 							{
-								// std::string splitCmd = line.substr(0, indexNewline);
-
-								// displayMessage(CLIENT, splitCmd);
-								// Commands cmd(splitCmd, tmpClient, *this);
-								// if (!cmd.executeCommand())
-								// 	break;
 								handleCommand = this->handleCommand(line.substr(0, indexNewline), tmpClient);
-								// if (!this->handleCommand(line.substr(0, indexNewline), tmpClient))
-								// 	break;
-									
 								line = line.substr(indexNewline + 1, line.size());
 								indexNewline = line.find("\n");
 								if (indexNewline == std::string::npos && !line.empty())
-								{
-									// displayMessage(CLIENT, line);
-									// Commands cmd(line, tmpClient, *this);
-									// if (!cmd.executeCommand())
-									// 	break;
 									handleCommand = this->handleCommand(line, tmpClient);
-									// if (!this->handleCommand(line, tmpClient))
-									// 	break;
-								}
 							}
 							if (!handleCommand)
 								break;
@@ -151,11 +133,8 @@ Server::Server(int port, char *password) {
 						}
 						else
 						{
-							displayMessage(CLIENT, line);
-							Commands cmd(line, tmpClient, *this);
-							if (!cmd.executeCommand())
+							if (!this->handleCommand(line.substr(0, indexEnd), tmpClient))
 								break;
-								
 							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
 							indexEnd = tmpBuffer.find("\r\n");
 						}
