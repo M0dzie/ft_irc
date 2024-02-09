@@ -6,17 +6,17 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 14:53:00 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:54:22 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef COMMANDS_HPP
 # define COMMANDS_HPP
+
 # include "Server.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-///////////////////////////////// SETUP OTHER NUMBER LATER
+
 # define ERR_CANNOTBEUNDEFINED -1
 # define ERR_INVALIDARG -2
 
@@ -70,8 +70,11 @@ class Commands {
 		~Commands(void) {}
 
 		int executeCommand();
+
+		// GETTER
 		std::string const & getName() const {return this->_name;}
 		std::vector<std::string> & getArgSplit() {return this->_argSplit;}
+		
 		Client & getClient() {return this->_client;}
 		Server & getServer() {return this->_server;}
 };
@@ -84,7 +87,9 @@ void	displayErrorChannelTarget(int errorCode, Client const &client, std::string 
 void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
 void	clearClient(Server & tmpServer, Client & tmpClient);
 void	clearFromChannel(Server & tmpServer, Client & tmpClient);
+
 Client & foundClient(Commands & command, std::string nickname);
+
 std::string getReason(std::vector<std::string> argSplit);
 
 #endif

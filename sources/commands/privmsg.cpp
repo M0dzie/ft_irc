@@ -6,14 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 11:22:51 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:39:21 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
 Client & foundClient(Commands & command, std::string nickname) {
-
 	Server & tmpServer = command.getServer();
 	Client & tmpClient = command.getClient();
 	std::map<int, Client *> tmpClientList = tmpServer.getClientList();
@@ -44,7 +43,6 @@ std::string	getMessageText(std::vector<std::string> & tmpArg) {
 }
 
 void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
-	
 	std::string target = *args.begin();
 	Client & tmpClient = command.getClient();
 	Channel * tmpChannel = command.getServer().getChannelList()[target];
@@ -74,7 +72,6 @@ void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 }
 
 void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
-	
 	std::string target = *args.begin();
 	Client & tmpReceiver = foundClient(command, target);
 	Client & tmpClient = command.getClient();
@@ -85,12 +82,10 @@ void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
 	{
 		std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
 		sendMessage(tmpReceiver.getFD(), serverMessageReceiver);
-		// displayMessage(SERVER, serverMessageReceiver);
 	}
 }
 
 void	executePrivateMsg(Commands & command) {
-
 	if (!command.getClient().getRegister())
 		displayError(ERR_NOTREGISTERED, command);
 	else

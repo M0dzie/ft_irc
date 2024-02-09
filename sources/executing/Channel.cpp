@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 11:21:47 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:39:39 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,6 @@ bool Channel::unsetOperator(Client *client) {
 }
 
 bool Channel::areClientOnChannel(std::string const & clientName) {
-	
 	std::map<Client *, bool> & listClient = this->getClients();
 	
 	for (std::map<Client *, bool>::const_iterator it = listClient.begin(); it != listClient.end(); it++)

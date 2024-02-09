@@ -6,14 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 11:22:26 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:38:13 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
 std::string	getKickChannelName(std::vector<std::string> args) {
-
 	std::vector<std::string>::iterator it = args.begin();
 
 	while (it != args.end())
@@ -26,12 +25,10 @@ std::string	getKickChannelName(std::vector<std::string> args) {
 }
 
 void	displayKickErrorMessage(Commands & command, std::string & channelName) {
-	
 	std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelName << " :No such channel" << std::endl;
 }
 
 std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & args) {
-	
 	std::vector<std::string>::iterator it = args.begin();
 
 	while (it != args.end())
@@ -44,7 +41,6 @@ std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & 
 }
 
 std::string getKickReason(std::vector<std::string> & args) {
-
 	std::vector<std::string>::iterator reasonIt = getReasonIterator(args);
 
 	if (reasonIt == args.end())
@@ -64,7 +60,6 @@ std::string getKickReason(std::vector<std::string> & args) {
 }
 
 void	executeKick(Commands & command) {
-
 	std::vector<std::string> tmpArgs = command.getArgSplit();
 
 	if (!command.getClient().getRegister())
@@ -102,7 +97,6 @@ void	executeKick(Commands & command) {
 					tmpChannel->removeClient(&clientReceiver, command.getServer());
 				}
 			}
-				
 		}
 	}
 }
