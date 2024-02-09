@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 14:14:35 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 14:20:51 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,42 @@ int	Server::handleCommand(std::string command, Client & client) {
 	return 1;
 }
 
+void	Server::recoverInput(Client & client) {
+	std::string &tmpBuffer = client.getBufferLine();
+	std::size_t indexEnd = tmpBuffer.find("\r\n");
+
+	while(indexEnd != std::string::npos)
+	{
+		std::string line = tmpBuffer.substr(0, indexEnd);
+		std::size_t indexNewline = line.find("\n");
+
+		if (indexNewline != std::string::npos)
+		{
+			int handleCommand = 0;
+			
+			while (indexNewline != std::string::npos)
+			{
+				handleCommand = this->handleCommand(line.substr(0, indexNewline), client);
+				line = line.substr(indexNewline + 1, line.size());
+				indexNewline = line.find("\n");
+				if (indexNewline == std::string::npos && !line.empty())
+					handleCommand = this->handleCommand(line, client);
+			}
+			if (!handleCommand)
+				break;
+			tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+			indexEnd = tmpBuffer.find("\r\n");
+		}
+		else
+		{
+			if (!this->handleCommand(line.substr(0, indexEnd), client))
+				break;
+			tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+			indexEnd = tmpBuffer.find("\r\n");
+		}
+	}
+}
+
 Server::Server(int port, char *password) {
 	std::string tmpSentence;
 
@@ -106,39 +142,40 @@ Server::Server(int port, char *password) {
 				}
 				else if (lineFull == 1)
 				{
-					std::string &tmpBuffer = tmpClient.getBufferLine();
-					std::size_t indexEnd = tmpBuffer.find("\r\n");
+					this->recoverInput(tmpClient);
+					// std::string &tmpBuffer = tmpClient.getBufferLine();
+					// std::size_t indexEnd = tmpBuffer.find("\r\n");
 
-					while(indexEnd != std::string::npos)
-					{
-						std::string line = tmpBuffer.substr(0, indexEnd);
-						std::size_t indexNewline = line.find("\n");
+					// while(indexEnd != std::string::npos)
+					// {
+					// 	std::string line = tmpBuffer.substr(0, indexEnd);
+					// 	std::size_t indexNewline = line.find("\n");
 
-						if (indexNewline != std::string::npos)
-						{
-							int handleCommand = 0;
+					// 	if (indexNewline != std::string::npos)
+					// 	{
+					// 		int handleCommand = 0;
 							
-							while (indexNewline != std::string::npos)
-							{
-								handleCommand = this->handleCommand(line.substr(0, indexNewline), tmpClient);
-								line = line.substr(indexNewline + 1, line.size());
-								indexNewline = line.find("\n");
-								if (indexNewline == std::string::npos && !line.empty())
-									handleCommand = this->handleCommand(line, tmpClient);
-							}
-							if (!handleCommand)
-								break;
-							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
-							indexEnd = tmpBuffer.find("\r\n");
-						}
-						else
-						{
-							if (!this->handleCommand(line.substr(0, indexEnd), tmpClient))
-								break;
-							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
-							indexEnd = tmpBuffer.find("\r\n");
-						}
-					}
+					// 		while (indexNewline != std::string::npos)
+					// 		{
+					// 			handleCommand = this->handleCommand(line.substr(0, indexNewline), tmpClient);
+					// 			line = line.substr(indexNewline + 1, line.size());
+					// 			indexNewline = line.find("\n");
+					// 			if (indexNewline == std::string::npos && !line.empty())
+					// 				handleCommand = this->handleCommand(line, tmpClient);
+					// 		}
+					// 		if (!handleCommand)
+					// 			break;
+					// 		tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+					// 		indexEnd = tmpBuffer.find("\r\n");
+					// 	}
+					// 	else
+					// 	{
+					// 		if (!this->handleCommand(line.substr(0, indexEnd), tmpClient))
+					// 			break;
+					// 		tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+					// 		indexEnd = tmpBuffer.find("\r\n");
+					// 	}
+					// }
 				}
 			}
 		}
