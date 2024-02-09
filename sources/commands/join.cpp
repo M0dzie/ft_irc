@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 11:46:53 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 12:28:49 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static void partAllChannels(Client &client, Server &server) {
 		client.removeOneChannel(channel);
 		channel->removeClient(&client, server);
 	}
+	gPairs.clear();
 }
 
 static bool isArgValid(Commands &command, std::vector<std::string> args) {
