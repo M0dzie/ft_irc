@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 16:25:28 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 14:05:49 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ std::string	getMessageConnection(int fd) {
 	infoMessage.append(fdToString);
 	infoMessage.append(")");
 	return infoMessage;
+}
+
+int	Server::handleCommand(std::string command, Client & client) {
+	displayMessage(CLIENT, command);
+	Commands cmd(command, client, *this);
+	if (!cmd.executeCommand())
+		return 0;
+	return 1;
 }
 
 Server::Server(int port, char *password) {
@@ -104,14 +112,53 @@ Server::Server(int port, char *password) {
 					while(indexEnd != std::string::npos)
 					{
 						std::string line = tmpBuffer.substr(0, indexEnd);
-						
-						displayMessage(CLIENT, line);
-						Commands cmd(line, tmpClient, *this);
+						std::size_t indexNewline = line.find("\n");
 
-						if (!cmd.executeCommand())
-							break;
-						tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());;
-						indexEnd = tmpBuffer.find("\r\n");
+						if (indexNewline != std::string::npos)
+						{
+							// std::cout << "return line found for: |" << line << "|" << std::endl;
+							int handleCommand = 0;
+							
+							while (indexNewline != std::string::npos)
+							{
+								// std::string splitCmd = line.substr(0, indexNewline);
+
+								// displayMessage(CLIENT, splitCmd);
+								// Commands cmd(splitCmd, tmpClient, *this);
+								// if (!cmd.executeCommand())
+								// 	break;
+								handleCommand = this->handleCommand(line.substr(0, indexNewline), tmpClient);
+								// if (!this->handleCommand(line.substr(0, indexNewline), tmpClient))
+								// 	break;
+									
+								line = line.substr(indexNewline + 1, line.size());
+								indexNewline = line.find("\n");
+								if (indexNewline == std::string::npos && !line.empty())
+								{
+									// displayMessage(CLIENT, line);
+									// Commands cmd(line, tmpClient, *this);
+									// if (!cmd.executeCommand())
+									// 	break;
+									handleCommand = this->handleCommand(line, tmpClient);
+									// if (!this->handleCommand(line, tmpClient))
+									// 	break;
+								}
+							}
+							if (!handleCommand)
+								break;
+							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+							indexEnd = tmpBuffer.find("\r\n");
+						}
+						else
+						{
+							displayMessage(CLIENT, line);
+							Commands cmd(line, tmpClient, *this);
+							if (!cmd.executeCommand())
+								break;
+								
+							tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+							indexEnd = tmpBuffer.find("\r\n");
+						}
 					}
 				}
 			}
