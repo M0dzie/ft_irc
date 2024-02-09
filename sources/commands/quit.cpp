@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 16:34:39 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 14:39:30 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,13 @@ int	getClientFDIndex(Server & tmpServer, Client & tmpClient) {
 }
 
 void	clearFromChannel(Server & tmpServer, Client & tmpClient) {
-	// std::cout << "clear from all channel:" << std::endl;
 	std::vector<Channel *> & tmpChannels = tmpClient.getChannels();
 
 	for (std::vector<Channel *>::iterator it = tmpChannels.begin(); it != tmpChannels.end(); it++)
 	{
-		std::cout << (*it)->getName() << std::endl;
-		
 		(*it)->sendMessageToChannel(tmpClient.getNickname() + " is leaving the channel " + (*it)->getName());
 		(*it)->removeClient(&tmpClient, tmpServer);
 	}
-	// tmpChannels.clear();
 }
 
 void	clearClient(Server & tmpServer, Client & tmpClient) {
@@ -46,13 +42,11 @@ void	clearClient(Server & tmpServer, Client & tmpClient) {
 	struct pollfd * tmpPoll = tmpServer.getPollFds();
 	int i = getClientFDIndex(tmpServer, tmpClient);
 
-	// std::cout << RED << "REMOVE" << RESET << " client fd: " << tmpFD << " index: " << i << std::endl;
 	while (i < numberClient)
 	{
 		tmpPoll[i].fd = tmpPoll[i + 1].fd;
 		tmpPoll[i].events = tmpPoll[i + 1].events;
 		tmpPoll[i].revents = tmpPoll[i + 1].revents;
-		// std::cout << "update fd: " << i << " with " << (i + 1) << " value" << std::endl;
 		i++;
 	}
 	tmpServer.setNbClient(tmpServer.getNbClient() - 1);
@@ -70,8 +64,6 @@ void	executeQuit(Commands & command) {
 	Server & tmpServer = command.getServer();
 
 	sendMessage(tmpClient.getFD(), serverMessage);
-	// displayMessage(SERVER, serverMessage);
-	
 	clearFromChannel(tmpServer, tmpClient);
 	clearClient(tmpServer, tmpClient);
 }
