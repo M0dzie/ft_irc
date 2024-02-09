@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 16:55:38 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 14:53:00 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define ERR_INVITEONLYCHAN 473
 # define ERR_BADCHANNELKEY 475
 # define ERR_CHANOPRIVSNEEDED 482
+# define ERR_UMODEUNKNOWNFLAG 501
 
 # define RPL_CHANNELMODEIS 324
 # define RPL_NOTOPIC 331

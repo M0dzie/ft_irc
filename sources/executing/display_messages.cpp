@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_messages.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 12:31:48 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 15:34:09 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void    displayError(int errorCode, Commands & command) {
 	case ERR_INVALIDARG:
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << command.getName() << " :Invalid arguments" << std::endl;
 		break;
-	
+	case ERR_UMODEUNKNOWNFLAG:
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :Unknown MODE flag" << std::endl;
+		break;
+
 	default:
 		break;
 	}
@@ -92,7 +95,6 @@ void	displayErrorChannelTarget(int errorCode, Client const &client, std::string 
 
 
 void displayRPL(int RPLCode, Client const &client, Channel &channel) {
-	
 	switch(RPLCode) {
 		case RPL_NOTOPIC:
 			sendMessage(client.getFD(), ":localhost 331 " + client.getNickname() + " " + channel.getName() + " :No topic is set");
