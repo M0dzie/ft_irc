@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:58:40 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 15:32:28 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 static bool isValidModeString(std::string const &string) {
 	if (string[0] != '+' && string[0] != '-')
 		return false;
-	if (!std::isalpha(string[1]))
+	if (!std::isalpha(string[1]) || string[2])
+		return false;
+	if (!(string[1] == 'i' || string[1] == 't' || string[1] == 'k' ||
+		string[1] == 'o' || string[1] == 'l'))
 		return false;
 	return true;
 }
@@ -107,13 +110,15 @@ static void handleChanLimit(std::vector<std::string> modeString, Client &client,
 	} else if (modeString.size() == 2 && *modeString.begin() == CHANLIMIT) {
 		if (!isNumber(modeString[1]))
 			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
-		std::stringstream ss(modeString[1]);
-		unsigned long limit;
-		ss >> limit;
-		channel.setChannelLimited(true);
-		channel.setChannelLimit(limit);
-		channel.setModes(CHANLIMIT, true);
-		displayMessage(INFO, "Set channel limit to " + modeString[1] + " successfully");
+		else {
+			std::stringstream ss(modeString[1]);
+			unsigned long limit;
+			ss >> limit;
+			channel.setChannelLimited(true);
+			channel.setChannelLimit(limit);
+			channel.setModes(CHANLIMIT, true);
+			displayMessage(INFO, "Set channel limit to " + modeString[1] + " successfully");
+		}
 	} else
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
 }
@@ -150,8 +155,10 @@ void	executeMode(Commands & command) {
 		server.getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	}
-	if (command.getArgSplit().size() == 1 || !isValidModeString(command.getArgSplit()[1]))
+	if (command.getArgSplit().size() == 1)
 		return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
+	else if (!isValidModeString(command.getArgSplit()[1]))
+		return (displayError(ERR_UMODEUNKNOWNFLAG, command));
 	if (!channel->getClients()[&client])
 		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
