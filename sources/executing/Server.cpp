@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 16:25:28 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 14:30:43 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,91 @@ std::string	getMessageConnection(int fd) {
 	return infoMessage;
 }
 
+int	Server::handleCommand(std::string command, Client & client) {
+	displayMessage(CLIENT, command);
+	Commands cmd(command, client, *this);
+	if (!cmd.executeCommand())
+		return 0;
+	return 1;
+}
+
+void	Server::recoverInput(Client & client) {
+	std::string &tmpBuffer = client.getBufferLine();
+	std::size_t indexEnd = tmpBuffer.find("\r\n");
+
+	while(indexEnd != std::string::npos)
+	{
+		std::string line = tmpBuffer.substr(0, indexEnd);
+		std::size_t indexNewline = line.find("\n");
+
+		if (indexNewline != std::string::npos)
+		{
+			int handleCommand = 0;
+			
+			while (indexNewline != std::string::npos)
+			{
+				handleCommand = this->handleCommand(line.substr(0, indexNewline), client);
+				line = line.substr(indexNewline + 1, line.size());
+				indexNewline = line.find("\n");
+				if (indexNewline == std::string::npos && !line.empty())
+					handleCommand = this->handleCommand(line, client);
+			}
+			if (!handleCommand)
+				break;
+			tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+			indexEnd = tmpBuffer.find("\r\n");
+		}
+		else
+		{
+			if (!this->handleCommand(line.substr(0, indexEnd), client))
+				break;
+			tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());
+			indexEnd = tmpBuffer.find("\r\n");
+		}
+	}
+}
+
+void	Server::handlingNewClient() {
+	if (this->_fds[0].revents & POLLIN) {
+		int newFD = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen);
+		if (newFD < 0) {
+			displayErrorMessage("accept() failed.");
+			this->exit();
+		}
+		if (this->_nbClient + 1 < MAXCLIENT) {
+			this->_nbClient += 1;
+			this->_fds[this->_nbClient].fd = newFD;
+			this->_fds[this->_nbClient].events = POLLIN;
+			this->_fds[this->_nbClient].revents = 0;
+			this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
+
+			displayMessage(INFO, getMessageConnection(newFD));
+		} else { // There is no places left
+			displayErrorMessage("The number of client available is full.");
+			close(newFD);
+		}
+	}
+}
+
+void	Server::handlingClientMessage() {
+	for (int i = 1; i < this->_nbClient + 1; i++) {
+		if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
+			Client & tmpClient = *this->_clientList[this->_fds[i].fd];
+			int lineFull = 0;
+			std::string commandLine = "";
+			
+			lineFull = recoverCommandLine(tmpClient);
+			if (lineFull == -1)
+			{
+				clearFromChannel(*this, tmpClient);
+				clearClient(*this, tmpClient);
+			}
+			else if (lineFull == 1)
+				this->recoverInput(tmpClient);
+		}
+	}
+}
+
 Server::Server(int port, char *password) {
 	std::string tmpSentence;
 
@@ -60,62 +145,8 @@ Server::Server(int port, char *password) {
 
 	while (Server::interrupt == false) {
 		poll(this->_fds, this->_nbClient + 1, -1);
-		
-		// handling new clients
-		if (this->_fds[0].revents & POLLIN) {
-			int newFD = accept(this->_fds[0].fd, (struct sockaddr *)&this->_address, &this->_addrLen);
-			if (newFD < 0) {
-				displayErrorMessage("accept() failed.");
-				this->exit();
-			}
-			
-			if (this->_nbClient + 1 < MAXCLIENT) {
-				this->_nbClient += 1;
-				this->_fds[this->_nbClient].fd = newFD;
-				this->_fds[this->_nbClient].events = POLLIN;
-				this->_fds[this->_nbClient].revents = 0;
-				this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
-
-				displayMessage(INFO, getMessageConnection(newFD));
-			} else { // There is no places left
-				displayErrorMessage("The number of client available is full.");
-				close(newFD);
-			}
-		}
-
-		//handling msg from known clients
-		for (int i = 1; i < this->_nbClient + 1; i++) {
-			if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
-				Client & tmpClient = *this->_clientList[this->_fds[i].fd];
-				int lineFull = 0;
-				std::string commandLine = "";
-				
-				lineFull = recoverCommandLine(tmpClient);
-				if (lineFull == -1)
-				{
-					clearFromChannel(*this, tmpClient);
-					clearClient(*this, tmpClient);
-				}
-				else if (lineFull == 1)
-				{
-					std::string &tmpBuffer = tmpClient.getBufferLine();
-					std::size_t indexEnd = tmpBuffer.find("\r\n");
-
-					while(indexEnd != std::string::npos)
-					{
-						std::string line = tmpBuffer.substr(0, indexEnd);
-						
-						displayMessage(CLIENT, line);
-						Commands cmd(line, tmpClient, *this);
-
-						if (!cmd.executeCommand())
-							break;
-						tmpBuffer = tmpBuffer.substr(indexEnd + 2, tmpBuffer.size());;
-						indexEnd = tmpBuffer.find("\r\n");
-					}
-				}
-			}
-		}
+		this->handlingNewClient();
+		this->handlingClientMessage();
 	}
 	this->exit();
 }
