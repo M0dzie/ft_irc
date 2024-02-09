@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 14:39:02 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/09 11:22:26 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,6 @@ void	displayKickErrorMessage(Commands & command, std::string & channelName) {
 	std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelName << " :No such channel" << std::endl;
 }
 
-std::pair<bool, bool> areOnChannel(Channel & tmpChannel, std::string receiverName, std::string senderName) {
-	std::pair<bool, bool>	returnPair;
-
-	returnPair.first = false;
-	returnPair.second = false;
-
-	if (tmpChannel.getName().empty())
-		return returnPair;
-	else
-	{
-		std::map<Client *, bool> const & listClient = tmpChannel.getClients();
-		
-		for (std::map<Client *, bool>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
-		{
-			std::string tmpName = it->first->getNickname();
-			
-			if (tmpName == senderName)
-				returnPair.first = true;
-			else if (tmpName == receiverName)
-				returnPair.second = true;
-		}
-	}
-	return returnPair;
-}
-
 std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & args) {
 	
 	std::vector<std::string>::iterator it = args.begin();
@@ -73,7 +48,7 @@ std::string getKickReason(std::vector<std::string> & args) {
 	std::vector<std::string>::iterator reasonIt = getReasonIterator(args);
 
 	if (reasonIt == args.end())
-		return "Without any particular reason";
+		return "Kick without any particular reason";
 	std::string reason = "";
 	
 	while (reasonIt != args.end())
@@ -110,11 +85,9 @@ void	executeKick(Commands & command) {
 				displayKickErrorMessage(command, channelName);
 			else
 			{
-				std::pair<bool, bool>	senderReceiverOnChannel = areOnChannel(*tmpChannel, receiverName, senderName);
-
-				if (!senderReceiverOnChannel.first)
+				if (!tmpChannel->areClientOnChannel(senderName))
 					displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
-				else if (senderReceiverOnChannel.second == 0)
+				else if (!tmpChannel->areClientOnChannel(receiverName))
 					std::cout << PURPLE << BOLD << "Warning: " << RESET << tmpClient.getUsername() << " " << receiverName << " " << tmpChannel->getName() << " :They aren't on that channel" << std::endl;
 				else if (!tmpChannel->getClients()[&tmpClient])
 					displayErrorChannel(ERR_CHANOPRIVSNEEDED, tmpClient, *tmpChannel);

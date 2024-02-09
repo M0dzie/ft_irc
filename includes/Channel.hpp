@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:03:03 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/07 08:37:09 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 11:08:49 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ public:
     bool const &getInviteOnly() const {return this->_inviteOnly;}
     bool const &getTopicRestrict() const {return this->_topicRestrict;}
     bool const &getChannelLimited() {return this->_isChannelLimited;}
+	bool areClientOnChannel(std::string const & clientName);
+    
     std::string const &getName() const {return this->_name;}
     std::string const &getPassword() const {return this->_password;}
     std::string const &getTopic() const {return this->_topic;}
