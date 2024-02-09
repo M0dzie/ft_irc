@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 11:22:02 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 11:22:51 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,28 @@ void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 	
 	std::string target = *args.begin();
 	Client & tmpClient = command.getClient();
-	Server & tmpServer = command.getServer();
-	std::map<std::string, Channel *> & tmpChannels = tmpServer.getChannelList();
-	Channel & tmpChannel = *(tmpChannels.find(target))->second;
+	Channel * tmpChannel = command.getServer().getChannelList()[target];
 
-	if (tmpChannel.getName().empty())
+	if (!tmpChannel)
 		displayError(ERR_NOSUCHCHANNEL, command);
 	else
 	{
-		std::map<Client *, bool> const & listClient = tmpChannel.getClients();
-
-		for (std::map<Client *, bool>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
+		if (!tmpChannel->areClientOnChannel(tmpClient.getNickname()))
+			displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
+		else
 		{
-			int tmpFdReceiver = it->first->getFD();
-			
-			if (tmpClient.getFD() != tmpFdReceiver)
+			std::map<Client *, bool> const & listClient = tmpChannel->getClients();
+
+			for (std::map<Client *, bool>::const_iterator it = listClient.begin(); it != listClient.end(); it++)
 			{
-				std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
-				sendMessage(tmpFdReceiver, serverMessageReceiver);
-				// displayMessage(SERVER, serverMessageReceiver);
-			}
+				int tmpFdReceiver = it->first->getFD();
+				
+				if (tmpClient.getFD() != tmpFdReceiver)
+				{
+					std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
+					sendMessage(tmpFdReceiver, serverMessageReceiver);
+				}
+			}	
 		}
 	}
 }
