@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:58:21 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 10:49:08 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,6 @@ static void createPair(std::vector<std::string> args) {
 	}
 }
 
-static bool isArgValid(Commands &command, std::vector<std::string> args) {
-	
-	if (args.size() > 2)
-		return false;
-	if (args.size() < 1 || args.at(0).empty()) {
-		displayError(ERR_NEEDMOREPARAMS, command);
-		return false;
-	}
-
-	createPair(args);
- 
-	std::map<std::string, std::string>::iterator it = gPairs.begin();
-	std::map<std::string, std::string>::iterator ite = gPairs.end();
-	while (it != ite) {
-		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
-			return (gPairs.clear(), false);
-		it++;
-	}
-
-	return true;
-}
-
 static void joinChannel(Channel &channel, Client &client) {
 	sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " JOIN " + channel.getName());
 	channel.sendMessageToChannel(client.getNickname() + " is joining the channel " + channel.getName());
@@ -118,6 +96,31 @@ static void joinAllChannels(Client &client, Server &server) {
 	}
 }
 
+static bool isArgValid(Commands &command, std::vector<std::string> args) {
+	
+	if (args.size() > 2)
+		return false;
+	if (args.size() < 1 || args.at(0).empty()) {
+		displayError(ERR_NEEDMOREPARAMS, command);
+		return false;
+	}
+
+	createPair(args);
+			
+	if (command.getArgSplit()[0][0] == '0' && !command.getArgSplit()[0][1])
+		return (joinAllChannels(command.getClient(), command.getServer()), false);
+ 
+	std::map<std::string, std::string>::iterator it = gPairs.begin();
+	std::map<std::string, std::string>::iterator ite = gPairs.end();
+	while (it != ite) {
+		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
+			return (gPairs.clear(), false);
+		it++;
+	}
+
+	return true;
+}
+
 void	executeJoin(Commands & command) {
 
 	if (!command.getClient().getRegister())
@@ -125,9 +128,6 @@ void	executeJoin(Commands & command) {
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
-		
-	if (command.getArgSplit()[0][0] == '0')
-		return (joinAllChannels(command.getClient(), command.getServer()));
 
 	std::map<std::string, std::string>::iterator it = gPairs.begin();
 	std::map<std::string, std::string>::iterator ite = gPairs.end();
