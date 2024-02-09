@@ -6,7 +6,7 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:58:21 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/09 11:46:53 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,28 @@ static void createPair(std::vector<std::string> args) {
 	}
 }
 
+static void joinChannel(Channel &channel, Client &client) {
+	sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " JOIN " + channel.getName());
+	channel.sendMessageToChannel(client.getNickname() + " is joining the channel " + channel.getName());
+	if (channel.getTopic().empty())
+		displayRPL(RPL_NOTOPIC, client, channel);
+	else
+		displayRPL(RPL_TOPIC, client, channel);
+}
+
+static void partAllChannels(Client &client, Server &server) {
+	size_t size = client.getChannels().size();
+
+	for (size_t i = 0; i < size; i++) {
+		Channel * channel = *client.getChannels().begin();
+		std::cout << channel->getName() << std::endl;
+		sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " PART " + channel->getName() + " :Leaving");
+		channel->sendMessageToChannel(client.getNickname() + " is leaving the channel " + channel->getName());
+		client.removeOneChannel(channel);
+		channel->removeClient(&client, server);
+	}
+}
+
 static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	
 	if (args.size() > 2)
@@ -65,6 +87,9 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	}
 
 	createPair(args);
+			
+	if (command.getArgSplit()[0][0] == '0' && !command.getArgSplit()[0][1])
+		return (partAllChannels(command.getClient(), command.getServer()), false);
  
 	std::map<std::string, std::string>::iterator it = gPairs.begin();
 	std::map<std::string, std::string>::iterator ite = gPairs.end();
@@ -77,47 +102,6 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 	return true;
 }
 
-static void joinChannel(Channel &channel, Client &client) {
-	sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " JOIN " + channel.getName());
-	channel.sendMessageToChannel(client.getNickname() + " is joining the channel " + channel.getName());
-	if (channel.getTopic().empty())
-		displayRPL(RPL_NOTOPIC, client, channel);
-	else
-		displayRPL(RPL_TOPIC, client, channel);
-}
-
-static void joinAllChannels(Client &client, Server &server) {
-	std::map<std::string, Channel *>::iterator it = server.getChannelList().begin();
-	std::map<std::string, Channel *>::iterator ite = server.getChannelList().end();
-
-	while (it != ite) {
-		Channel *channel = server.getChannelList()[it->first];
-		if (channel->isAlreadyIn(client.getNickname())) {
-			displayErrorChannelTarget(ERR_USERONCHANNEL, client, client.getNickname(), *channel);
-			it++;
-			continue;
-		} else if (!channel->getPassword().empty()) {
-			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
-			it++;
-			continue;
-		} else if (channel->getChannelLimited() && channel->getClients().size() >= channel->getChannelLimit()) {
-			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
-			it++;
-			continue;
-		} else if (channel->getInviteOnly() && !channel->isInvited(client.getNickname())) {
-			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
-			it++;
-			continue;
-		}
-		
-		channel->updateClients(&client, false);
-		joinChannel(*channel, client);
-		channel->displayClientList();
-		client.addChannels(channel);
-		it++;
-	}
-}
-
 void	executeJoin(Commands & command) {
 
 	if (!command.getClient().getRegister())
@@ -125,9 +109,6 @@ void	executeJoin(Commands & command) {
 
 	if (!isArgValid(command, command.getArgSplit()))
 		return;
-		
-	if (command.getArgSplit()[0][0] == '0')
-		return (joinAllChannels(command.getClient(), command.getServer()));
 
 	std::map<std::string, std::string>::iterator it = gPairs.begin();
 	std::map<std::string, std::string>::iterator ite = gPairs.end();
