@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:58:15 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:16:25 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ void	executeInvite(Commands & command) {
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[1] << " :No such channel" << std::endl;
 		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
 		return;
+	} else if (!channel->getClients()[&client]) {
+		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 	} else if (client == target) {
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :wrong client" << std::endl;
 		return;
 	} else if (!channel->isAlreadyIn(client.getNickname()))
 		return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
-	if (channel->getInviteOnly() && !channel->getClients()[&client])
-		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
+		
 	if (channel->isAlreadyIn(target.getNickname()))
 		return (displayErrorChannelTarget(ERR_USERONCHANNEL, client, target.getNickname(), *channel));
 
