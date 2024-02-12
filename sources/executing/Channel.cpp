@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 15:39:39 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 10:22:46 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void Channel::sendMessageToChannel(std::string msg) {
 void Channel::removeClient(Client *client, Server &server) {
     for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
         if (it->first == client) {
+            std::string clientName = it->first->getNickname();
+            this->_invitedList.erase(std::find(this->_invitedList.begin(), this->_invitedList.end(), clientName));
             this->_clients.erase(it->first);
             this->displayClientList();
             break;
