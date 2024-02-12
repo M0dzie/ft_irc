@@ -6,12 +6,35 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:38:04 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 11:01:34 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 18:51:13 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Client.hpp"
 #include "../../includes/Channel.hpp"
+
+void	Client::displayErrorClient(int errorCode) {
+	switch (errorCode)
+	{
+	case ERR_NOTREGISTERED:
+		sendMessage(this->_fd, ":localhost 451 " + this->_nickname + " :You have not registered");
+		break;
+	case ERR_ALREADYREGISTERED:
+		sendMessage(this->_fd, ":localhost 462 " + this->_nickname + " :You may not reregister");
+		break;
+	case ERR_PASSWDMISMATCH:
+		sendMessage(this->_fd, ":localhost 464 " + this->_nickname + " :Password incorrect");
+		break;
+	case ERR_NONICKNAMEGIVEN:
+		sendMessage(this->_fd, ":localhost 431 " + this->_nickname + " :No nickname given");
+		break;
+	case ERR_CANNOTBEUNDEFINED:
+		sendMessage(this->_fd, ":localhost " + this->_nickname + " :Nickname cannot be \"undefined\"");
+		break;
+	default:
+		break;
+	}
+}
 
 std::string const & Client::getUsername() const {
 	if (this->_username.empty())
