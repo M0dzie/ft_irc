@@ -6,13 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:38:58 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 11:03:22 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-bool isNicknameValid(std::string nickname, Commands & command) {
+static bool isNicknameValid(std::string nickname, Commands & command) {
 	if (nickname[0] == '#' || nickname[0] == ':')
 		return std::cout << RED << BOLD << "Error: " << RESET << command.getClient().getUsername() << " " << nickname << " :Erroneus nickname" << std::endl, false;
 	else if (nickname == "undefined")
@@ -20,7 +20,7 @@ bool isNicknameValid(std::string nickname, Commands & command) {
 	return true;
 }
 
-bool isUseElsewhere(Commands & command, std::string nickname) {
+static bool isUseElsewhere(Commands & command, std::string nickname) {
 	Server & tmpServer = command.getServer();
 	std::map<int, Client *> tmpMap = tmpServer.getClientList();
 	std::map<int, Client *>::iterator  it = tmpMap.begin();

@@ -6,13 +6,13 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 14:39:30 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 11:05:31 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-int	getClientFDIndex(Server & tmpServer, Client & tmpClient) {
+static int	getClientFDIndex(Server & tmpServer, Client & tmpClient) {
 	int numberClient = tmpServer.getNbClient();
 	int tmpFD = tmpClient.getFD();
 	struct pollfd * tmpPoll = tmpServer.getPollFds();

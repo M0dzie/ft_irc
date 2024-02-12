@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 14:30:43 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 10:50:54 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	Server::recoverInput(Client & client) {
 	std::string &tmpBuffer = client.getBufferLine();
 	std::size_t indexEnd = tmpBuffer.find("\r\n");
 
+		// std::cout << "|" << tmpBuffer << "|" << std::endl;
 	while(indexEnd != std::string::npos)
 	{
 		std::string line = tmpBuffer.substr(0, indexEnd);

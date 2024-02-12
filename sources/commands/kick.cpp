@@ -6,29 +6,17 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:38:13 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 10:59:34 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
-std::string	getKickChannelName(std::vector<std::string> args) {
-	std::vector<std::string>::iterator it = args.begin();
-
-	while (it != args.end())
-	{
-		if ((*it)[0] == '#')
-			return *it;
-		it++;
-	}
-	return *(args.begin());
-}
-
-void	displayKickErrorMessage(Commands & command, std::string & channelName) {
+static void	displayKickErrorMessage(Commands & command, std::string & channelName) {
 	std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelName << " :No such channel" << std::endl;
 }
 
-std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & args) {
+static std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & args) {
 	std::vector<std::string>::iterator it = args.begin();
 
 	while (it != args.end())
@@ -40,7 +28,7 @@ std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & 
 	return it;
 }
 
-std::string getKickReason(std::vector<std::string> & args) {
+static std::string getKickReason(std::vector<std::string> & args) {
 	std::vector<std::string>::iterator reasonIt = getReasonIterator(args);
 
 	if (reasonIt == args.end())

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 16:03:54 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:39:08 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 11:03:51 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,5 @@ void	executePing(Commands & command) {
 		std::string serverMessage = ":" + tmpClient.getNickname() + "!" + tmpClient.getUsername() + "@localhost" + " PONG " + tmpPing;
 
 		sendMessage(tmpClient.getFD(), serverMessage);
-		// displayMessage(SERVER, serverMessage);
 	}
 }
