@@ -199,7 +199,7 @@ void Server::initDataAndServer(int port, char *password) {
 		throw(Server::ServerError(ERROR "Creation of socket failed."));
 	
 	// Forcefully attaching socket to the current port passing in paramater (port)
-	if (setsockopt(this->_fds[0].fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	if (setsockopt(this->_fds[0].fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
 		throw(Server::ServerError(ERROR "Something went wrong."));
 
 	if (bind(this->_fds[0].fd, (struct sockaddr *)&this->_address, sizeof(this->_address)) < 0)
