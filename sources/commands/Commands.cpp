@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 10:56:41 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 18:52:04 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,15 @@ int Commands::executeCommand() {
 				break;
 			}
 		}
+		Client & tmpClient = this->getClient();
+		
 		if (i == 12)
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << this->getClient().getUsername() << " " << this->_name << " :Unknown command" << std::endl;
+		{
+			if (!tmpClient.getRegister())
+				sendMessage(tmpClient.getFD(), ":localhost 451 " + tmpClient.getNickname() + " :You have not registered");
+			else
+				sendMessage(tmpClient.getFD(), ":localhost 421 " + tmpClient.getNickname() + " " + this->_name + " :Unknown command");
+		}
 	}
 	if (i == 5)
 		return 0;
@@ -82,7 +89,8 @@ void login(Commands & command) {
 	if (isRegistered)
 		displayError(ERR_ALREADYREGISTERED, command);
 	else if (password.empty())
-		displayError(ERR_NOTREGISTERED, command);
+		// displayError(ERR_NOTREGISTERED, command);
+		tmpClient.displayErrorClient(ERR_NOTREGISTERED);
 	else if (password != command.getServer().getPassword())
 		displayError(ERR_PASSWDMISMATCH, command);
 	else
@@ -103,19 +111,19 @@ void login(Commands & command) {
 }
 
 std::string getReason(std::vector<std::string> argSplit) {
-    std::string reason;
-    
-    if (argSplit.size() < 1)
-        reason = "Leaving";
-    else {
-        for (size_t i = 0; i < argSplit.size(); i++) {
-            reason += argSplit[i];
-            if (i != argSplit.size() - 1)
-                reason += " ";
-        }
-        if (reason[0] == ':')
-            reason = reason.substr(1);
-    }
-    
-    return reason;
+	std::string reason;
+	
+	if (argSplit.size() < 1)
+		reason = "Leaving";
+	else {
+		for (size_t i = 0; i < argSplit.size(); i++) {
+			reason += argSplit[i];
+			if (i != argSplit.size() - 1)
+				reason += " ";
+		}
+		if (reason[0] == ':')
+			reason = reason.substr(1);
+	}
+	
+	return reason;
 }

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 11:05:41 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 18:56:31 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,14 @@ static bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & comman
 
 void	executeUser(Commands & command) {
 	std::vector<std::string> tmpArgs = command.getArgSplit();
+	Client & client = command.getClient();
 
 	if (command.getClient().getRegister())
-		displayError(ERR_ALREADYREGISTERED, command);
+		client.displayErrorClient(ERR_ALREADYREGISTERED);
 	else if (command.getClient().getPassword().empty())
-		displayError(ERR_NOTREGISTERED, command);
+		client.displayErrorClient(ERR_NOTREGISTERED);
 	else if (command.getClient().getNickname() == "undefined")
-		displayError(ERR_CANNOTBEUNDEFINED, command);
+		client.displayErrorClient(ERR_CANNOTBEUNDEFINED);
 	else
 	{
 		if (tmpArgs.empty() || tmpArgs.size() < 4)
