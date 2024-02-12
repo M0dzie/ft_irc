@@ -6,13 +6,11 @@
 /*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 12:28:49 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/12 09:19:03 by thmeyer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
-
-std::map<std::string, std::string> gPairs;
 
 static std::vector<std::string> splitArg(std::string arg) {
 
@@ -31,7 +29,7 @@ static std::vector<std::string> splitArg(std::string arg) {
 	return tmpVector;
 }
 
-static void createPair(std::vector<std::string> args) {
+static void createPair(std::vector<std::string> args, std::map<std::string, std::string> &pairs) {
 	
 	std::vector<std::string> channelName;
 	std::vector<std::string> password;
@@ -47,10 +45,10 @@ static void createPair(std::vector<std::string> args) {
 
 	while (itCN != iteCN) {
 		if (itP != iteP) {
-			gPairs.insert(std::pair<std::string, std::string>(*itCN, *itP));
+			pairs.insert(std::pair<std::string, std::string>(*itCN, *itP));
 			itP++;
 		} else
-			gPairs.insert(std::pair<std::string, std::string>(*itCN, ""));
+			pairs.insert(std::pair<std::string, std::string>(*itCN, ""));
 		itCN++;
 	}
 }
@@ -75,10 +73,9 @@ static void partAllChannels(Client &client, Server &server) {
 		client.removeOneChannel(channel);
 		channel->removeClient(&client, server);
 	}
-	gPairs.clear();
 }
 
-static bool isArgValid(Commands &command, std::vector<std::string> args) {
+static bool isArgValid(Commands &command, std::vector<std::string> args,std::map<std::string, std::string> &pairs) {
 	
 	if (args.size() > 2)
 		return false;
@@ -87,16 +84,16 @@ static bool isArgValid(Commands &command, std::vector<std::string> args) {
 		return false;
 	}
 
-	createPair(args);
+	createPair(args, pairs);
 			
 	if (command.getArgSplit()[0][0] == '0' && !command.getArgSplit()[0][1])
 		return (partAllChannels(command.getClient(), command.getServer()), false);
  
-	std::map<std::string, std::string>::iterator it = gPairs.begin();
-	std::map<std::string, std::string>::iterator ite = gPairs.end();
+	std::map<std::string, std::string>::iterator it = pairs.begin();
+	std::map<std::string, std::string>::iterator ite = pairs.end();
 	while (it != ite) {
 		if (it->first[0] != '#' || it->first.size() < 2 || it->first.find('#', 1) != std::string::npos)
-			return (gPairs.clear(), false);
+			return (pairs.clear(), false);
 		it++;
 	}
 
@@ -108,11 +105,13 @@ void	executeJoin(Commands & command) {
 	if (!command.getClient().getRegister())
 		return (displayError(ERR_NOTREGISTERED, command));
 
-	if (!isArgValid(command, command.getArgSplit()))
+	std::map<std::string, std::string> pairs;
+
+	if (!isArgValid(command, command.getArgSplit(), pairs))
 		return;
 
-	std::map<std::string, std::string>::iterator it = gPairs.begin();
-	std::map<std::string, std::string>::iterator ite = gPairs.end();
+	std::map<std::string, std::string>::iterator it = pairs.begin();
+	std::map<std::string, std::string>::iterator ite = pairs.end();
 	
 	while (it != ite) {
 		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
@@ -159,6 +158,4 @@ void	executeJoin(Commands & command) {
 		client.addChannels(channel);
 		it++;
 	}
-
-	gPairs.clear();
 }
