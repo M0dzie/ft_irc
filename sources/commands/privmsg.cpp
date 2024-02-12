@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:39:21 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 11:05:10 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ Client & foundClient(Commands & command, std::string nickname) {
 	return command.getClient();
 }
 
-std::string	getMessageText(std::vector<std::string> & tmpArg) {
+static std::string	getMessageText(std::vector<std::string> & tmpArg) {
 	std::string messageText;
 	
 	for (std::vector<std::string>::iterator it = ++tmpArg.begin(); it != tmpArg.end(); it++)
@@ -42,7 +42,7 @@ std::string	getMessageText(std::vector<std::string> & tmpArg) {
 	return  messageText;
 }
 
-void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
+static void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 	std::string target = *args.begin();
 	Client & tmpClient = command.getClient();
 	Channel * tmpChannel = command.getServer().getChannelList()[target];
@@ -71,7 +71,7 @@ void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 	}
 }
 
-void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
+static void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
 	std::string target = *args.begin();
 	Client & tmpReceiver = foundClient(command, target);
 	Client & tmpClient = command.getClient();
