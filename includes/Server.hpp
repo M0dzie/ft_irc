@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:36:14 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/09 15:54:51 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 12:57:57 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ public:
 	void exit();
 	void handlingSignal();
 	void initDataAndServer(int port, char *password);
-	void sendMessage(int clientFd, std::string msg);
+	// void sendMessage(int clientFd, std::string msg);
 
 	// SETTER
 	void setNbClient(int value) {this->_nbClient = value;}
