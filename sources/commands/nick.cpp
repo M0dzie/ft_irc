@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 11:03:22 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 18:41:33 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,22 @@ void	executeNick(Commands & command) {
     	return (displayError(ERR_NEEDMOREPARAMS, command));
 	std::string nickname = *(command.getArgSplit().begin());
 	std::string oldNickname = command.getClient().getNickname();
+	Client & client = command.getClient();
 
-	if (command.getClient().getPassword().empty())
+	if (client.getPassword().empty())
 		displayError(ERR_NOTREGISTERED, command);
+		// sendMessage(client.getFD(), ":localhost ")
 	else if (isUseElsewhere(command, nickname))
 		displayError(ERR_NICKNAMEINUSE, command);
 	else if (isNicknameValid(nickname, command))
 	{
 		std::string cmdToSend = ":" + oldNickname + " NICK " + nickname;
 		
-		command.getClient().setNickname(nickname);
-		sendMessage(command.getClient().getFD(), cmdToSend);
-		if (command.getClient().getRegister())
+		client.setNickname(nickname);
+		sendMessage(client.getFD(), cmdToSend);
+		if (client.getRegister())
 		{
-			std::vector<Channel *> tmpChannels = command.getClient().getChannels();
+			std::vector<Channel *> tmpChannels = client.getChannels();
 
 			for (std::vector<Channel *>::iterator it = tmpChannels.begin(); it != tmpChannels.end(); it++)
 				(*it)->displayClientList();
