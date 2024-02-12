@@ -13,40 +13,40 @@
 #include "../../includes/Channel.hpp"
 
 std::string Channel::getClientList() {
-    std::string display;
+	std::string display;
 
-    for(std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
-        Client *client = it->first;
-        if (this->_clients[client])
-            display += "@";
-        display += client->getNickname() + " ";
-    }
-    
-    return display;
+	for(std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		Client *client = it->first;
+		if (this->_clients[client])
+			display += "@";
+		display += client->getNickname() + " ";
+	}
+	
+	return display;
 }
 
 void Channel::displayClientList() {
-    for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
-        Client *client = it->first;
-        displayRPL(RPL_NAMREPLY, *client, *this);
-	    displayRPL(RPL_ENDOFNAMES, *client, *this);
-    }
+	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		Client *client = it->first;
+		displayRPL(RPL_NAMREPLY, *client, *this);
+		displayRPL(RPL_ENDOFNAMES, *client, *this);
+	}
 }
 
 void Channel::updateClients(Client *client, bool first) {
-    if (first)
-        this->_clients.insert(std::pair<Client *, bool>(client, true));
-    else
-        this->_clients.insert(std::pair<Client *, bool>(client, false));
+	if (first)
+		this->_clients.insert(std::pair<Client *, bool>(client, true));
+	else
+		this->_clients.insert(std::pair<Client *, bool>(client, false));
 }
 
 bool Channel::isAlreadyIn(std::string const &name) {
-    for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
-        Client *tmp = it->first;
-        if (tmp->getNickname() == name)
-            return true;
-    }
-    return false;
+	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		Client *tmp = it->first;
+		if (tmp->getNickname() == name)
+			return true;
+	}
+	return false;
 }
 
 void Channel::sendMessageToChannel(std::string msg) {
@@ -54,33 +54,45 @@ void Channel::sendMessageToChannel(std::string msg) {
 		sendMessage((it->first)->getFD(), msg);
 }
 
+void Channel::removeFromInvitedList(std::string const &clientName) {
+	std::vector<std::string>::iterator it = this->_invitedList.begin();
+	std::vector<std::string>::iterator ite = this->_invitedList.end();
+	while (it != ite) {
+		if (*it == clientName) {
+			this->_invitedList.erase(it);
+			break;
+		}
+		it++;
+	}
+}
+
 void Channel::removeClient(Client *client, Server &server) {
-    for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
-        if (it->first == client) {
-            std::string clientName = it->first->getNickname();
-            this->_invitedList.erase(std::find(this->_invitedList.begin(), this->_invitedList.end(), clientName));
-            this->_clients.erase(it->first);
-            this->displayClientList();
-            break;
-        }
-    }
+	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		if (it->first == client) {
+			std::string clientName = it->first->getNickname();
+			this->removeFromInvitedList(clientName);
+			this->_clients.erase(it->first);
+			this->displayClientList();
+			break;
+		}
+	}
 
-    // if there's no member left, delete the channel
-    if (this->_clients.empty()) {
-        server.getChannelList().erase(this->_name);
-        delete this;
-        return;
-    }
+	// if there's no member left, delete the channel
+	if (this->_clients.empty()) {
+		server.getChannelList().erase(this->_name);
+		delete this;
+		return;
+	}
 
-    // check if an operator is still available, if not, upgrade the older member
-    bool found = false;
-    for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-        if (it->second)
-            found = true;
-    if (!found) {
-        this->setOperator(this->_clients.begin()->first);
-        this->displayClientList();
-    }
+	// check if an operator is still available, if not, upgrade the older member
+	bool found = false;
+	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		if (it->second)
+			found = true;
+	if (!found) {
+		this->setOperator(this->_clients.begin()->first);
+		this->displayClientList();
+	}
 }
 
 void Channel::setModes(std::string const &mode, bool plus) {
@@ -126,37 +138,37 @@ bool Channel::isInvited(std::string const &name) {
 }
 
 bool Channel::setOperator(Client *client) {
-    std::map<Client *, bool>::iterator it = this->_clients.begin();
-    std::map<Client *, bool>::iterator ite = this->_clients.end();
-    bool found = false;
-    while (it != ite) {
-        if (it->first == client && !this->_clients[client])
-            found = true;
-        it++;
-    }
+	std::map<Client *, bool>::iterator it = this->_clients.begin();
+	std::map<Client *, bool>::iterator ite = this->_clients.end();
+	bool found = false;
+	while (it != ite) {
+		if (it->first == client && !this->_clients[client])
+			found = true;
+		it++;
+	}
 
-    if (found) {
-        this->_clients[client] = true;
-        return true;
-    }
-    return false;
+	if (found) {
+		this->_clients[client] = true;
+		return true;
+	}
+	return false;
 }
 
 bool Channel::unsetOperator(Client *client) {
-    std::map<Client *, bool>::iterator it = this->_clients.begin();
-    std::map<Client *, bool>::iterator ite = this->_clients.end();
-    bool found = false;
-    while (it != ite) {
-        if (it->first == client && this->_clients[client])
-            found = true;
-        it++;
-    }
+	std::map<Client *, bool>::iterator it = this->_clients.begin();
+	std::map<Client *, bool>::iterator ite = this->_clients.end();
+	bool found = false;
+	while (it != ite) {
+		if (it->first == client && this->_clients[client])
+			found = true;
+		it++;
+	}
 
-    if (found) {
-        this->_clients[client] = false;
-        return true;
-    }
-    return false;
+	if (found) {
+		this->_clients[client] = false;
+		return true;
+	}
+	return false;
 }
 
 bool Channel::areClientOnChannel(std::string const & clientName) {

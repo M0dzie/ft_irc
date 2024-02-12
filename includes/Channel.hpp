@@ -44,6 +44,7 @@ public:
 	
 	void displayClientList();
 	void removeClient(Client *client, Server &server);
+	void removeFromInvitedList(std::string const &clientName);
 	void sendMessageToChannel(std::string msg);
 	void updateClients(Client *client, bool first);
 
