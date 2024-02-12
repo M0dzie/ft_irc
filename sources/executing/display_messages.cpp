@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:45:25 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:34:09 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/12 19:02:31 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,44 @@
 #include "../../includes/Client.hpp"
 
 void    displayError(int errorCode, Commands & command) {
-
+	Client & client = command.getClient();
+	
 	switch (errorCode)
 	{
-	case ERR_NOTREGISTERED:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :You have not registered" << std::endl;
+	// case ERR_NOTREGISTERED:
+	// 	// std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :You have not registered" << std::endl;
+	// 	sendMessage(client.getFD(), ":localhost 451 " + client.getNickname() + " :You have not registered");
+	// 	break;
+	// case ERR_ALREADYREGISTERED:
+	// 	std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " :You may not reregister" << std::endl;
+	// 	break;
+	// case ERR_PASSWDMISMATCH:
+	// 	std::cout << RED << BOLD << "Error: " << RESET << client.getUsername() << " :Password incorrect" << std::endl;
+	// 	break;
+	// case ERR_NONICKNAMEGIVEN:
+	// 	std::cout << RED << BOLD << "Warning: " << RESET << client.getUsername() << " :No nickname given" << std::endl;
+	// 	break;
+	// case ERR_CANNOTBEUNDEFINED:
+	// 	std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " :Nickname cannot be \"undefined\"" << std::endl;
+	// 	break;
+	case ERR_UMODEUNKNOWNFLAG:
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " :Unknown MODE flag" << std::endl;
 		break;
 	case ERR_NEEDMOREPARAMS:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << command.getName() << " :Not enough parameters" << std::endl;
-		break;
-	case ERR_ALREADYREGISTERED:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :You may not reregister" << std::endl;
-		break;
-	case ERR_PASSWDMISMATCH:
-		std::cout << RED << BOLD << "Error: " << RESET << command.getClient().getUsername() << " :Password incorrect" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getName() << " :Not enough parameters" << std::endl;
+		// sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + command.getName() + " :Not enough parameters");
 		break;
 	case ERR_NOSUCHCHANNEL:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :No such channel" << std::endl;
-		break;
-	case ERR_NONICKNAMEGIVEN:
-		std::cout << RED << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :No nickname given" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << *(command.getArgSplit().begin()) << " :No such channel" << std::endl;
 		break;
 	case ERR_NICKNAMEINUSE:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :Nickname is already in use" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << *(command.getArgSplit().begin()) << " :Nickname is already in use" << std::endl;
 		break;
 	case ERR_NOSUCHNICK:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << *(command.getArgSplit().begin()) << " :No such nick/channel" << std::endl;
-		break;
-	case ERR_CANNOTBEUNDEFINED:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :Nickname cannot be \"undefined\"" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << *(command.getArgSplit().begin()) << " :No such nick/channel" << std::endl;
 		break;
 	case ERR_INVALIDARG:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << command.getName() << " :Invalid arguments" << std::endl;
-		break;
-	case ERR_UMODEUNKNOWNFLAG:
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " :Unknown MODE flag" << std::endl;
+		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getName() << " :Invalid arguments" << std::endl;
 		break;
 
 	default:
