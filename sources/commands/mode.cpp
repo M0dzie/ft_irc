@@ -86,7 +86,8 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 		it++;
 	}
 	if (!target)
-		return (displayErrorChannelTarget(ERR_USERNOTINCHANNEL, client, modeString[1], channel));
+		return (channel.displayErrorTarget(ERR_USERNOTINCHANNEL, client, modeString[1]));
+		// return (displayErrorChannelTarget(ERR_USERNOTINCHANNEL, client, modeString[1], channel));
 	
 	if (modeString.size() == 2 && *modeString.begin() == RMVOPECHAN) {
 		if (channel.unsetOperator(target)) {

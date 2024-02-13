@@ -83,7 +83,7 @@ void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
 // void	displayErrorChannel(int errorCode, Client const &client, Channel &channel);
-void	displayErrorChannelTarget(int errorCode, Client const &client, std::string const &targetNickname, Channel &channel);
+// void	displayErrorChannelTarget(int errorCode, Client const &client, std::string const &targetNickname, Channel &channel);
 void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
 void	clearClient(Server & tmpServer, Client & tmpClient);
 void	clearFromChannel(Server & tmpServer, Client & tmpClient);

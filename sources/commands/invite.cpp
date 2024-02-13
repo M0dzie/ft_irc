@@ -44,7 +44,7 @@ void	executeInvite(Commands & command) {
 		// return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
 		
 	if (channel->isAlreadyIn(target.getNickname()))
-		return (channel->displayError(ERR_USERONCHANNEL, client));
+		return (channel->displayErrorTarget(ERR_USERONCHANNEL, client, target.getNickname()));
 		// return (displayErrorChannelTarget(ERR_USERONCHANNEL, client, target.getNickname(), *channel));
 
 	// If user and client exist and invite is possible, send a RPL_INVITING

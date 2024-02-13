@@ -204,3 +204,17 @@ void	Channel::displayError(int errorCode, Client const &client) {
 			break;
 	}
 }
+
+void	Channel::displayErrorTarget(int errorCode, Client const &client, std::string const &targetNickname) {
+	switch (errorCode) {
+		case ERR_USERONCHANNEL:
+			sendMessage(client.getFD(), ":localhost 443 " + client.getNickname() + " " + targetNickname + " " + this->_name + " :is already on channel");
+			break;
+		case ERR_USERNOTINCHANNEL:
+			sendMessage(client.getFD(), ":localhost 441 " + client.getNickname() + " " + targetNickname + " " + this->_name + " :They aren't on that channel");
+			break;
+		
+		default:
+			break;
+	}
+}
