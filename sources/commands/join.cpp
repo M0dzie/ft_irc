@@ -67,7 +67,6 @@ static void partAllChannels(Client &client, Server &server) {
 
 	for (size_t i = 0; i < size; i++) {
 		Channel * channel = *client.getChannels().begin();
-		std::cout << channel->getName() << std::endl;
 		sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " PART " + channel->getName() + " :Leaving");
 		channel->sendMessageToChannel(client.getNickname() + " is leaving the channel " + channel->getName());
 		client.removeOneChannel(channel);
@@ -135,7 +134,8 @@ void	executeJoin(Commands & command) {
 
 		Channel *channel = command.getServer().getChannelList()[it->first];
 		if (channel->isAlreadyIn(client.getNickname())) {
-			displayErrorChannelTarget(ERR_USERONCHANNEL, client, client.getNickname(), *channel);
+			channel->displayErrorTarget(ERR_USERONCHANNEL, client, client.getNickname());
+			// displayErrorChannelTarget(ERR_USERONCHANNEL, client, client.getNickname(), *channel);
 			it++;
 			continue;
 		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {

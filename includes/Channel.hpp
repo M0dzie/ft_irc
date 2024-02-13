@@ -44,6 +44,7 @@ public:
 	
 	void displayClientList();
 	void displayError(int errorCode, Client const &client);
+	void displayErrorTarget(int errorCode, Client const &client, std::string const &targetNickname);
 	void removeClient(Client *client, Server &server);
 	void removeFromInvitedList(std::string const &clientName);
 	void sendMessageToChannel(std::string msg);
