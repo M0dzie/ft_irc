@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:57:56 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 16:45:18 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/13 18:18:05 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ static std::vector<std::string> getChannelNames(std::string string) {
 }
 
 void executePart(Commands & command) {
-	if (!command.getClient().getRegister())
-		return (displayError(ERR_NOTREGISTERED, command));
+    Client *client = &command.getClient();
     
+	if (!client->getRegister())
+		return (client->displayError(ERR_NOTREGISTERED));
     if (command.getArgSplit().size() < 1)
-    	return (displayError(ERR_NEEDMOREPARAMS, command));
+    	return (command.displayError(ERR_NEEDMOREPARAMS));
 
     std::map<std::string, Channel *> channels = command.getServer().getChannelList();
-    Client *client = &command.getClient();
     std::vector<std::string> channelNames = getChannelNames(command.getArgSplit()[0]);
     
     for (size_t i = 0; i < channelNames.size(); i++) {
         if (channels.find(channelNames[i]) == channels.end()) {
-            std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelNames[i] << " :No such channel" << std::endl;
+            sendMessage(client->getFD(), ":localhost 403 " + client->getNickname() + " " + channelNames[i] + " :No such channel");
             continue;
         }
 
@@ -59,7 +59,6 @@ void executePart(Commands & command) {
             
             if (it == ite)
                 channel->displayError(ERR_NOTONCHANNEL, *client);
-                // displayErrorChannel(ERR_NOTONCHANNEL, *client, *channel);
         }
     }
 }

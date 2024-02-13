@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 12:40:17 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:17:22 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 		channel.setModes(PASS, true);
 		displayMessage(INFO, "Set password successfully : " + modeString[1]);
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
+		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -53,7 +53,7 @@ static void handleInviteOnly(std::vector<std::string> modeString, Client &client
 		channel.setModes(INVITEONLY, true);
 		displayMessage(INFO, "Set invite only successfully");
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
+		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -66,13 +66,13 @@ static void handleTopicRestrict(std::vector<std::string> modeString, Client &cli
 		channel.setModes(TOPICRESTRICT, true);
 		displayMessage(INFO, "Set topic restriction successfully");
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
+		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() != 2) {
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
-			return;
+		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		return;
 	}
 	
 	std::map<Client *, bool>::iterator it = channel.getClients().begin();
@@ -87,7 +87,6 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 	}
 	if (!target)
 		return (channel.displayErrorTarget(ERR_USERNOTINCHANNEL, client, modeString[1]));
-		// return (displayErrorChannelTarget(ERR_USERNOTINCHANNEL, client, modeString[1], channel));
 	
 	if (modeString.size() == 2 && *modeString.begin() == RMVOPECHAN) {
 		if (channel.unsetOperator(target)) {
@@ -100,7 +99,7 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 			displayMessage(INFO, "Set " + target->getNickname() + " operator successfully");
 		}
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
+		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -110,7 +109,7 @@ static void handleChanLimit(std::vector<std::string> modeString, Client &client,
 		displayMessage(INFO, "Remove channel limit successfully");
 	} else if (modeString.size() == 2 && *modeString.begin() == CHANLIMIT) {
 		if (!isNumber(modeString[1]))
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
+			sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 		else {
 			std::stringstream ss(modeString[1]);
 			unsigned long limit;
@@ -121,7 +120,7 @@ static void handleChanLimit(std::vector<std::string> modeString, Client &client,
 			displayMessage(INFO, "Set channel limit to " + modeString[1] + " successfully");
 		}
 	} else
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << modeString[0] << " :Wrong parameters" << std::endl;
+		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 
@@ -143,26 +142,26 @@ static void splitModes(std::vector<std::string> modeString, Client &client, Chan
 }
 
 void	executeMode(Commands & command) {
-	if (!command.getClient().getRegister())
-		return (displayError(ERR_NOTREGISTERED, command));
-	else if (command.getArgSplit().size() < 1)
-    	return (displayError(ERR_NEEDMOREPARAMS, command));
-
 	Client &client = command.getClient();
+	
+	if (!client.getRegister())
+		return (client.displayError(ERR_NOTREGISTERED));
+	else if (command.getArgSplit().size() < 1)
+    	return (command.displayError(ERR_NEEDMOREPARAMS));
+
 	Server &server = command.getServer();
 	Channel *channel = server.getChannelList()[command.getArgSplit()[0]];
 	if (!channel) {
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :No such channel" << std::endl;
+		sendMessage(client.getFD(), ":localhost 403 " + client.getNickname() + " " + command.getArgSplit()[0] + " :No such channel");
 		server.getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	}
 	if (command.getArgSplit().size() == 1)
 		return (displayChannelRPL(RPL_CHANNELMODEIS, client, *channel));
 	else if (!isValidModeString(command.getArgSplit()[1]))
-		return (displayError(ERR_UMODEUNKNOWNFLAG, command));
+		return (sendMessage(ERR_UMODEUNKNOWNFLAG, ":localhost 501 " + client.getNickname() + " :Unknown MODE flag"));
 	if (!channel->getClients()[&client])
 		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
-		// return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
 	// if everything good, split and setup modes
 	std::vector<std::string> modes;

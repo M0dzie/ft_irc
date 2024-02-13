@@ -6,29 +6,29 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 12:40:27 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 17:59:40 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
 
 void	executeTopic(Commands & command) {
-	if (!command.getClient().getRegister())
-		return (displayError(ERR_NOTREGISTERED, command));
+	Client &client = command.getClient();
+	
+	if (!client.getRegister())
+		return (client.displayError(ERR_NOTREGISTERED));
 	else if (command.getArgSplit().size() < 1)
-    	return (displayError(ERR_NEEDMOREPARAMS, command));
+    	return (command.displayError(ERR_NEEDMOREPARAMS));
 	else if (command.getArgSplit()[0][0] != '#')
 		return;
 
-	Client &client = command.getClient();
 	Channel *channel = command.getServer().getChannelList()[command.getArgSplit()[0]];
 	if (!channel) {
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :No such channel" << std::endl;
+		sendMessage(client.getFD(), ":localhost 403 " + client.getNickname() + " " + command.getArgSplit()[0] + " :No such channel");
 		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	} else if (!channel->isAlreadyIn(client.getNickname()))
 		return (channel->displayError(ERR_NOTONCHANNEL, client));
-		// return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
 	
 	// Only display the topic
 	if (command.getArgSplit().size() == 1) {
@@ -42,7 +42,6 @@ void	executeTopic(Commands & command) {
 	// Check if the client is an operator if topicRestriction is off
 	if (channel->getTopicRestrict() && !channel->getClients()[&client])
 		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
-		// return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
 	// Update topic
 	std::string newTopic;
