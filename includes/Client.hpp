@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/13 11:02:29 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:09:36 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ public:
 	int const &getFD() const {return this->_fd;}
 	
 	std::string const &getNickname() const {return this->_nickname;}
-	std::string const &getUsername() const;
-	std::string const &getRealname() const;
+	std::string const &getUsername() const {return this->_username;}
+	std::string const &getRealname() const {return this->_realname;}
 	std::string const &getPassword() const {return this->_password;}
 	std::string const &getLastPing() const {return this->_lastPing;}
 	std::string & getBufferLine() {return this->_bufferLine;}
