@@ -58,7 +58,8 @@ void executePart(Commands & command) {
             it++;
             
             if (it == ite)
-                displayErrorChannel(ERR_NOTONCHANNEL, *client, *channel);
+                channel->displayError(ERR_NOTONCHANNEL, *client);
+                // displayErrorChannel(ERR_NOTONCHANNEL, *client, *channel);
         }
     }
 }

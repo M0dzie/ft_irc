@@ -69,11 +69,13 @@ void	executeKick(Commands & command) {
 			else
 			{
 				if (!tmpChannel->areClientOnChannel(senderName))
-					displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
+					tmpChannel->displayError(ERR_NOTONCHANNEL, tmpClient);
+					// displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
 				else if (!tmpChannel->areClientOnChannel(receiverName))
 					std::cout << PURPLE << BOLD << "Warning: " << RESET << tmpClient.getUsername() << " " << receiverName << " " << tmpChannel->getName() << " :They aren't on that channel" << std::endl;
 				else if (!tmpChannel->getClients()[&tmpClient])
-					displayErrorChannel(ERR_CHANOPRIVSNEEDED, tmpClient, *tmpChannel);
+					tmpChannel->displayError(ERR_CHANOPRIVSNEEDED, tmpClient);
+					// displayErrorChannel(ERR_CHANOPRIVSNEEDED, tmpClient, *tmpChannel);
 				else
 				{
 					Client & clientReceiver = foundClient(command, receiverName);

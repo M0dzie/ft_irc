@@ -52,7 +52,8 @@ static void	sendMessageToChannel(Commands & command, std::vector<std::string> & 
 	else
 	{
 		if (!tmpChannel->areClientOnChannel(tmpClient.getNickname()))
-			displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
+			tmpChannel->displayError(ERR_NOTONCHANNEL, tmpClient);
+			// displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
 		else
 		{
 			std::map<Client *, bool> const & listClient = tmpChannel->getClients();

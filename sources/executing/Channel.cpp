@@ -181,3 +181,26 @@ bool Channel::areClientOnChannel(std::string const & clientName) {
 	}
 	return false;
 }
+
+void	Channel::displayError(int errorCode, Client const &client) {
+	switch (errorCode) {
+		case ERR_CHANNELISFULL:
+			sendMessage(client.getFD(), ":localhost 471 " + client.getNickname() + " " + this->_name + " :Cannot join channel (+l)");
+			break;
+		case ERR_BADCHANNELKEY:
+			sendMessage(client.getFD(), ":localhost 475 " + client.getNickname() + " " + this->_name + " :Cannot join channel (+k)");
+			break;
+		case ERR_INVITEONLYCHAN:
+			sendMessage(client.getFD(), ":localhost 473 " + client.getNickname() + " " + this->_name + " :Cannot join channel (+i)");
+			break;
+		case ERR_NOTONCHANNEL:
+			sendMessage(client.getFD(), ":localhost 442 " + client.getNickname() + " " + this->_name + " :You're not on that channel");
+			break;
+		case ERR_CHANOPRIVSNEEDED:
+			sendMessage(client.getFD(), ":localhost 482 " + client.getNickname() + " " + this->_name + " :You're not channel operator");
+			break;
+
+		default:
+			break;
+	}
+}

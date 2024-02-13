@@ -139,15 +139,18 @@ void	executeJoin(Commands & command) {
 			it++;
 			continue;
 		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
-			displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
+			channel->displayError(ERR_BADCHANNELKEY, client);
+			// displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
 			it++;
 			continue;
 		} else if (channel->getChannelLimited() && channel->getClients().size() >= channel->getChannelLimit()) {
-			displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
+			channel->displayError(ERR_CHANNELISFULL, client);
+			// displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
 			it++;
 			continue;
 		} else if (channel->getInviteOnly() && !channel->isInvited(client.getNickname())) {
-			displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
+			channel->displayError(ERR_INVITEONLYCHAN, client);
+			// displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
 			it++;
 			continue;
 		}
