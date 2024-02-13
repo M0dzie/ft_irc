@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:00 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 10:16:25 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:11:51 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,31 @@ static bool isIn(Channel &channel, std::string toFind) {
 }
 
 void	executeInvite(Commands & command) {
-	if (!command.getClient().getRegister())
-		return (displayError(ERR_NOTREGISTERED, command));
-	else if (command.getArgSplit().size() < 1)
-    	return (displayError(ERR_NEEDMOREPARAMS, command));
-
 	Client &client = command.getClient();
+	
+	if (!client.getRegister())
+		return (client.displayError(ERR_NOTREGISTERED));
+	else if (command.getArgSplit().size() < 1)
+		return (command.displayError(ERR_NEEDMOREPARAMS));
 	Client &target = foundClient(command, command.getArgSplit()[0]);
 	Channel *channel = command.getServer().getChannelList()[command.getArgSplit()[1]];
 
 	// Check if conditions are true
 	if (!channel) {
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[1] << " :No such channel" << std::endl;
-		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
-		return;
-	} else if (!channel->getClients()[&client]) {
-		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
-		// return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
-	} else if (client == target) {
-		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :wrong client" << std::endl;
-		return;
-	} else if (!channel->isAlreadyIn(client.getNickname()))
-		return (channel->displayError(ERR_NOTONCHANNEL, client));
-		// return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
+		std::string channelName = command.getArgSplit()[0];
 		
+		sendMessage(client.getFD(), ":localhost 403 " + client.getNickname() + " " + channelName + " :No such channel");
+		command.getServer().getChannelList().erase(channelName);
+		return;
+	}
+	if (!channel->getClients()[&client])
+		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
+	if (client == target)
+		return (sendMessage(client.getFD(), ":localhost 401 " + client.getNickname() + " " + command.getArgSplit()[0] + " :No such nick/channel"));
+	if (!channel->isAlreadyIn(client.getNickname()))
+		return (channel->displayError(ERR_NOTONCHANNEL, client));
 	if (channel->isAlreadyIn(target.getNickname()))
 		return (channel->displayErrorTarget(ERR_USERONCHANNEL, client, target.getNickname()));
-		// return (displayErrorChannelTarget(ERR_USERONCHANNEL, client, target.getNickname(), *channel));
 
 	// If user and client exist and invite is possible, send a RPL_INVITING
 	if (!isIn(*channel, target.getNickname()))
