@@ -6,15 +6,11 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 10:59:34 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:16:34 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/Commands.hpp"
-
-static void	displayKickErrorMessage(Commands & command, std::string & channelName) {
-	std::cout << PURPLE << BOLD << "Warning: " << RESET << command.getClient().getUsername() << " " << channelName << " :No such channel" << std::endl;
-}
 
 static std::vector<std::string>::iterator	getReasonIterator(std::vector<std::string> & args) {
 	std::vector<std::string>::iterator it = args.begin();
@@ -49,42 +45,40 @@ static std::string getKickReason(std::vector<std::string> & args) {
 
 void	executeKick(Commands & command) {
 	std::vector<std::string> tmpArgs = command.getArgSplit();
+	Client & client = command.getClient();
 
-	if (!command.getClient().getRegister())
-		displayError(ERR_NOTREGISTERED, command);
+	if (!client.getRegister())
+		client.displayError(ERR_NOTREGISTERED);
 	else
 	{
 		if (tmpArgs.size() < 2)
-			displayError(ERR_NEEDMOREPARAMS, command);
+			command.displayError(ERR_NEEDMOREPARAMS);
 		else
 		{
-			Client & tmpClient = command.getClient();
 			std::string &	channelName = *command.getArgSplit().begin();
 			std::string &	receiverName = *++(command.getArgSplit()).begin();
-			std::string const &	senderName = tmpClient.getNickname();
-			Channel * tmpChannel = command.getServer().getChannelList()[channelName];
+			std::string const &	senderName = client.getNickname();
+			Channel * channel = command.getServer().getChannelList()[channelName];
 
-			if (!tmpChannel)
-				displayKickErrorMessage(command, channelName);
+			if (!channel)
+				sendMessage(client.getFD(), ":localhost 401 " + client.getNickname() + " " + command.getArgSplit()[0] + " :No such nick/channel");
 			else
 			{
-				if (!tmpChannel->areClientOnChannel(senderName))
-					tmpChannel->displayError(ERR_NOTONCHANNEL, tmpClient);
-					// displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
-				else if (!tmpChannel->areClientOnChannel(receiverName))
-					std::cout << PURPLE << BOLD << "Warning: " << RESET << tmpClient.getUsername() << " " << receiverName << " " << tmpChannel->getName() << " :They aren't on that channel" << std::endl;
-				else if (!tmpChannel->getClients()[&tmpClient])
-					tmpChannel->displayError(ERR_CHANOPRIVSNEEDED, tmpClient);
-					// displayErrorChannel(ERR_CHANOPRIVSNEEDED, tmpClient, *tmpChannel);
+				if (!channel->areClientOnChannel(senderName))
+					channel->displayError(ERR_NOTONCHANNEL, client);
+				else if (!channel->areClientOnChannel(receiverName))
+					sendMessage(client.getFD(), ":localhost 441 " + client.getUsername() + " " + receiverName + " " + channel->getName() + " :They aren't on that channel");
+				else if (!channel->getClients()[&client])
+					channel->displayError(ERR_CHANOPRIVSNEEDED, client);
 				else
 				{
 					Client & clientReceiver = foundClient(command, receiverName);
 					std::string reason = getKickReason(tmpArgs);
-					std::string commandMessage	= ":" + senderName + "!" + tmpClient.getUsername() + "@localhost KICK " + channelName + " " + receiverName + " " + reason;
+					std::string commandMessage	= ":" + senderName + "!" + client.getUsername() + "@localhost KICK " + channelName + " " + receiverName + " " + reason;
 					
-					sendMessage(tmpClient.getFD(), commandMessage);
+					sendMessage(client.getFD(), commandMessage);
 					sendMessage(clientReceiver.getFD(), ":" + clientReceiver.getNickname() + "!" + clientReceiver.getUsername() + "@localhost" + " PART " + channelName + " " + reason);
-					tmpChannel->removeClient(&clientReceiver, command.getServer());
+					channel->removeClient(&clientReceiver, command.getServer());
 				}
 			}
 		}
