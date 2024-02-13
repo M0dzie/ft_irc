@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:19 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:59:00 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/13 12:40:27 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	executeTopic(Commands & command) {
 	// Only display the topic
 	if (command.getArgSplit().size() == 1) {
 		if (channel->getTopic().empty())
-			displayRPL(RPL_NOTOPIC, client, *channel);
+			displayChannelRPL(RPL_NOTOPIC, client, *channel);
 		else
-			displayRPL(RPL_TOPIC, client, *channel);
+			displayChannelRPL(RPL_TOPIC, client, *channel);
 		return;
 	}
 
@@ -61,8 +61,8 @@ void	executeTopic(Commands & command) {
 	// Display the change for every clients inside the channel
 	for (std::map<Client *, bool>::iterator it = channel->getClients().begin(); it != channel->getClients().end(); it++) {
 		if (channel->getTopic().empty())
-			displayRPL(RPL_NOTOPIC, *it->first, *channel);
+			displayChannelRPL(RPL_NOTOPIC, *it->first, *channel);
 		else
-			displayRPL(RPL_TOPIC, *it->first, *channel);
+			displayChannelRPL(RPL_TOPIC, *it->first, *channel);
 	}
 }
