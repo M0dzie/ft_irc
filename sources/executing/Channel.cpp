@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:02:49 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/12 10:22:46 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/13 12:38:39 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ std::string Channel::getClientList() {
 void Channel::displayClientList() {
 	for (std::map<Client *, bool>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
 		Client *client = it->first;
-		displayRPL(RPL_NAMREPLY, *client, *this);
-		displayRPL(RPL_ENDOFNAMES, *client, *this);
+		displayChannelRPL(RPL_NAMREPLY, *client, *this);
+		displayChannelRPL(RPL_ENDOFNAMES, *client, *this);
 	}
 }
 

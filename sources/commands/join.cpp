@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thmeyer <thmeyer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 09:19:03 by thmeyer          ###   ########.fr       */
+/*   Updated: 2024/02/13 12:39:53 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ static void joinChannel(Channel &channel, Client &client) {
 	sendMessage(client.getFD(), ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " JOIN " + channel.getName());
 	channel.sendMessageToChannel(client.getNickname() + " is joining the channel " + channel.getName());
 	if (channel.getTopic().empty())
-		displayRPL(RPL_NOTOPIC, client, channel);
+		displayChannelRPL(RPL_NOTOPIC, client, channel);
 	else
-		displayRPL(RPL_TOPIC, client, channel);
+		displayChannelRPL(RPL_TOPIC, client, channel);
 }
 
 static void partAllChannels(Client &client, Server &server) {

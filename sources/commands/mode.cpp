@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:06:01 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:32:28 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 12:40:17 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	executeMode(Commands & command) {
 		return;
 	}
 	if (command.getArgSplit().size() == 1)
-		return (displayRPL(RPL_CHANNELMODEIS, client, *channel));
+		return (displayChannelRPL(RPL_CHANNELMODEIS, client, *channel));
 	else if (!isValidModeString(command.getArgSplit()[1]))
 		return (displayError(ERR_UMODEUNKNOWNFLAG, command));
 	if (!channel->getClients()[&client])

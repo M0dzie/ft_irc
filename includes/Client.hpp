@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/12 18:45:13 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 11:02:29 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ public:
 
 	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
 	void removeOneChannel(Channel * channel);
-	void displayErrorClient(int errorCode);
+	void displayError(int errorCode);
 
 	bool operator==(Client const & rhs) const {return this->_nickname == rhs.getNickname();}
 
