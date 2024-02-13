@@ -43,6 +43,7 @@ public:
 	bool areClientOnChannel(std::string const & clientName);
 	
 	void displayClientList();
+	void displayError(int errorCode, Client const &client);
 	void removeClient(Client *client, Server &server);
 	void removeFromInvitedList(std::string const &clientName);
 	void sendMessageToChannel(std::string msg);

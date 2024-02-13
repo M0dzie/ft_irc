@@ -34,15 +34,18 @@ void	executeInvite(Commands & command) {
 		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	} else if (!channel->getClients()[&client]) {
-		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
+		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
+		// return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 	} else if (client == target) {
 		std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << command.getArgSplit()[0] << " :wrong client" << std::endl;
 		return;
 	} else if (!channel->isAlreadyIn(client.getNickname()))
-		return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
+		return (channel->displayError(ERR_NOTONCHANNEL, client));
+		// return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
 		
 	if (channel->isAlreadyIn(target.getNickname()))
-		return (displayErrorChannelTarget(ERR_USERONCHANNEL, client, target.getNickname(), *channel));
+		return (channel->displayError(ERR_USERONCHANNEL, client));
+		// return (displayErrorChannelTarget(ERR_USERONCHANNEL, client, target.getNickname(), *channel));
 
 	// If user and client exist and invite is possible, send a RPL_INVITING
 	if (!isIn(*channel, target.getNickname()))

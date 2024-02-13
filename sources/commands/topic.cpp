@@ -27,7 +27,8 @@ void	executeTopic(Commands & command) {
 		command.getServer().getChannelList().erase(command.getArgSplit()[0]);
 		return;
 	} else if (!channel->isAlreadyIn(client.getNickname()))
-		return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
+		return (channel->displayError(ERR_NOTONCHANNEL, client));
+		// return (displayErrorChannel(ERR_NOTONCHANNEL, client, *channel));
 	
 	// Only display the topic
 	if (command.getArgSplit().size() == 1) {
@@ -40,7 +41,8 @@ void	executeTopic(Commands & command) {
 
 	// Check if the client is an operator if topicRestriction is off
 	if (channel->getTopicRestrict() && !channel->getClients()[&client])
-		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
+		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
+		// return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
 	// Update topic
 	std::string newTopic;

@@ -160,7 +160,8 @@ void	executeMode(Commands & command) {
 	else if (!isValidModeString(command.getArgSplit()[1]))
 		return (displayError(ERR_UMODEUNKNOWNFLAG, command));
 	if (!channel->getClients()[&client])
-		return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
+		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
+		// return (displayErrorChannel(ERR_CHANOPRIVSNEEDED, client, *channel));
 
 	// if everything good, split and setup modes
 	std::vector<std::string> modes;
