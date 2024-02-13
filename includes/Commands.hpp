@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:54:22 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 12:37:39 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@
 # define RPL_INVITING 341
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
+# define RPL_WELCOME 001
+# define RPL_MOTD 372
+# define RPL_MOTDSTART 375
+# define RPL_ENDOFMOTD 376
 
 # define PASS "+k"
 # define RMVPASS "-k"
@@ -70,6 +74,8 @@ class Commands {
 		~Commands(void) {}
 
 		int executeCommand();
+		
+		void	displayError(int errorCode);
 
 		// GETTER
 		std::string const & getName() const {return this->_name;}
@@ -82,9 +88,8 @@ class Commands {
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void    displayError(int errorCode, Commands & command);
-// void	displayErrorChannel(int errorCode, Client const &client, Channel &channel);
-// void	displayErrorChannelTarget(int errorCode, Client const &client, std::string const &targetNickname, Channel &channel);
-void 	displayRPL(int RPLCode, Client const &client, Channel &channel);
+void	displayRPL(int RPLCode, Client const &client);
+void	displayChannelRPL(int RPLCode, Client const &client, Channel &channel);
 void	clearClient(Server & tmpServer, Client & tmpClient);
 void	clearFromChannel(Server & tmpServer, Client & tmpClient);
 
