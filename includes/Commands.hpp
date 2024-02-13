@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 12:37:39 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:06:05 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,6 @@ class Commands {
 
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
-void    displayError(int errorCode, Commands & command);
-void	displayRPL(int RPLCode, Client const &client);
-void	displayChannelRPL(int RPLCode, Client const &client, Channel &channel);
 void	clearClient(Server & tmpServer, Client & tmpClient);
 void	clearFromChannel(Server & tmpServer, Client & tmpClient);
 
