@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/12 10:50:54 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:29:58 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	Server::recoverInput(Client & client) {
 	std::string &tmpBuffer = client.getBufferLine();
 	std::size_t indexEnd = tmpBuffer.find("\r\n");
 
-		// std::cout << "|" << tmpBuffer << "|" << std::endl;
 	while(indexEnd != std::string::npos)
 	{
 		std::string line = tmpBuffer.substr(0, indexEnd);
@@ -109,7 +108,7 @@ void	Server::handlingNewClient() {
 			this->_fds[this->_nbClient].fd = newFD;
 			this->_fds[this->_nbClient].events = POLLIN;
 			this->_fds[this->_nbClient].revents = 0;
-			this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd, "undefined")));
+			this->_clientList.insert(std::pair<int, Client *>(this->_fds[this->_nbClient].fd, new Client(this->_fds[this->_nbClient].fd)));
 
 			displayMessage(INFO, getMessageConnection(newFD));
 		} else { // There is no places left

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/13 18:09:36 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:28:19 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ private:
 	bool _registered;
 
 public:
-	Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {}
+	Client(int fd) : _fd(fd), _registered(false) {}
 
 	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
 	void removeOneChannel(Channel * channel);
