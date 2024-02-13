@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 18:07:00 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:52:25 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void login(Commands & command) {
 
 	if (client.getRegister())
 		client.displayError(ERR_ALREADYREGISTERED);
-	else if (password.empty() || client.getUsername().empty() || client.getNickname().empty())
+	else if (password.empty() || !client.getValidNick() || !client.getValidUser())
 		client.displayError(ERR_NOTREGISTERED);
 	else if (password != command.getServer().getPassword())
 		client.displayError(ERR_PASSWDMISMATCH);

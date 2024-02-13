@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:32 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 18:23:52 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:47:31 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool isUseElsewhere(Commands & command, std::string nickname) {
 
 	while (it != tmpMap.end())
 	{
-		if (it->second->getNickname() == nickname && !it->second->getNickname().empty())
+		if (it->second->getNickname() == nickname && !it->second->getNickname().empty() && command.getClient().getNickname() != nickname)
 			return true;
 		it++;
 	}
@@ -41,8 +41,11 @@ void	executeNick(Commands & command) {
 
 	if (isUseElsewhere(command, nickname))
 	{
-		sendMessage(client.getFD(), ":localhost 433 " + client.getNickname() + " " + nickname + " :Nickname is already in use");
+		if (oldNickname.empty())
+			oldNickname = "undefined";
+		sendMessage(client.getFD(), ":localhost 433 " + oldNickname + " " + nickname + " :Nickname is already in use");
 		client.setNickname(nickname);
+		client.setValidNick(false);
 	}
 	else if (isNicknameValid(nickname, client))
 	{
@@ -52,6 +55,7 @@ void	executeNick(Commands & command) {
 
 		sendMessage(client.getFD(), cmdToSend);
 		client.setNickname(nickname);
+		client.setValidNick(true);
 	}
 	if (client.getRegister())
 	{

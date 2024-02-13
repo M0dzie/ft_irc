@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 18:20:59 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:54:03 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void	executeUser(Commands & command) {
 		{
 			command.getClient().setUsername(*tmpArgs.begin());
 			command.getClient().setRealname(tmpRealname);
+			command.getClient().setValidUser(true);
 			login(command);
 		}
+		else
+			command.getClient().setValidUser(false);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/13 18:28:19 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:46:34 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ private:
 
 	std::vector<Channel *> _channels;
 	
+	bool _validNick;
+	bool _validUser;
 	bool _registered;
 
 public:
-	Client(int fd) : _fd(fd), _registered(false) {}
+	Client(int fd) : _fd(fd), _validNick(false), _validUser(false),  _registered(false) {}
 
 	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
 	void removeOneChannel(Channel * channel);
@@ -50,6 +52,8 @@ public:
 	void setRealname(std::string const &realname) {this->_realname = realname;}
 	void setPassword(std::string const &password) {this->_password = password;}
 	void setLastPing(std::string const &lastPing) {this->_lastPing = lastPing;}
+	void setValidNick(bool value) {this->_validNick = value;}
+	void setValidUser(bool value) {this->_validUser = value;}
 	void setRegister(bool value) {this->_registered = value;}
 
 	// GETTER
@@ -64,6 +68,8 @@ public:
 	
 	std::vector<Channel *> & getChannels() {return this->_channels;}
 	
+	bool getValidNick() const {return this->_validNick;}
+	bool getValidUser() const {return this->_validUser;}
 	bool getRegister() const {return this->_registered;}
 };
 
