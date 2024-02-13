@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:02 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/13 11:02:29 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:46:34 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ private:
 
 	std::vector<Channel *> _channels;
 	
+	bool _validNick;
+	bool _validUser;
 	bool _registered;
 
 public:
-	Client(int fd, std::string const &nickname) : _fd(fd), _nickname(nickname), _registered(false) {}
+	Client(int fd) : _fd(fd), _validNick(false), _validUser(false),  _registered(false) {}
 
 	void addChannels(Channel * channel) {this->_channels.push_back(channel);}
 	void removeOneChannel(Channel * channel);
@@ -50,20 +52,24 @@ public:
 	void setRealname(std::string const &realname) {this->_realname = realname;}
 	void setPassword(std::string const &password) {this->_password = password;}
 	void setLastPing(std::string const &lastPing) {this->_lastPing = lastPing;}
+	void setValidNick(bool value) {this->_validNick = value;}
+	void setValidUser(bool value) {this->_validUser = value;}
 	void setRegister(bool value) {this->_registered = value;}
 
 	// GETTER
 	int const &getFD() const {return this->_fd;}
 	
 	std::string const &getNickname() const {return this->_nickname;}
-	std::string const &getUsername() const;
-	std::string const &getRealname() const;
+	std::string const &getUsername() const {return this->_username;}
+	std::string const &getRealname() const {return this->_realname;}
 	std::string const &getPassword() const {return this->_password;}
 	std::string const &getLastPing() const {return this->_lastPing;}
 	std::string & getBufferLine() {return this->_bufferLine;}
 	
 	std::vector<Channel *> & getChannels() {return this->_channels;}
 	
+	bool getValidNick() const {return this->_validNick;}
+	bool getValidUser() const {return this->_validUser;}
 	bool getRegister() const {return this->_registered;}
 };
 

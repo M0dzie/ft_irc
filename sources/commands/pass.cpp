@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:28:24 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/09 15:39:03 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 16:12:04 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,25 @@ void	executePass(Commands & command) {
 	std::vector<std::string> tmpArgs = command.getArgSplit();
 
 	if (tmpArgs.begin() == tmpArgs.end())
-		displayError(ERR_NEEDMOREPARAMS, command);
+		command.displayError(ERR_NEEDMOREPARAMS);
 	else
 	{
+		Client & client = command.getClient();
 		std::string password = *(command.getArgSplit().begin());
-		Client & tmpClient = command.getClient();
-		bool isRegistered = tmpClient.getRegister();
+		bool isRegistered = client.getRegister();
 
 		if (password.empty())
-			displayError(ERR_NEEDMOREPARAMS, command);
+			command.displayError(ERR_NEEDMOREPARAMS);
 		else if (isRegistered)
-			displayError(ERR_ALREADYREGISTERED, command);
+			client.displayError(ERR_ALREADYREGISTERED);
 		else
 		{
 			if (password.empty())
-				displayError(ERR_NEEDMOREPARAMS, command);
+				command.displayError(ERR_NEEDMOREPARAMS);
 			else
 			{
-				displayMessage(INFO, "Set connection password (" + password + ")");
-				tmpClient.setPassword(password);
+				displayMessage(INFO, "Connection password set (" + password + ")");
+				client.setPassword(password);
 			}
 		}
 	}

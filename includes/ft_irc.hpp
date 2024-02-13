@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:09:54 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/08 17:12:57 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:05:50 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@
 
 # define USERLEN 18
 
-void displayErrorMessage(std::string const &msg);
-void displayMessage(int from, std::string message);
+void    displayErrorMessage(std::string const &msg);
+void    displayMessage(int from, std::string message);
+void	displayRPL(int RPLCode, Client const &client);
+void	displayChannelRPL(int RPLCode, Client const &client, Channel &channel);
 
 #endif

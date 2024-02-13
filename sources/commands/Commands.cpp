@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:42:52 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 18:52:04 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:52:25 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,22 @@ Commands::Commands(std::string & line, Client & client, Server & server) : _clie
 	while (streamLine >> word)
 	{
 		this->_argSplit.push_back(word);
+	}
+}
+
+void	Commands::displayError(int errorCode) {
+	
+	switch (errorCode)
+	{
+		case ERR_NEEDMOREPARAMS:
+			sendMessage(this->_client.getFD(), ":localhost 461 " + this->_client.getNickname() + " " + this->_name + " :Not enough parameters");
+			break;
+		case ERR_INVALIDARG:
+			sendMessage(this->_client.getFD(), ":localhost " + this->_client.getNickname() + " " + this->_name + " :Invalid arguments");
+			
+			break;
+		default:
+			break;
 	}
 }
 
@@ -82,31 +98,22 @@ int Commands::executeCommand() {
 
 void login(Commands & command) {
 
-	Client & tmpClient = command.getClient();
-	bool isRegistered = tmpClient.getRegister();
-	const std::string & password = tmpClient.getPassword();
+	Client & client = command.getClient();
+	const std::string & password = client.getPassword();
 
-	if (isRegistered)
-		displayError(ERR_ALREADYREGISTERED, command);
-	else if (password.empty())
-		// displayError(ERR_NOTREGISTERED, command);
-		tmpClient.displayErrorClient(ERR_NOTREGISTERED);
+	if (client.getRegister())
+		client.displayError(ERR_ALREADYREGISTERED);
+	else if (password.empty() || !client.getValidNick() || !client.getValidUser())
+		client.displayError(ERR_NOTREGISTERED);
 	else if (password != command.getServer().getPassword())
-		displayError(ERR_PASSWDMISMATCH, command);
+		client.displayError(ERR_PASSWDMISMATCH);
 	else
 	{
-		tmpClient.setRegister(true);
-		sendMessage(tmpClient.getFD(), ":localhost 001 " + tmpClient.getNickname() + " :Welcome to your IRC Network!");
-		sendMessage(tmpClient.getFD(), ":localhost 375 " + tmpClient.getNickname() + " :- ft_irc Message of the day - ");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :                                          ");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :  ███████╗████████╗    ██╗██████╗  ██████╗");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :  ██╔════╝╚══██╔══╝    ██║██╔══██╗██╔════╝");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :  █████╗     ██║       ██║██████╔╝██║     ");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :  ██╔══╝     ██║       ██║██╔══██╗██║     ");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :  ██║        ██║       ██║██║  ██║╚██████╗");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :  ╚═╝        ╚═╝       ╚═╝╚═╝  ╚═╝ ╚═════╝");
-		sendMessage(tmpClient.getFD(), ":localhost 372 " + tmpClient.getNickname() + " :                                          ");
-		sendMessage(tmpClient.getFD(), ":localhost 376 " + tmpClient.getNickname() + " :End of /MOTD command.");
+		client.setRegister(true);
+		displayRPL(RPL_WELCOME, client);
+		displayRPL(RPL_MOTDSTART, client);
+		displayRPL(RPL_MOTD, client);
+		displayRPL(RPL_ENDOFMOTD, client);
 	}
 }
 

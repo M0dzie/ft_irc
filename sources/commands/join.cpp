@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:30 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 12:39:53 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:14:20 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,8 @@ static bool isArgValid(Commands &command, std::vector<std::string> args,std::map
 	
 	if (args.size() > 2)
 		return false;
-	if (args.size() < 1 || args.at(0).empty()) {
-		displayError(ERR_NEEDMOREPARAMS, command);
-		return false;
-	}
-
+	if (args.size() < 1 || args.at(0).empty())
+		return command.displayError(ERR_NEEDMOREPARAMS), false;
 	createPair(args, pairs);
 			
 	if (command.getArgSplit()[0][0] == '0' && !command.getArgSplit()[0][1])
@@ -95,29 +92,26 @@ static bool isArgValid(Commands &command, std::vector<std::string> args,std::map
 			return (pairs.clear(), false);
 		it++;
 	}
-
 	return true;
 }
 
 void	executeJoin(Commands & command) {
-
-	if (!command.getClient().getRegister())
-		return (displayError(ERR_NOTREGISTERED, command));
-
+	Client &client = command.getClient();
+	
+	if (!client.getRegister())
+		return (client.displayError(ERR_NOTREGISTERED));
 	std::map<std::string, std::string> pairs;
 
 	if (!isArgValid(command, command.getArgSplit(), pairs))
 		return;
-
 	std::map<std::string, std::string>::iterator it = pairs.begin();
 	std::map<std::string, std::string>::iterator ite = pairs.end();
 	
 	while (it != ite) {
 		std::map<std::string, Channel *>::iterator channelIt = command.getServer().getChannelList().find(it->first);
-		Client &client = command.getClient();
 		
 		if (channelIt == command.getServer().getChannelList().end()) {
-			std::cout << PURPLE << BOLD << "Warning: " << RESET << client.getUsername() << " " << it->first << " :No such channel" << std::endl;
+			sendMessage(client.getFD(), ":localhost 403 " + client.getNickname() + " " + it->first + " :No such channel");
 			command.getServer().getChannelList().insert(std::pair<std::string, Channel *>(it->first, new Channel(it->first, it->second)));
 			Channel *channel = command.getServer().getChannelList()[it->first];
 			channel->updateClients(&client, true);
@@ -131,30 +125,28 @@ void	executeJoin(Commands & command) {
 			it++;
 			continue;
 		}
-
 		Channel *channel = command.getServer().getChannelList()[it->first];
+
 		if (channel->isAlreadyIn(client.getNickname())) {
 			channel->displayErrorTarget(ERR_USERONCHANNEL, client, client.getNickname());
-			// displayErrorChannelTarget(ERR_USERONCHANNEL, client, client.getNickname(), *channel);
-			it++;
-			continue;
-		} else if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
-			channel->displayError(ERR_BADCHANNELKEY, client);
-			// displayErrorChannel(ERR_BADCHANNELKEY, client, *channel);
-			it++;
-			continue;
-		} else if (channel->getChannelLimited() && channel->getClients().size() >= channel->getChannelLimit()) {
-			channel->displayError(ERR_CHANNELISFULL, client);
-			// displayErrorChannel(ERR_CHANNELISFULL, client, *channel);
-			it++;
-			continue;
-		} else if (channel->getInviteOnly() && !channel->isInvited(client.getNickname())) {
-			channel->displayError(ERR_INVITEONLYCHAN, client);
-			// displayErrorChannel(ERR_INVITEONLYCHAN, client, *channel);
 			it++;
 			continue;
 		}
-		
+		if (!channel->getPassword().empty() && it->second != channel->getPassword()) {
+			channel->displayError(ERR_BADCHANNELKEY, client);
+			it++;
+			continue;
+		}
+		if (channel->getChannelLimited() && channel->getClients().size() >= channel->getChannelLimit()) {
+			channel->displayError(ERR_CHANNELISFULL, client);
+			it++;
+			continue;
+		}
+		if (channel->getInviteOnly() && !channel->isInvited(client.getNickname())) {
+			channel->displayError(ERR_INVITEONLYCHAN, client);
+			it++;
+			continue;
+		}
 		channel->updateClients(&client, false);
 		joinChannel(*channel, client);
 		channel->displayClientList();

@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:47:46 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 11:05:10 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 17:59:11 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,15 @@ static std::string	getMessageText(std::vector<std::string> & tmpArg) {
 
 static void	sendMessageToChannel(Commands & command, std::vector<std::string> & args) {
 	std::string target = *args.begin();
-	Client & tmpClient = command.getClient();
+	Client & client = command.getClient();
 	Channel * tmpChannel = command.getServer().getChannelList()[target];
 
 	if (!tmpChannel)
-		displayError(ERR_NOSUCHCHANNEL, command);
+		sendMessage(client.getFD(), ":localhost 403 " + client.getNickname() + " " + target + " :No such channel");
 	else
 	{
-		if (!tmpChannel->areClientOnChannel(tmpClient.getNickname()))
-			tmpChannel->displayError(ERR_NOTONCHANNEL, tmpClient);
-			// displayErrorChannel(ERR_NOTONCHANNEL, tmpClient, *tmpChannel);
+		if (!tmpChannel->areClientOnChannel(client.getNickname()))
+			tmpChannel->displayError(ERR_NOTONCHANNEL, client);
 		else
 		{
 			std::map<Client *, bool> const & listClient = tmpChannel->getClients();
@@ -62,9 +61,9 @@ static void	sendMessageToChannel(Commands & command, std::vector<std::string> & 
 			{
 				int tmpFdReceiver = it->first->getFD();
 				
-				if (tmpClient.getFD() != tmpFdReceiver)
+				if (client.getFD() != tmpFdReceiver)
 				{
-					std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
+					std::string serverMessageReceiver = ":" + client.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
 					sendMessage(tmpFdReceiver, serverMessageReceiver);
 				}
 			}	
@@ -74,27 +73,27 @@ static void	sendMessageToChannel(Commands & command, std::vector<std::string> & 
 
 static void	sendMessageToClient(Commands & command, std::vector<std::string> & args) {
 	std::string target = *args.begin();
-	Client & tmpReceiver = foundClient(command, target);
-	Client & tmpClient = command.getClient();
+	Client & receiver = foundClient(command, target);
+	Client & client = command.getClient();
 			
-	if (tmpReceiver == tmpClient)
-		displayError(ERR_NOSUCHNICK, command);
+	if (receiver == client)
+		sendMessage(client.getFD(), ":localhost 401 " + client.getNickname() + " " + target + " :No such nick/channel");
 	else
 	{
-		std::string serverMessageReceiver = ":" + tmpClient.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
-		sendMessage(tmpReceiver.getFD(), serverMessageReceiver);
+		std::string serverMessageReceiver = ":" + client.getNickname() + " PRIVMSG " + target + " " + getMessageText(args);
+		sendMessage(receiver.getFD(), serverMessageReceiver);
 	}
 }
 
 void	executePrivateMsg(Commands & command) {
 	if (!command.getClient().getRegister())
-		displayError(ERR_NOTREGISTERED, command);
+		command.getClient().displayError(ERR_NOTREGISTERED);
 	else
 	{
 		std::vector<std::string> & args = command.getArgSplit();
 
 		if (args.empty())
-			displayError(ERR_NEEDMOREPARAMS, command);
+			command.displayError(ERR_NEEDMOREPARAMS);
 		else
 		{
 			if ((*args.begin())[0] == '#')

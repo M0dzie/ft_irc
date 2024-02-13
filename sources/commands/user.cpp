@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 13:15:37 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/12 18:56:31 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:54:03 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,39 @@ static bool isUserArgValid(std::vector<std::string> & tmpArgs, Commands & comman
 	std::vector<std::string>::iterator it = tmpArgs.begin();
 
 	if (it->empty())
-		return displayError(ERR_NEEDMOREPARAMS, command), false;
+		return command.displayError(ERR_NEEDMOREPARAMS), false;
 	else if (it->size() > USERLEN)
 		*it = it->substr(0, USERLEN);
 		
 	if (*(++it) != "0")
-		return displayError(ERR_INVALIDARG, command), false;
+		return command.displayError(ERR_INVALIDARG), false;
 	if (!(*(++it) == "*" || *(it) == "0"))
-		return displayError(ERR_INVALIDARG, command), false;
+		return command.displayError(ERR_INVALIDARG), false;
 	
 	while (++it != tmpArgs.end())
 		tmpRealname += *(it);
 	if (tmpRealname[0] != ':' || !tmpRealname[1])
-		return displayError(ERR_INVALIDARG, command), false;
+		return command.displayError(ERR_INVALIDARG), false;
 	return true;
 }
 
 void	executeUser(Commands & command) {
 	std::vector<std::string> tmpArgs = command.getArgSplit();
-	Client & client = command.getClient();
 
-	if (command.getClient().getRegister())
-		client.displayErrorClient(ERR_ALREADYREGISTERED);
-	else if (command.getClient().getPassword().empty())
-		client.displayErrorClient(ERR_NOTREGISTERED);
-	else if (command.getClient().getNickname() == "undefined")
-		client.displayErrorClient(ERR_CANNOTBEUNDEFINED);
+	if (tmpArgs.empty() || tmpArgs.size() < 4)
+		command.displayError(ERR_NEEDMOREPARAMS);
 	else
 	{
-		if (tmpArgs.empty() || tmpArgs.size() < 4)
-			displayError(ERR_NEEDMOREPARAMS, command);
-		else
+		std::string tmpRealname;
+		
+		if (isUserArgValid(tmpArgs, command, tmpRealname))
 		{
-			std::string tmpRealname;
-			
-			if (isUserArgValid(tmpArgs, command, tmpRealname))
-			{
-				command.getClient().setUsername(*tmpArgs.begin());
-				command.getClient().setRealname(tmpRealname);
-				login(command);
-			}
+			command.getClient().setUsername(*tmpArgs.begin());
+			command.getClient().setRealname(tmpRealname);
+			command.getClient().setValidUser(true);
+			login(command);
 		}
+		else
+			command.getClient().setValidUser(false);
 	}
 }
