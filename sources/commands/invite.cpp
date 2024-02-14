@@ -30,7 +30,7 @@ void	executeInvite(Commands & command) {
 
 	// Check if conditions are true
 	if (!channel) {
-		std::string channelName = command.getArgSplit()[0];
+		std::string channelName = command.getArgSplit()[1];
 		
 		sendMessage(client.getFD(), ":localhost 403 " + client.getNickname() + " " + channelName + " :No such channel");
 		command.getServer().getChannelList().erase(channelName);
