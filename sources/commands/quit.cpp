@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:47:09 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 16:53:29 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/14 12:03:47 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ static int	getClientFDIndex(Server & tmpServer, Client & tmpClient) {
 	return i;
 }
 
-void	clearFromChannel(Server & tmpServer, Client & tmpClient) {
+void	clearFromChannel(Server & tmpServer, Client & tmpClient, std::string msg) {
 	std::vector<Channel *> & tmpChannels = tmpClient.getChannels();
 
 	for (std::vector<Channel *>::iterator it = tmpChannels.begin(); it != tmpChannels.end(); it++)
 	{
-		(*it)->sendMessageToChannel(tmpClient.getNickname() + " is leaving the channel " + (*it)->getName());
+		(*it)->sendMessageToChannel(msg);
 		(*it)->removeClient(&tmpClient, tmpServer);
 	}
 }
@@ -57,10 +57,10 @@ void	clearClient(Server & tmpServer, Client & tmpClient) {
 
 void	executeQuit(Commands & command) {
 	Client & client = command.getClient();
-	std::string serverMessage = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " QUIT " + getReason(command.getArgSplit());
+	std::string serverMessage = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost" + " QUIT :" + getReason(command.getArgSplit());
 	Server & tmpServer = command.getServer();
 
 	sendMessage(client.getFD(), serverMessage);
-	clearFromChannel(tmpServer, client);
+	clearFromChannel(tmpServer, client, serverMessage);
 	clearClient(tmpServer, client);
 }
