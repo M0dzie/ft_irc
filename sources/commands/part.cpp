@@ -49,7 +49,6 @@ void executePart(Commands & command) {
                 std::vector<std::string>::iterator it = command.getArgSplit().begin() + 1;
                 std::vector<std::string>::iterator ite = command.getArgSplit().end();
                 std::vector<std::string> newVec(it, ite);
-                sendMessage(client->getFD(), ":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channel->getName() + " :" + getReason(newVec));
                 channel->sendMessageToChannel(":" + client->getNickname() + "!" + client->getUsername() + "@localhost" + " PART " + channel->getName() + " :" + getReason(newVec));
                 client->removeOneChannel(channel);
                 channel->removeClient(client, command.getServer());
