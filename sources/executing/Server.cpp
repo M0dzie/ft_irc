@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:37:42 by thmeyer           #+#    #+#             */
-/*   Updated: 2024/02/13 18:29:58 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/14 12:03:02 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ int	Server::recoverCommandLine(Client & tmpClient) {
 
 	for (int i = 0; i < BUFFERSIZE; i++)
 		buffer[i] = '\0';
-	if ((bufferLen = recv(tmpClient.getFD(), buffer, BUFFERSIZE, 0)) < 1) {
+	if ((bufferLen = recv(tmpClient.getFD(), buffer, BUFFERSIZE, 0)) == 0 || bufferLen == std::string::npos) {
 		return -1;
 	} else {
 		std::string & refBuffer = tmpClient.getBufferLine();
+
 		refBuffer.append(buffer, bufferLen);
 		return 1;
 	}
@@ -121,18 +122,18 @@ void	Server::handlingNewClient() {
 void	Server::handlingClientMessage() {
 	for (int i = 1; i < this->_nbClient + 1; i++) {
 		if (this->_fds[i].fd && this->_fds[i].revents & POLLIN) { // there is data ready to recv()
-			Client & tmpClient = *this->_clientList[this->_fds[i].fd];
+			Client & client = *this->_clientList[this->_fds[i].fd];
 			int lineFull = 0;
 			std::string commandLine = "";
 			
-			lineFull = recoverCommandLine(tmpClient);
+			lineFull = recoverCommandLine(client);
 			if (lineFull == -1)
 			{
-				clearFromChannel(*this, tmpClient);
-				clearClient(*this, tmpClient);
+				clearFromChannel(*this, client, ":" + client.getNickname() + "!" + client.getUsername() + "@localhost QUIT :Lost connection");
+				clearClient(*this, client);
 			}
 			else if (lineFull == 1)
-				this->recoverInput(tmpClient);
+				this->recoverInput(client);
 		}
 	}
 }

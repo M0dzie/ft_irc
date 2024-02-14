@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 12:43:15 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 18:06:05 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:31:14 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ class Commands {
 void	login(Commands & command);
 void	sendMessage(int clientFd, std::string msg);
 void	clearClient(Server & tmpServer, Client & tmpClient);
-void	clearFromChannel(Server & tmpServer, Client & tmpClient);
+void	clearFromChannel(Server & tmpServer, Client & tmpClient, std::string msg);
 
 Client & foundClient(Commands & command, std::string nickname);
 
