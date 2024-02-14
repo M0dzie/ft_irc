@@ -34,44 +34,44 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 	if (modeString.size() == 1 && *modeString.begin() == RMVPASS) {
 		channel.setPassword("");
 		channel.setModes(PASS, false);
-		displayMessage(INFO, "Remove password successfully");
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Remove password successfully");
 	} else if (modeString.size() == 2 && !modeString[1].empty() && *modeString.begin() == PASS) {
 		channel.setPassword(modeString[1]);
 		channel.setModes(PASS, true);
-		displayMessage(INFO, "Set password successfully : " + modeString[1]);
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Set password successfully : " + modeString[1]);
 	} else
-		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVINVITEONLY) {
 		channel.setInviteOnlyMode(false);
 		channel.setModes(INVITEONLY, false);
-		displayMessage(INFO, "Remove invite only successfully");
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Remove invite only successfully");
 	} else if (modeString.size() == 1 && *modeString.begin() == INVITEONLY) {
 		channel.setInviteOnlyMode(true);
 		channel.setModes(INVITEONLY, true);
-		displayMessage(INFO, "Set invite only successfully");
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Set invite only successfully");
 	} else
-		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVTOPICRESTRICT) {
 		channel.setTopicRestrict(false);
 		channel.setModes(TOPICRESTRICT, false);
-		displayMessage(INFO, "Remove topic restriction successfully");
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Remove topic restriction successfully");
 	} else if (modeString.size() == 1 && *modeString.begin() == TOPICRESTRICT) {
 		channel.setTopicRestrict(true);
 		channel.setModes(TOPICRESTRICT, true);
-		displayMessage(INFO, "Set topic restriction successfully");
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Set topic restriction successfully");
 	} else
-		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() != 2) {
-		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 		return;
 	}
 	
@@ -91,25 +91,25 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 	if (modeString.size() == 2 && *modeString.begin() == RMVOPECHAN) {
 		if (channel.unsetOperator(target)) {
 			channel.displayClientList();
-			displayMessage(INFO, "Remove " + target->getNickname() + " from operators successfully");
+			channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Remove " + target->getNickname() + " from operators successfully");
 		}
 	} else if (modeString.size() == 2 && *modeString.begin() == OPECHAN) {
 		if (channel.setOperator(target)) {
 			channel.displayClientList();
-			displayMessage(INFO, "Set " + target->getNickname() + " operator successfully");
+			channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Set " + target->getNickname() + " operator successfully");
 		}
 	} else
-		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() == 1 && *modeString.begin() == RMVCHANLIMIT) {
 		channel.setChannelLimited(false);
 		channel.setModes(CHANLIMIT, false);
-		displayMessage(INFO, "Remove channel limit successfully");
+		channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Remove channel limit successfully");
 	} else if (modeString.size() == 2 && *modeString.begin() == CHANLIMIT) {
 		if (!isNumber(modeString[1]))
-			sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+			sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 		else {
 			std::stringstream ss(modeString[1]);
 			unsigned long limit;
@@ -117,10 +117,10 @@ static void handleChanLimit(std::vector<std::string> modeString, Client &client,
 			channel.setChannelLimited(true);
 			channel.setChannelLimit(limit);
 			channel.setModes(CHANLIMIT, true);
-			displayMessage(INFO, "Set channel limit to " + modeString[1] + " successfully");
+			channel.sendMessageToChannel(":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Set channel limit to " + modeString[1] + " successfully");
 		}
 	} else
-		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 300 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 
@@ -146,7 +146,7 @@ void	executeMode(Commands & command) {
 	
 	if (!client.getRegister())
 		return (client.displayError(ERR_NOTREGISTERED));
-	else if (command.getArgSplit().size() < 1)
+	if (command.getArgSplit().size() < 1)
     	return (command.displayError(ERR_NEEDMOREPARAMS));
 
 	Server &server = command.getServer();
@@ -158,8 +158,8 @@ void	executeMode(Commands & command) {
 	}
 	if (command.getArgSplit().size() == 1)
 		return (displayChannelRPL(RPL_CHANNELMODEIS, client, *channel));
-	else if (!isValidModeString(command.getArgSplit()[1]))
-		return (sendMessage(ERR_UMODEUNKNOWNFLAG, ":localhost 501 " + client.getNickname() + " :Unknown MODE flag"));
+	if (!isValidModeString(command.getArgSplit()[1]))
+		return (sendMessage(client.getFD(), ":localhost 501 " + client.getNickname() + " " + channel->getName() + " :Unknown MODE flag"));
 	if (!channel->getClients()[&client])
 		return (channel->displayError(ERR_CHANOPRIVSNEEDED, client));
 
