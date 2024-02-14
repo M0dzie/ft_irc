@@ -6,7 +6,7 @@
 /*   By: msapin <msapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:11:02 by msapin            #+#    #+#             */
-/*   Updated: 2024/02/13 18:16:34 by msapin           ###   ########.fr       */
+/*   Updated: 2024/02/14 12:43:54 by msapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,8 @@ void	executeKick(Commands & command) {
 				else
 				{
 					Client & clientReceiver = foundClient(command, receiverName);
-					std::string reason = getKickReason(tmpArgs);
-					std::string commandMessage	= ":" + senderName + "!" + client.getUsername() + "@localhost KICK " + channelName + " " + receiverName + " " + reason;
-					
-					sendMessage(client.getFD(), commandMessage);
-					sendMessage(clientReceiver.getFD(), ":" + clientReceiver.getNickname() + "!" + clientReceiver.getUsername() + "@localhost" + " PART " + channelName + " " + reason);
+
+					channel->sendMessageToChannel(":" + senderName + "!" + client.getUsername() + "@localhost KICK " + channelName + " " + receiverName + " " + getKickReason(tmpArgs));
 					channel->removeClient(&clientReceiver, command.getServer());
 				}
 			}
