@@ -40,7 +40,7 @@ static void handlePass(std::vector<std::string> modeString, Client &client, Chan
 		channel.setModes(PASS, true);
 		displayMessage(INFO, "Set password successfully : " + modeString[1]);
 	} else
-		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleInviteOnly(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -53,7 +53,7 @@ static void handleInviteOnly(std::vector<std::string> modeString, Client &client
 		channel.setModes(INVITEONLY, true);
 		displayMessage(INFO, "Set invite only successfully");
 	} else
-		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleTopicRestrict(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -66,12 +66,12 @@ static void handleTopicRestrict(std::vector<std::string> modeString, Client &cli
 		channel.setModes(TOPICRESTRICT, true);
 		displayMessage(INFO, "Set topic restriction successfully");
 	} else
-		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleOpeChan(std::vector<std::string> modeString, Client &client, Channel &channel) {
 	if (modeString.size() != 2) {
-		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 		return;
 	}
 	
@@ -99,7 +99,7 @@ static void handleOpeChan(std::vector<std::string> modeString, Client &client, C
 			displayMessage(INFO, "Set " + target->getNickname() + " operator successfully");
 		}
 	} else
-		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 static void handleChanLimit(std::vector<std::string> modeString, Client &client, Channel &channel) {
@@ -109,7 +109,7 @@ static void handleChanLimit(std::vector<std::string> modeString, Client &client,
 		displayMessage(INFO, "Remove channel limit successfully");
 	} else if (modeString.size() == 2 && *modeString.begin() == CHANLIMIT) {
 		if (!isNumber(modeString[1]))
-			sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+			sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 		else {
 			std::stringstream ss(modeString[1]);
 			unsigned long limit;
@@ -120,7 +120,7 @@ static void handleChanLimit(std::vector<std::string> modeString, Client &client,
 			displayMessage(INFO, "Set channel limit to " + modeString[1] + " successfully");
 		}
 	} else
-		sendMessage(client.getFD(), ":localhost " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
+		sendMessage(client.getFD(), ":localhost 461 " + client.getNickname() + " " + channel.getName() + " :Invalid arguments");
 }
 
 
